@@ -1,0 +1,68 @@
+name: edu-union
+
+services:
+  edu-db:
+    image: mariadb:12.3.2
+    container_name: edu-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-union_root_password}
+      MYSQL_DATABASE: ${DB_NAME:-union_db}
+      MYSQL_USER: ${DB_USER:-union_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-union_secure_password}
+    ports:
+      - "${DB_PORT:-13306}:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - backend_net
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+
+  edu-backend:
+    build:
+      context: ./server/backend
+      dockerfile: Dockerfile
+    container_name: edu-backend
+    restart: always
+    ports:
+      - "18000:8000" # 디버깅용 직접 접근 (프로덕션에서는 제거 권장)
+    env_file:
+      - .env.${ENVIRONMENT:-dev}
+    environment:
+      - DB_HOST=edu-db # Override host to use compose network alias
+      - DB_PORT=3306 # Override internal port inside docker network
+      - ENVIRONMENT=${ENVIRONMENT:-dev}
+    depends_on:
+      edu-db:
+        condition: service_healthy
+    # Run migrations and then start the FastAPI application
+    command: >
+      bash -c "alembic -c backend/alembic/alembic.ini upgrade head && uvicorn backend.main:app --host 0.0.0.0 --port 8000"
+    networks:
+      - backend_net
+
+  edu-nginx:
+    build:
+      context: . # 최상위 루트 디렉토리
+      dockerfile: server/nginx/Dockerfile
+    container_name: edu-nginx
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - edu-backend
+    networks:
+      - backend_net
+
+networks:
+  backend_net:
+    driver: bridge
+
+volumes:
+  mariadb_data:
+    driver: local
