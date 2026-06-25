@@ -67,6 +67,7 @@ def upgrade() -> None:
         sa.Column('name', sqlmodel.sql.sqltypes.AutoString(), nullable=False, comment="이름"),
         sa.Column('phone', sqlmodel.sql.sqltypes.AutoString(), nullable=False, comment="휴대폰 번호"),
         sa.Column('status', sqlmodel.sql.sqltypes.AutoString(), nullable=False, server_default='pending', comment="수강 신청 상태 (예: pending, approved, rejected)"),
+        sa.Column('comment', sa.String(length=1000), nullable=True, comment="관리자 수강 승인/반려 코멘트"),
         sa.Column('created_at', sa.DateTime(), nullable=False, comment="생성 일시"),
         sa.Column('updated_at', sa.DateTime(), nullable=False, comment="수정 일시"),
         sa.ForeignKeyConstraint(['course_id'], ['courses.id'], ),

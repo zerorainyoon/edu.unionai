@@ -112,7 +112,11 @@ const mapApiCourseToCourse = (apiCourse: ApiCourse): Course => {
         unitName: apiCourse.title,
         topics: [apiCourse.description || '실무 중심 핵심 교육 내용']
       }
-    ]
+    ],
+    apply_start_date: apiCourse.apply_start_date,
+    apply_end_date: apiCourse.apply_end_date,
+    edu_start_date: apiCourse.edu_start_date,
+    edu_end_date: apiCourse.edu_end_date,
   };
 };
 

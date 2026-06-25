@@ -28,7 +28,14 @@ export interface Course {
     unitName: string;
     topics: string[];
   }[];
+
+  // Raw date fields from backend API
+  apply_start_date?: string;
+  apply_end_date?: string;
+  edu_start_date?: string;
+  edu_end_date?: string;
 }
+
 
 const GRADIENTS = [
   { from: '#4F46E5', to: '#06B6D4' }, // Indigo -> Cyan

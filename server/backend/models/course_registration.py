@@ -11,6 +11,7 @@ class CourseRegistrationBase(SQLModel):
     name: str = Field(nullable=False)
     phone: str = Field(nullable=False)
     status: str = Field(default="pending", nullable=False)
+    comment: Optional[str] = Field(default=None, nullable=True)
 
 class CourseRegistration(CourseRegistrationBase, table=True):
     """
@@ -42,6 +43,7 @@ class CourseRegistrationResponse(SQLModel):
     name: str
     phone: str
     status: str
+    comment: Optional[str] = None
     created_at: datetime
     updated_at: datetime
 
@@ -54,3 +56,4 @@ class CourseRegistrationUpdate(SQLModel):
     name: Optional[str] = None
     phone: Optional[str] = None
     status: Optional[str] = None
+    comment: Optional[str] = None
