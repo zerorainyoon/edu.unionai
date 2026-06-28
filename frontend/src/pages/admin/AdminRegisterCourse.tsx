@@ -54,7 +54,7 @@ export const AdminRegisterCourse: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}

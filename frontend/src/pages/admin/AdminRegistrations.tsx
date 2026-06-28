@@ -140,26 +140,15 @@ export const AdminRegistrations: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         {/* Back Button */}
-        <div className="flex justify-between items-center mb-6">
-          <button
-            onClick={() => navigate(-1)}
-            className="group flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary transition-colors cursor-pointer"
-          >
-            <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
-            이전 페이지로 돌아가기
-          </button>
-
-          <button
-            onClick={loadData}
-            disabled={loading}
-            className="flex items-center gap-1.5 text-sm font-bold text-slate-600 hover:text-brand-primary bg-white border border-slate-200 shadow-sm px-3.5 py-2 rounded-xl active:scale-95 transition-all cursor-pointer"
-          >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-            새로고침
-          </button>
-        </div>
+        <button
+          onClick={() => navigate(-1)}
+          className="group mb-6 flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary transition-colors cursor-pointer"
+        >
+          <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
+          이전 페이지로 돌아가기
+        </button>
 
         {/* Console Container Card */}
         <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-fade-in select-text">
@@ -179,9 +168,22 @@ export const AdminRegistrations: React.FC = () => {
                   현재 날짜 기준 모집 중이거나 교육 중인 코스를 선택하고, 수강 신청 및 상세 상담 내역을 모니터링합니다.
                 </p>
               </div>
-              <div className="bg-white/10 rounded-2xl px-5 py-3 border border-white/10 shrink-0 text-left">
-                <span className="text-xs font-bold text-slate-400 block mb-0.5">전체 접수 내역</span>
-                <span className="text-2xl font-black text-white">{loading ? '...' : registrations.length}건</span>
+              <div className="flex items-center gap-4.5 shrink-0 self-start md:self-auto select-none">
+                {/* Refresh Button */}
+                <button
+                  onClick={loadData}
+                  disabled={loading}
+                  className="flex items-center gap-1.5 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2.5 rounded-xl active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+                >
+                  <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+                  새로고침
+                </button>
+
+                {/* Registration Count Badge */}
+                <div className="bg-white/10 rounded-2xl px-5 py-3 border border-white/10 text-left">
+                  <span className="text-xs font-bold text-slate-400 block mb-0.5">전체 접수 내역</span>
+                  <span className="text-2xl font-black text-white">{loading ? '...' : registrations.length}건</span>
+                </div>
               </div>
             </div>
           </div>
