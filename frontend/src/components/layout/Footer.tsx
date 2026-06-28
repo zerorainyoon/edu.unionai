@@ -76,8 +76,8 @@ export const Footer: React.FC = () => {
         {/* Corporate bottom detail */}
         <div className="pt-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4 text-xs text-slate-600">
           <div className="space-y-1">
-            <p>서울특별시 중구 세종대로 39 (남대문로4가) 대한상공회의소 | 사업자등록번호: 104-82-01234</p>
-            <p>Copyright © 2026 대한상공회의소. All rights reserved.</p>
+            <p>서울 금천구 가산디지털2로 143 UnionAI | 사업자등록번호: 104-82-01234</p>
+            <p>Copyright © 2026 UnionAI. All rights reserved.</p>
           </div>
           <div className="flex items-center gap-2 bg-slate-800/40 px-3 py-1.5 rounded-lg border border-slate-800/60">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>

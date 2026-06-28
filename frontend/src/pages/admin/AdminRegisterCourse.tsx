@@ -81,7 +81,7 @@ export const AdminRegisterCourse: React.FC = () => {
                 교육과정 등록
               </h1>
               <p className="text-slate-400 text-sm mt-2 font-medium">
-                WORK.AI 플랫폼에 새로운 대한상공회의소 교육과정을 게시합니다. 아래의 세부사항들을 빠짐없이 기입해주세요.
+                UnionAI 교육과정을 게시합니다. 아래의 세부사항들을 빠짐없이 기입해주세요.
               </p>
             </div>
           </div>

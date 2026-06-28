@@ -100,11 +100,6 @@ export const CourseDetail: React.FC = () => {
         {/* Detailed Header Banner Card */}
         <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 mb-8 flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <div className="flex items-center gap-2">
-              <span className="bg-brand-accent-light text-brand-secondary text-xs font-black px-2.5 py-1 rounded-md tracking-wider">
-                {course.institution}
-              </span>
-            </div>
             <h1 className="text-2xl md:text-4xl font-black text-slate-900 leading-tight tracking-tight mt-1">
               {course.title}
             </h1>
@@ -140,10 +135,6 @@ export const CourseDetail: React.FC = () => {
             {/* Right Column: Spec Sheet & Registration CTA */}
             <div className="lg:col-span-7 flex flex-col justify-between h-full min-h-[16rem]">
               <div className="divide-y divide-slate-100 text-base">
-                <div className="grid grid-cols-3 py-3">
-                  <span className="font-bold text-slate-400">훈련 기관</span>
-                  <span className="col-span-2 text-slate-800 font-semibold">{course.institution}</span>
-                </div>
                 <div className="grid grid-cols-3 py-3">
                   <span className="font-bold text-slate-400">교육 기간</span>
                   <span className="col-span-2 text-slate-800 font-semibold">{course.duration}</span>

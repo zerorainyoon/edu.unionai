@@ -37,7 +37,7 @@ const GRADIENTS = [
 ];
 
 const mapApiCourseToCourse = (apiCourse: ApiCourse): Course => {
-  const location = `${apiCourse.region} / 대한상의 교육관`;
+  const location = `${apiCourse.region}`;
 
   const fee = apiCourse.edu_fee === 0 ? '무료 (전액 국비 지원)' : `${apiCourse.edu_fee.toLocaleString()}원`;
 
