@@ -1,27 +1,18 @@
 name: edu-union
 
 services:
-  edu-db:
-    image: mariadb:12.3.2
-    container_name: edu-db
+  edu-nginx:
+    build:
+      context: . # 최상위 루트 디렉토리
+      dockerfile: server/nginx/Dockerfile
+    container_name: edu-nginx
     restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-union_root_password}
-      MYSQL_DATABASE: ${DB_NAME:-union_db}
-      MYSQL_USER: ${DB_USER:-union_user}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-union_secure_password}
     ports:
-      - "${DB_PORT:-13306}:3306"
-    volumes:
-      - mariadb_data:/var/lib/mysql
+      - "80:80"
+    depends_on:
+      - edu-backend
     networks:
       - backend_net
-    healthcheck:
-      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-      start_period: 15s
 
   edu-backend:
     build:
@@ -46,18 +37,27 @@ services:
     networks:
       - backend_net
 
-  edu-nginx:
+  edu-db:
     build:
-      context: . # 최상위 루트 디렉토리
-      dockerfile: server/nginx/Dockerfile
-    container_name: edu-nginx
+      context: .
+      dockerfile: server/db/Dockerfile
+    image: edu-db
+    container_name: edu-db
     restart: always
+    env_file:
+      - .env.${ENVIRONMENT:-dev}
     ports:
-      - "80:80"
-    depends_on:
-      - edu-backend
+      - "${DB_PORT:-13306}:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
     networks:
       - backend_net
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
 
 networks:
   backend_net:
