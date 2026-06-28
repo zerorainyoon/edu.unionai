@@ -5,6 +5,8 @@ import { useToast } from '../ui/Toast';
 
 export const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [boardOpen, setBoardOpen] = useState(false);
+  const [adminOpen, setAdminOpen] = useState(false);
   const { showToast } = useToast();
   const location = useLocation();
 
@@ -107,63 +109,81 @@ export const Header: React.FC = () => {
           ))}
 
           {/* Board Hover Dropdown Menu */}
-          <div className="relative group h-full flex items-center">
+          <div
+            className="relative h-full flex items-center"
+            onMouseEnter={() => setBoardOpen(true)}
+            onMouseLeave={() => setBoardOpen(false)}
+          >
             <button className="px-4 py-2 text-lg font-bold text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 flex items-center gap-1 cursor-pointer">
-              게시판 <ChevronDown size={14} className="opacity-60 group-hover:rotate-180 transition-transform duration-200" />
+              게시판 <ChevronDown size={14} className={`opacity-60 transition-transform duration-200 ${boardOpen ? 'rotate-180 text-brand-secondary' : ''}`} />
             </button>
-            <div className="absolute top-[80%] left-1/2 -translate-x-1/2 hidden group-hover:block w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-fade-in select-none">
-              <Link
-                to="/faq"
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <HelpCircle size={15} className="text-slate-400" />
-                FAQ
-              </Link>
-              <Link
-                to="/board"
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <FileText size={15} className="text-slate-400" />
-                게시판
-              </Link>
-              <Link
-                to="/inquiry"
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <MessageSquare size={15} className="text-slate-400" />
-                1:1 문의
-              </Link>
-            </div>
+            {boardOpen && (
+              <div className="absolute top-[80%] left-1/2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-slide-down select-none">
+                <Link
+                  to="/faq"
+                  onClick={() => setBoardOpen(false)}
+                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <HelpCircle size={15} className="text-slate-400" />
+                  FAQ
+                </Link>
+                <Link
+                  to="/board"
+                  onClick={() => setBoardOpen(false)}
+                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <FileText size={15} className="text-slate-400" />
+                  게시판
+                </Link>
+                <Link
+                  to="/inquiry"
+                  onClick={() => setBoardOpen(false)}
+                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <MessageSquare size={15} className="text-slate-400" />
+                  1:1 문의
+                </Link>
+              </div>
+            )}
           </div>
 
           {/* Admin Hover Dropdown Menu */}
-          <div className="relative group h-full flex items-center">
+          <div
+            className="relative h-full flex items-center"
+            onMouseEnter={() => setAdminOpen(true)}
+            onMouseLeave={() => setAdminOpen(false)}
+          >
             <button className="px-4 py-2 text-lg font-bold text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 flex items-center gap-1 cursor-pointer">
-              관리자 <ChevronDown size={14} className="opacity-60 group-hover:rotate-180 transition-transform duration-200" />
+              관리자 <ChevronDown size={14} className={`opacity-60 transition-transform duration-200 ${adminOpen ? 'rotate-180 text-brand-secondary' : ''}`} />
             </button>
-            <div className="absolute top-[80%] left-1/2 -translate-x-1/2 hidden group-hover:block w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-fade-in select-none">
-              <Link
-                to="/admin/register-course"
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <PlusCircle size={15} className="text-slate-400" />
-                교육과정 등록
-              </Link>
-              <Link
-                to="/admin/courses"
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <Settings size={15} className="text-slate-400" />
-                교육과정 관리
-              </Link>
-              <Link
-                to="/admin/registrations"
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <ClipboardList size={15} className="text-slate-400" />
-                수강 신청 현황
-              </Link>
-            </div>
+            {adminOpen && (
+              <div className="absolute top-[80%] left-1/2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-slide-down select-none">
+                <Link
+                  to="/admin/register-course"
+                  onClick={() => setAdminOpen(false)}
+                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <PlusCircle size={15} className="text-slate-400" />
+                  교육과정 등록
+                </Link>
+                <Link
+                  to="/admin/courses"
+                  onClick={() => setAdminOpen(false)}
+                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <Settings size={15} className="text-slate-400" />
+                  교육과정 관리
+                </Link>
+                <Link
+                  to="/admin/registrations"
+                  onClick={() => setAdminOpen(false)}
+                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                >
+                  <ClipboardList size={15} className="text-slate-400" />
+                  수강 신청 현황
+                </Link>
+              </div>
+            )}
           </div>
         </nav>
 

@@ -1,15 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Settings, ArrowLeft, RefreshCw, Layers, MapPin, Search, Calendar, Tag, Landmark, Clock, FileText } from 'lucide-react';
+import { Settings, ArrowLeft, RefreshCw, Layers, MapPin, Search, Calendar, Tag, Clock, FileText, X, Coins, BookOpen } from 'lucide-react';
 import { useToast } from '../../components/ui/Toast';
 import { api } from '../../services/api';
 import { courseService } from '../../services/courseService';
 import type { ApiCourse } from '../../services/courseService';
 import { CourseCard } from '../../components/ui/CourseCard';
 import type { Course } from '../../data/courses';
+import { RichTextEditor } from '../../components/ui/RichTextEditor';
 
 const CATEGORIES = ['전체', '인공지능', '클라우드', '스마트팩토리', '웹개발', '모바일앱', '로봇'];
 const REGIONS = ['전국', '서울', '경기', '부산', '인천', '광주'];
+
+const PREDEFINED_TAGS = [
+  'K-Digital',
+  'SeSAC(새싹)',
+];
 
 export const AdminCourses: React.FC = () => {
   const navigate = useNavigate();
@@ -29,7 +35,7 @@ export const AdminCourses: React.FC = () => {
   const [submitting, setSubmitting] = useState(false);
   const [courseForm, setCourseForm] = useState({
     title: '',
-    tags: 'K-Digital',
+    tags: '',
     region: '서울',
     description: '',
     apply_start_date: '',
@@ -234,9 +240,9 @@ export const AdminCourses: React.FC = () => {
                 <p className="text-slate-500 font-bold text-sm">상세 정보를 불러오는 중...</p>
               </div>
             ) : (
-              <form onSubmit={handleEditSubmit} className="p-8 space-y-8">
+              <form onSubmit={handleEditSubmit} className="p-8 space-y-12">
                 {/* Section 1: Basic Information */}
-                <div className="space-y-5">
+                <div className="space-y-3">
                   <h2 className="text-lg font-black text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
                     <FileText size={18} className="text-brand-primary" />
                     기본 과정 정보
@@ -258,17 +264,63 @@ export const AdminCourses: React.FC = () => {
                     <div className="flex flex-col gap-1.5">
                       <label htmlFor="tags" className="text-sm font-bold text-slate-700 flex items-center gap-1">
                         <Tag size={13} className="text-slate-400" />
-                        태그 (쉼표로 구분) *
+                        태그 관리 *
                       </label>
-                      <input
-                        id="tags"
-                        type="text"
-                        required
-                        value={courseForm.tags}
-                        onChange={e => setCourseForm(prev => ({ ...prev, tags: e.target.value }))}
-                        placeholder="예: K-Digital, 백엔드, FastAPI"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
-                      />
+                      <div className="flex gap-2">
+                        <input
+                          id="tags"
+                          type="text"
+                          required
+                          value={courseForm.tags}
+                          onChange={e => setCourseForm(prev => ({ ...prev, tags: e.target.value }))}
+                          placeholder="태그를 직접 입력하거나 우측 목록에서 선택해 주세요"
+                          className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        />
+                        <select
+                          onChange={(e) => {
+                            const val = e.target.value;
+                            if (!val) return;
+                            const current = courseForm.tags ? courseForm.tags.split(',').map(t => t.trim()).filter(Boolean) : [];
+                            if (!current.includes(val)) {
+                              const updated = [...current, val].join(', ');
+                              setCourseForm(prev => ({ ...prev, tags: updated }));
+                            }
+                            e.target.value = '';
+                          }}
+                          className="px-3 py-3 rounded-xl border border-slate-200 bg-white text-sm font-semibold focus:outline-none focus:border-brand-primary cursor-pointer max-w-[150px]"
+                          defaultValue=""
+                        >
+                          <option value="" disabled>태그 선택...</option>
+                          {PREDEFINED_TAGS.map(tag => (
+                            <option key={tag} value={tag}>{tag}</option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {/* Removable Badges */}
+                      {courseForm.tags && (
+                        <div className="flex flex-wrap gap-1.5 mt-1.5 select-none">
+                          {courseForm.tags.split(',').map(t => t.trim()).filter(Boolean).map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1 bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-bold"
+                            >
+                              {tag}
+                              <button
+                                type="button"
+                                onClick={() => {
+                                  const current = courseForm.tags.split(',').map(t => t.trim()).filter(Boolean);
+                                  const updated = current.filter(t => t !== tag).join(', ');
+                                  setCourseForm(prev => ({ ...prev, tags: updated }));
+                                }}
+                                className="text-slate-400 hover:text-slate-600 transition-colors p-0.5"
+                              >
+                                <X size={12} />
+                              </button>
+                            </span>
+                          ))}
+                        </div>
+                      )}
                     </div>
 
                     <div className="flex flex-col gap-1.5">
@@ -286,24 +338,11 @@ export const AdminCourses: React.FC = () => {
                         className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
-
-                    <div className="flex flex-col gap-1.5 sm:col-span-2">
-                      <label htmlFor="description" className="text-sm font-bold text-slate-700">과정 상세 소개 *</label>
-                      <textarea
-                        id="description"
-                        required
-                        value={courseForm.description}
-                        onChange={e => setCourseForm(prev => ({ ...prev, description: e.target.value }))}
-                        placeholder="교육 과정의 커리큘럼, 대상자 및 핵심 소개 내용을 입력해주세요."
-                        rows={4}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all resize-none select-text"
-                      />
-                    </div>
                   </div>
                 </div>
 
                 {/* Section 2: Schedules */}
-                <div className="space-y-5">
+                <div className="space-y-3">
                   <h2 className="text-lg font-black text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
                     <Calendar size={18} className="text-brand-primary" />
                     모집 및 교육 일정
@@ -376,9 +415,9 @@ export const AdminCourses: React.FC = () => {
                 </div>
 
                 {/* Section 3: Fees */}
-                <div className="space-y-5">
+                <div className="space-y-3">
                   <h2 className="text-lg font-black text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
-                    <Landmark size={18} className="text-brand-primary" />
+                    <Coins size={18} className="text-brand-primary" />
                     교육 비용 및 환급 조건
                   </h2>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
@@ -407,6 +446,22 @@ export const AdminCourses: React.FC = () => {
                         className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
+                  </div>
+                </div>
+
+                {/* Section 4: Description */}
+                <div className="space-y-3">
+                  <h2 className="text-lg font-black text-slate-800 flex items-center gap-2 border-b border-slate-100 pb-2">
+                    <BookOpen size={18} className="text-brand-primary" />
+                    교육과정 설명
+                  </h2>
+                  <div className="flex flex-col gap-1.5 sm:col-span-2">
+                    <label className="text-sm font-bold text-slate-700">과정 상세 소개 *</label>
+                    <RichTextEditor
+                      value={courseForm.description}
+                      onChange={html => setCourseForm(prev => ({ ...prev, description: html }))}
+                      placeholder="교육 과정의 커리큘럼, 대상자 및 핵심 소개 내용을 입력해주세요."
+                    />
                   </div>
                 </div>
 

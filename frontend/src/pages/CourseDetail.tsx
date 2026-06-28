@@ -184,10 +184,10 @@ export const CourseDetail: React.FC = () => {
                     onClick={handleEnrollClick}
                     disabled={course.status === '모집마감'}
                     className={`w-full py-4 rounded-xl font-bold text-base tracking-widest shadow-md transition-all duration-200 active:scale-98 flex items-center justify-center gap-2 ${course.status === '모집마감'
-                        ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none'
-                        : isEnrolled
-                          ? 'bg-slate-800 text-white hover:bg-slate-900'
-                          : 'bg-brand-primary text-white hover:bg-brand-secondary hover:shadow-lg'
+                      ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none'
+                      : isEnrolled
+                        ? 'bg-slate-800 text-white hover:bg-slate-900'
+                        : 'bg-brand-primary text-white hover:bg-brand-secondary hover:shadow-lg'
                       }`}
                   >
                     {isEnrolled ? (
