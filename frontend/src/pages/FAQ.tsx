@@ -121,8 +121,6 @@ export const FAQ: React.FC = () => {
           </button>
         </form>
 
-
-
         {/* FAQ Accordion List */}
         <div className="space-y-4">
           {filteredFaqs.length > 0 ? (

@@ -1,7 +1,7 @@
 """initial table
 
 Revision ID: 93c1264c48bb
-Revises: 
+Revises:
 Create Date: 2026-06-24 13:25:00.000000
 
 """
@@ -15,7 +15,6 @@ revision: str = '93c1264c48bb'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
-
 
 def upgrade() -> None:
     # 1. Create the 'users' table
@@ -40,7 +39,7 @@ def upgrade() -> None:
         sa.Column('region', sqlmodel.sql.sqltypes.AutoString(), nullable=False, comment="지역"),
         sa.Column('title', sqlmodel.sql.sqltypes.AutoString(), nullable=False, comment="코스 제목"),
         sa.Column('description', sqlmodel.sql.sqltypes.AutoString(), nullable=True, comment="코스 상세 설명"),
-        
+
         # 교육접수 기간, 교육기간
         sa.Column('apply_start_date', sa.Date(), nullable=False, comment="교육접수 시작일"),
         sa.Column('apply_end_date', sa.Date(), nullable=False, comment="교육접수 종료일"),
@@ -51,7 +50,7 @@ def upgrade() -> None:
         sa.Column('edu_time', sqlmodel.sql.sqltypes.AutoString(), nullable=True, comment="교육 시간"),
         sa.Column('edu_fee', sa.Integer(), nullable=False, comment="교육비"),
         sa.Column('refund_amount', sa.Integer(), nullable=False, comment="환급액"),
-        
+
         sa.Column('created_at', sa.DateTime(), nullable=False, comment="생성 일시"),
         sa.Column('updated_at', sa.DateTime(), nullable=False, comment="수정 일시"),
         sa.PrimaryKeyConstraint('id')
@@ -75,14 +74,13 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_course_registrations_course_id'), 'course_registrations', ['course_id'], unique=False)
 
-
 def downgrade() -> None:
     # Drop tables in reverse order to respect foreign key constraints
     op.drop_index(op.f('ix_course_registrations_course_id'), table_name='course_registrations')
     op.drop_table('course_registrations')
-    
+
     op.drop_index(op.f('ix_courses_title'), table_name='courses')
     op.drop_table('courses')
-    
+
     op.drop_index(op.f('ix_users_email'), table_name='users')
     op.drop_table('users')

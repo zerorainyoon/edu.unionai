@@ -5,6 +5,7 @@ services:
     build:
       context: . # 최상위 루트 디렉토리
       dockerfile: server/nginx/Dockerfile
+    image: edu-nginx
     container_name: edu-nginx
     restart: always
     ports:
@@ -18,6 +19,7 @@ services:
     build:
       context: ./server/backend
       dockerfile: Dockerfile
+    image: edu-backend
     container_name: edu-backend
     restart: always
     ports:

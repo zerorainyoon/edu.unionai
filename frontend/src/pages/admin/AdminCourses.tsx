@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Settings, ArrowLeft, RefreshCw, MapPin, Search, Calendar, Tag, Clock, FileText, X, Coins, BookOpen } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Settings, ArrowLeft, RefreshCw, MapPin, Search, Calendar, Tag, Clock, FileText, X, Coins, BookOpen, AlertCircle } from 'lucide-react';
 import { useToast } from '../../components/ui/Toast';
 import { api } from '../../services/api';
 import { courseService } from '../../services/courseService';
@@ -13,7 +13,7 @@ const REGIONS = ['전국', '서울', '경기', '부산', '인천', '광주'];
 
 const PREDEFINED_TAGS = [
   'K-Digital',
-  '새싹(SeSAC))',
+  '새싹(SeSAC)',
 ];
 
 export const AdminCourses: React.FC = () => {
@@ -29,7 +29,8 @@ export const AdminCourses: React.FC = () => {
   const [activeSubTab, setActiveSubTab] = useState('전체 과정');
 
   // Edit View State
-  const [editingCourseId, setEditingCourseId] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const editingCourseId = searchParams.get('edit');
   const [submitting, setSubmitting] = useState(false);
   const [courseForm, setCourseForm] = useState({
     title: '',
@@ -84,7 +85,7 @@ export const AdminCourses: React.FC = () => {
     } catch (err) {
       console.error(err);
       showToast('교육과정 상세 정보를 불러오는 중 오류가 발생했습니다.');
-      setEditingCourseId(null);
+      setSearchParams({});
     } finally {
       setLoading(false);
     }
@@ -114,11 +115,11 @@ export const AdminCourses: React.FC = () => {
   };
 
   const handleStartEdit = (id: string) => {
-    setEditingCourseId(id);
+    setSearchParams({ edit: id });
   };
 
   const handleCancelEdit = () => {
-    setEditingCourseId(null);
+    setSearchParams({});
   };
 
   const handleEditSubmit = async (e: React.FormEvent) => {
@@ -142,7 +143,7 @@ export const AdminCourses: React.FC = () => {
 
       await api.put(`/courses/${editingCourseId}`, payload);
       showToast(`'${courseForm.title}' 과정이 성공적으로 수정되었습니다.`);
-      setEditingCourseId(null);
+      setSearchParams({});
       fetchCourses();
     } catch (err) {
       console.error(err);
@@ -160,7 +161,7 @@ export const AdminCourses: React.FC = () => {
       await api.delete(`/courses/${id}`);
       showToast(`'${title}' 과정이 성공적으로 삭제되었습니다.`);
       if (editingCourseId === id) {
-        setEditingCourseId(null);
+        setSearchParams({});
       }
       fetchCourses();
     } catch (err) {
@@ -174,7 +175,7 @@ export const AdminCourses: React.FC = () => {
     const matchesTab =
       activeSubTab === '전체 과정' ||
       (activeSubTab === 'K-Digital Training' && course.type === 'k-digital') ||
-      (activeSubTab === '새싹' && course.type === 'sesac');
+      (activeSubTab === '새싹(SeSAC)' && course.type === 'sesac');
 
     if (!matchesTab) return false;
 
@@ -191,8 +192,6 @@ export const AdminCourses: React.FC = () => {
 
   const kDigitalCourses = filteredCourses.filter(c => c.type === 'k-digital');
   const sesacCourses = filteredCourses.filter(c => c.type === 'sesac');
-
-
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
@@ -519,7 +518,7 @@ export const AdminCourses: React.FC = () => {
                     key={tab}
                     href="#"
                     onClick={(e) => handleSubTabClick(e, tab)}
-                    className={`py-3 px-5 text-base font-bold border-b-2 shrink-0 transition-all duration-200 ${isActive
+                    className={`py-3 px-5 text-lg font-bold border-b-2 shrink-0 transition-all duration-200 ${isActive
                       ? 'border-brand-secondary text-brand-secondary'
                       : 'border-transparent text-slate-400 hover:text-slate-700'
                       }`}
@@ -533,25 +532,23 @@ export const AdminCourses: React.FC = () => {
             {/* Filter and Search Console */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col gap-6 select-none">
               {/* Region Chips */}
-              <div className="flex flex-col md:flex-row gap-3 items-start">
-                <span className="text-sm font-bold text-slate-400 mt-2 shrink-0 flex items-center gap-1.5">
-                  <MapPin size={14} />
-                  지역별 필터
-                </span>
-                <div className="flex flex-wrap gap-1.5">
-                  {REGIONS.map((reg) => (
-                    <button
-                      key={reg}
-                      onClick={() => setSelectedRegion(reg)}
-                      className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold tracking-wide border transition-all duration-200 cursor-pointer ${selectedRegion === reg
-                        ? 'bg-brand-secondary text-white border-brand-secondary shadow-sm'
-                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                        }`}
-                    >
-                      {reg}
-                    </button>
-                  ))}
-                </div>
+              <span className="text-base font-bold text-slate-400 mt-2 shrink-0 flex items-center gap-1.5">
+                <MapPin size={14} />
+                지역별 필터
+              </span>
+              <div className="flex flex-wrap gap-1.5">
+                {REGIONS.map((reg) => (
+                  <button
+                    key={reg}
+                    onClick={() => setSelectedRegion(reg)}
+                    className={`px-3.5 py-1.5 rounded-xl text-sm font-semibold tracking-wide border transition-all duration-200 cursor-pointer ${selectedRegion === reg
+                      ? 'bg-brand-secondary text-white border-brand-secondary shadow-sm'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                      }`}
+                  >
+                    {reg}
+                  </button>
+                ))}
               </div>
 
               {/* Search bar & Reset buttons */}
@@ -569,7 +566,7 @@ export const AdminCourses: React.FC = () => {
                   </div>
                   <button
                     type="submit"
-                    className="bg-brand-primary text-white font-bold text-xs px-4 py-2 rounded-lg hover:bg-brand-secondary transition-colors cursor-pointer"
+                    className="bg-brand-primary text-white font-bold text-sm px-4 py-2 rounded-lg hover:bg-brand-secondary transition-colors cursor-pointer"
                   >
                     검색
                   </button>
@@ -577,7 +574,7 @@ export const AdminCourses: React.FC = () => {
 
                 <button
                   onClick={handleClearFilters}
-                  className="flex items-center justify-center gap-1.5 text-xs font-bold text-slate-600 hover:text-brand-primary bg-white border border-slate-200 shadow-sm px-3.5 py-2.5 rounded-xl active:scale-95 transition-all cursor-pointer select-none"
+                  className="flex items-center justify-center gap-1.5 text-sm font-bold text-slate-600 hover:text-brand-primary bg-white border border-slate-200 shadow-sm px-4 py-2.5 rounded-xl active:scale-95 transition-all cursor-pointer select-none"
                 >
                   <RefreshCw size={12} />
                   필터 초기화
@@ -592,17 +589,17 @@ export const AdminCourses: React.FC = () => {
                 <p className="text-slate-500 font-bold text-sm">교육 과정 리스트를 불러오는 중...</p>
               </div>
             ) : filteredCourses.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center shadow-sm max-w-md mx-auto animate-fade-in">
-                <div className="inline-flex p-4 rounded-full bg-slate-50 text-slate-400 mb-4">
-                  <Settings size={36} />
+              <div className="bg-white rounded-3xl border border-slate-200 p-12 md:p-16 text-center shadow-sm max-w-xl mx-auto animate-fade-in">
+                <div className="inline-flex p-4 rounded-full bg-slate-50 text-slate-400 mb-5">
+                  <AlertCircle size={48} />
                 </div>
-                <h3 className="text-xl font-bold text-slate-900 mb-2">검색 결과가 없습니다</h3>
-                <p className="text-sm text-slate-500 leading-relaxed mb-6 max-w-xs mx-auto">
+                <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-4">검색 결과가 없습니다</h3>
+                <p className="text-base md:text-lg text-slate-500 leading-relaxed mb-8 max-w-md mx-auto">
                   선택한 필터 조건에 해당하는 교육 과정이 존재하지 않습니다. 필터를 초기화해 보세요.
                 </p>
                 <button
                   onClick={handleClearFilters}
-                  className="bg-brand-primary text-white font-bold text-xs px-5 py-2.5 rounded-xl hover:bg-brand-secondary transition-colors shadow-sm active:scale-95 duration-200 cursor-pointer"
+                  className="bg-brand-primary text-white font-bold text-base px-6 py-3 rounded-xl hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200 cursor-pointer"
                 >
                   필터 초기화
                 </button>

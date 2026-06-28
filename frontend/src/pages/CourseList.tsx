@@ -67,7 +67,7 @@ export const CourseList: React.FC = () => {
     const matchesTab =
       activeSubTab === '전체 과정' ||
       (activeSubTab === 'K-Digital Training' && course.type === 'k-digital') ||
-      (activeSubTab === '새싹' && course.type === 'sesac');
+      (activeSubTab === '새싹(SeSAC)' && course.type === 'sesac');
 
     if (!matchesTab) return false;
 

@@ -40,7 +40,7 @@ apiClient.interceptors.response.use(
   (error: AxiosError) => {
     // Global Error Handling Logic
     const status = error.response ? error.response.status : null;
-    
+
     if (status === 401) {
       console.warn('Unauthorized request! Redirecting or clearing credentials...');
       // e.g. localStorage.removeItem('auth_token');

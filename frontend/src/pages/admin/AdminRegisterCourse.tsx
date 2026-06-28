@@ -7,7 +7,7 @@ import { RichTextEditor } from '../../components/ui/RichTextEditor';
 
 const PREDEFINED_TAGS = [
   'K-Digital',
-  '새싹(SeSAC))',
+  '새싹(SeSAC)',
 ];
 
 export const AdminRegisterCourse: React.FC = () => {

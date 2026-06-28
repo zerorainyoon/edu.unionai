@@ -35,7 +35,6 @@ export interface Course {
   edu_end_date?: string;
 }
 
-
 const GRADIENTS = [
   { from: '#4F46E5', to: '#06B6D4' }, // Indigo -> Cyan
   { from: '#3B82F6', to: '#8B5CF6' }, // Blue -> Purple
