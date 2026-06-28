@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Menu, X, User, LogIn, ExternalLink, GraduationCap, PlusCircle, ClipboardList, ChevronDown, Settings } from 'lucide-react';
+import { Menu, X, User, LogIn, ExternalLink, GraduationCap, PlusCircle, ClipboardList, ChevronDown, Settings, HelpCircle, MessageSquare, FileText } from 'lucide-react';
 import { useToast } from '../ui/Toast';
 
 export const Header: React.FC = () => {
@@ -106,6 +106,36 @@ export const Header: React.FC = () => {
             )
           ))}
 
+          {/* Board Hover Dropdown Menu */}
+          <div className="relative group h-full flex items-center">
+            <button className="px-4 py-2 text-lg font-bold text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 flex items-center gap-1 cursor-pointer">
+              게시판 <ChevronDown size={14} className="opacity-60 group-hover:rotate-180 transition-transform duration-200" />
+            </button>
+            <div className="absolute top-[80%] left-1/2 -translate-x-1/2 hidden group-hover:block w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-fade-in select-none">
+              <button
+                onClick={(e) => handlePlaceholderClick(e, 'FAQ')}
+                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              >
+                <HelpCircle size={15} className="text-slate-400" />
+                FAQ
+              </button>
+              <button
+                onClick={(e) => handlePlaceholderClick(e, '게시판')}
+                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              >
+                <FileText size={15} className="text-slate-400" />
+                게시판
+              </button>
+              <button
+                onClick={(e) => handlePlaceholderClick(e, '1:1 문의')}
+                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              >
+                <MessageSquare size={15} className="text-slate-400" />
+                1:1 문의
+              </button>
+            </div>
+          </div>
+
           {/* Admin Hover Dropdown Menu */}
           <div className="relative group h-full flex items-center">
             <button className="px-4 py-2 text-lg font-bold text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 flex items-center gap-1 cursor-pointer">
@@ -113,18 +143,18 @@ export const Header: React.FC = () => {
             </button>
             <div className="absolute top-[80%] left-1/2 -translate-x-1/2 hidden group-hover:block w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-fade-in select-none">
               <Link
-                to="/admin/courses"
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <Settings size={15} className="text-slate-400" />
-                교육과정 관리
-              </Link>
-              <Link
                 to="/admin/register-course"
                 className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <PlusCircle size={15} className="text-slate-400" />
                 교육과정 등록
+              </Link>
+              <Link
+                to="/admin/courses"
+                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+              >
+                <Settings size={15} className="text-slate-400" />
+                교육과정 관리
               </Link>
               <Link
                 to="/admin/registrations"
@@ -190,19 +220,39 @@ export const Header: React.FC = () => {
               )
             ))}
 
+            {/* Mobile Board menu */}
+            <div className="border-t border-slate-100 pt-3 mt-3 space-y-1 select-none">
+              <span className="block px-4 py-1 text-xs font-black text-slate-400 uppercase tracking-wider">
+                게시판
+              </span>
+              <button
+                onClick={(e) => handlePlaceholderClick(e, 'FAQ')}
+                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              >
+                <HelpCircle size={18} className="text-slate-400" />
+                FAQ
+              </button>
+              <button
+                onClick={(e) => handlePlaceholderClick(e, '게시판')}
+                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              >
+                <FileText size={18} className="text-slate-400" />
+                게시판
+              </button>
+              <button
+                onClick={(e) => handlePlaceholderClick(e, '1:1 문의')}
+                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              >
+                <MessageSquare size={18} className="text-slate-400" />
+                1:1 문의
+              </button>
+            </div>
+
             {/* Mobile Admin menu */}
             <div className="border-t border-slate-100 pt-3 mt-3 space-y-1 select-none">
               <span className="block px-4 py-1 text-xs font-black text-slate-400 uppercase tracking-wider">
                 관리자 메뉴
               </span>
-              <Link
-                to="/admin/courses"
-                onClick={() => setIsOpen(false)}
-                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
-              >
-                <Settings size={18} className="text-slate-400" />
-                교육과정 관리
-              </Link>
               <Link
                 to="/admin/register-course"
                 onClick={() => setIsOpen(false)}
@@ -210,6 +260,14 @@ export const Header: React.FC = () => {
               >
                 <PlusCircle size={18} className="text-slate-400" />
                 교육과정 등록
+              </Link>
+              <Link
+                to="/admin/courses"
+                onClick={() => setIsOpen(false)}
+                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
+              >
+                <Settings size={18} className="text-slate-400" />
+                교육과정 관리
               </Link>
               <Link
                 to="/admin/registrations"
