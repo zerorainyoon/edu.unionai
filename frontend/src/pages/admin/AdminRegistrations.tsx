@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ClipboardList, ArrowLeft, RefreshCw, Mail, Phone, Clock } from 'lucide-react';
+import { ClipboardList, ArrowLeft, RefreshCw } from 'lucide-react';
 import { useToast } from '../../components/ui/Toast';
 import { api } from '../../services/api';
 import { courseService } from '../../services/courseService';
@@ -175,12 +175,6 @@ export const AdminRegistrations: React.FC = () => {
                   <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
                   새로고침
                 </button>
-
-                {/* Registration Count Badge */}
-                <div className="bg-white/10 rounded-2xl px-5 py-3 border border-white/10 text-left">
-                  <span className="text-xs font-bold text-slate-400 block mb-0.5">전체 접수 내역</span>
-                  <span className="text-2xl font-black text-white">{loading ? '...' : registrations.length}건</span>
-                </div>
               </div>
             </div>
           </div>
@@ -224,10 +218,6 @@ export const AdminRegistrations: React.FC = () => {
                   <span className="block text-xs font-bold text-slate-400 uppercase mb-0.5">모집 기간</span>
                   <span className="font-extrabold text-slate-700">{selectedCourse.applyPeriod}</span>
                 </div>
-                <div className="bg-brand-primary/5 border border-brand-primary/10 rounded-2xl px-4 py-2.5 text-sm shadow-sm">
-                  <span className="block text-xs font-bold text-brand-primary uppercase mb-0.5">선택 코스 신청자</span>
-                  <span className="font-black text-brand-primary">{filteredRegistrations.length}명</span>
-                </div>
               </div>
             )}
           </div>
@@ -264,28 +254,33 @@ export const AdminRegistrations: React.FC = () => {
                 <table className="w-full text-left border-collapse text-sm">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 font-extrabold text-slate-600">
+                      <th className="p-4.5 select-none w-16 text-center">No</th>
                       <th className="p-4.5 select-none">신청자</th>
-                      <th className="p-4.5 select-none">연락처 / 이메일</th>
+                      <th className="p-4.5 select-none">연락처</th>
+                      <th className="p-4.5 select-none">이메일</th>
                       <th className="p-4.5 select-none">접수 상태</th>
                       <th className="p-4.5 select-none">관리자 코멘트</th>
                       <th className="p-4.5 select-none">신청일시</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                    {filteredRegistrations.map((reg) => (
+                    {filteredRegistrations.map((reg, idx) => (
                       <tr key={reg.id} className="hover:bg-slate-50/50 transition-colors">
+                        <td className="p-4.5 text-slate-400 font-bold text-center select-none w-16">
+                          {idx + 1}
+                        </td>
                         <td className="p-4.5">
-                          <span className="bg-slate-100 text-slate-800 text-sm font-black px-3 py-1.5 rounded-lg border border-slate-200">
+                          <span className="text-slate-800 text-sm px-3 py-1.5">
                             {reg.name}
                           </span>
                         </td>
                         <td className="p-4.5">
-                          <div className="flex items-center gap-1.5 font-bold text-slate-800">
-                            <Phone size={15} className="text-slate-400" />
+                          <div className="flex items-center gap-1.5 text-slate-800">
                             {reg.phone}
                           </div>
-                          <div className="flex items-center gap-1.5 text-sm text-slate-400 font-semibold mt-1">
-                            <Mail size={14} className="text-slate-300" />
+                        </td>
+                        <td className="p-4.5">
+                          <div className="flex items-center gap-1.5 text-sm text-slate-600 font-semibold">
                             {reg.email}
                           </div>
                         </td>
@@ -311,13 +306,11 @@ export const AdminRegistrations: React.FC = () => {
                             value={reg.comment || ''}
                             onChange={(e) => handleCommentChange(reg.id, e.target.value)}
                             onBlur={() => handleCommentBlur(reg)}
-                            placeholder="코멘트를 입력하세요 (입력 후 포커스 아웃 시 저장)"
                             className="w-full text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm border bg-white border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                           />
                         </td>
                         <td className="p-4.5 text-sm text-slate-400 font-semibold">
                           <div className="flex items-center gap-1">
-                            <Clock size={14} className="text-slate-300" />
                             {new Date(reg.created_at).toLocaleDateString('ko-KR', {
                               year: 'numeric',
                               month: '2-digit',

@@ -7,7 +7,7 @@ import { RichTextEditor } from '../../components/ui/RichTextEditor';
 
 const PREDEFINED_TAGS = [
   'K-Digital',
-  'SeSAC(새싹)',
+  '새싹(SeSAC))',
 ];
 
 export const AdminRegisterCourse: React.FC = () => {
@@ -103,7 +103,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     required
                     value={courseForm.title}
                     onChange={e => setCourseForm(prev => ({ ...prev, title: e.target.value }))}
-                    placeholder="예: (2) FastAPI 실무 마스터 클래스"
+                    placeholder="예: Physical AI 엔지니어"
                     title="과정명"
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />

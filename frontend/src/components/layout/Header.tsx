@@ -17,7 +17,7 @@ export const Header: React.FC = () => {
   };
 
   const navItems = [
-    { name: 'WORK.AI', path: '/', isPlaceholder: false },
+    { name: 'UnionAI', path: '/', isPlaceholder: false },
     { name: '교육 과정', path: '/courses', isPlaceholder: false },
     // { name: '맞춤형교육신청', path: '/custom-training', isPlaceholder: true },
     // { name: '고객센터', path: '/support', isPlaceholder: true },
@@ -68,10 +68,7 @@ export const Header: React.FC = () => {
             </div>
             <div className="flex flex-col">
               <span className="text-lg md:text-xl font-black text-brand-primary tracking-tight leading-none">
-                WORK.AI
-              </span>
-              <span className="text-xs font-bold text-slate-400 mt-0.5 tracking-wider">
-                대한상공회의소
+                UnionAI
               </span>
             </div>
           </Link>

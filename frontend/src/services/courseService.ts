@@ -37,16 +37,6 @@ const GRADIENTS = [
 ];
 
 const mapApiCourseToCourse = (apiCourse: ApiCourse): Course => {
-  const CATEGORIES = ['인공지능', '클라우드', '스마트팩토리', '웹개발', '모바일앱', '로봇', '스마트모빌리티', '빅데이터', '데이터공학', 'AI 비즈니스 기획', '산업로봇', '자동화'];
-  const matchedCategories = apiCourse.tags.filter(t =>
-    CATEGORIES.some(cat => t.includes(cat))
-  );
-  const category = matchedCategories.join(' / ') || '일반 교육';
-
-  // const REGIONS = ['서울', '경기', '부산', '인천', '광주', '전국'];
-  // const matchedRegion = apiCourse.tags.find(t =>
-  //   REGIONS.some(reg => t.includes(reg))
-  // ) || '서울';
   const location = `${apiCourse.region} / 대한상의 교육관`;
 
   const fee = apiCourse.edu_fee === 0 ? '무료 (전액 국비 지원)' : `${apiCourse.edu_fee.toLocaleString()}원`;
@@ -66,7 +56,8 @@ const mapApiCourseToCourse = (apiCourse: ApiCourse): Course => {
   const gradientFrom = GRADIENTS[gradIndex].from;
   const gradientTo = GRADIENTS[gradIndex].to;
 
-  const hasSesac = apiCourse.tags.some(t => {
+  const titleLower = apiCourse.title.toLowerCase();
+  const hasSesac = titleLower.includes('sesac') || titleLower.includes('새싹') || apiCourse.tags.some(t => {
     const lower = t.toLowerCase();
     return lower.includes('sesac') || lower.includes('새싹');
   });
@@ -88,7 +79,6 @@ const mapApiCourseToCourse = (apiCourse: ApiCourse): Course => {
   return {
     id: String(apiCourse.id),
     title: apiCourse.title,
-    category,
     tags: apiCourse.tags,
     duration,
     applyPeriod,
@@ -149,35 +139,5 @@ export const courseService = {
     });
 
     return mapped;
-  },
-
-  /**
-   * 특정 교육과정 상세 조회
-   * @param id 교육과정 고유 ID
-   */
-  getCourseById: async (id: string): Promise<Course> => {
-    const data = await api.get<WrappedResponse<ApiCourse>>(`/courses/${id}`);
-    const apiCourse = data.response;
-    const mapped = mapApiCourseToCourse(apiCourse);
-
-    // Also update MOCK_COURSES cache
-    const idx = MOCK_COURSES.findIndex(mc => mc.id === mapped.id);
-    if (idx > -1) {
-      MOCK_COURSES[idx] = mapped;
-    } else {
-      MOCK_COURSES.push(mapped);
-    }
-
-    return mapped;
-  },
-
-  /**
-   * 특정 교육과정에 수강신청 제출
-   */
-  applyCourse: async (
-    courseId: string,
-    studentInfo: { name: string; phone: string; agreement: boolean }
-  ): Promise<{ success: boolean; message: string }> => {
-    return api.post<{ success: boolean; message: string }>(`/courses/${courseId}/apply`, studentInfo);
   }
 };

@@ -106,7 +106,7 @@ export const Board: React.FC = () => {
 
     setPosts(prev => [newPost, ...prev]);
     showToast('새 글이 성공적으로 등록되었습니다.');
-    
+
     // Reset Form & Close Modal
     setNewTitle('');
     setNewCategory('free');
@@ -135,15 +135,12 @@ export const Board: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
       <div className="max-w-6xl mx-auto">
-        
+
         {/* Banner Section */}
         <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl border border-slate-200 mb-8 animate-fade-in relative">
           <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
           <div className="relative z-10 px-8 py-8 md:py-10 flex flex-col md:flex-row items-center justify-between gap-6">
             <div className="text-left select-text max-w-xl">
-              <span className="text-xs font-black text-brand-accent-light uppercase tracking-widest bg-brand-primary/30 px-3 py-1 rounded-md mb-3 inline-block">
-                COMMUNITY
-              </span>
               <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
                 <FileText className="text-brand-accent-light stroke-[2.5]" size={30} />
                 통합 게시판
@@ -169,11 +166,10 @@ export const Board: React.FC = () => {
               <button
                 key={cat.key}
                 onClick={() => setSelectedCategory(cat.key as any)}
-                className={`px-4 py-2 rounded-xl text-xs font-black tracking-wide border cursor-pointer active:scale-95 transition-all duration-200 ${
-                  selectedCategory === cat.key
+                className={`px-4 py-2 rounded-xl text-xs font-black tracking-wide border cursor-pointer active:scale-95 transition-all duration-200 ${selectedCategory === cat.key
                     ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/10'
                     : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                }`}
+                  }`}
               >
                 {cat.label}
               </button>
@@ -215,13 +211,12 @@ export const Board: React.FC = () => {
                     >
                       <td className="px-6 py-4 text-center select-none">
                         <span
-                          className={`inline-block px-2.5 py-1 rounded-lg text-xxs font-black tracking-wide ${
-                            post.category === 'notice'
+                          className={`inline-block px-2.5 py-1 rounded-lg text-xxs font-black tracking-wide ${post.category === 'notice'
                               ? 'bg-rose-50 text-rose-700 border border-rose-100'
                               : post.category === 'review'
                                 ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
                                 : 'bg-slate-100 text-slate-600'
-                          }`}
+                            }`}
                         >
                           {post.category === 'notice' ? '공지' : post.category === 'review' ? '후기' : '자유'}
                         </span>
@@ -280,7 +275,7 @@ export const Board: React.FC = () => {
                   {selectedPost.category === 'notice' ? '공지사항' : selectedPost.category === 'review' ? '취업 후기' : '자유게시글'}
                 </span>
                 <h2 className="text-lg md:text-xl font-black leading-snug pr-8">{selectedPost.title}</h2>
-                
+
                 {/* Meta details */}
                 <div className="flex flex-wrap gap-4 mt-4 text-xs font-bold text-slate-400 select-none">
                   <span className="flex items-center gap-1"><User size={13} /> {selectedPost.author}</span>

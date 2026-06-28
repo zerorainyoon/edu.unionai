@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Search, MapPin, Grid, Layers, RefreshCw, AlertCircle } from 'lucide-react';
+import { Search, MapPin, Grid, RefreshCw, AlertCircle } from 'lucide-react';
 import { CourseCard } from '../components/ui/CourseCard';
 import { useToast } from '../components/ui/Toast';
 import type { Course } from '../data/courses';
 import { courseService } from '../services/courseService';
 
-const CATEGORIES = ['전체', '인공지능', '클라우드', '스마트팩토리', '웹개발', '모바일앱', '로봇'];
 const REGIONS = ['전국', '서울', '경기', '부산', '인천', '광주'];
 
 export const CourseList: React.FC = () => {
@@ -14,7 +13,6 @@ export const CourseList: React.FC = () => {
   const { showToast } = useToast();
 
   const searchFilter = searchParams.get('search') || '';
-  const [selectedCategory, setSelectedCategory] = useState('전체');
   const [selectedRegion, setSelectedRegion] = useState('전국');
   const [activeSubTab, setActiveSubTab] = useState('전체 과정');
 
@@ -57,7 +55,6 @@ export const CourseList: React.FC = () => {
   };
 
   const handleClearFilters = () => {
-    setSelectedCategory('전체');
     setSelectedRegion('전국');
     setSearchInput('');
     setSearchParams({});
@@ -77,20 +74,14 @@ export const CourseList: React.FC = () => {
     // 2. Search Keyword Filtering
     const matchesSearch =
       course.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
-      course.category.toLowerCase().includes(searchFilter.toLowerCase());
-
-    // 3. Dropdown Category Filtering
-    const matchesCategory =
-      selectedCategory === '전체' ||
-      course.category.replace(/\s+/g, '').includes(selectedCategory) ||
-      course.title.replace(/\s+/g, '').includes(selectedCategory);
+      course.tags.some(t => t.toLowerCase().includes(searchFilter.toLowerCase()));
 
     // 4. Region Filtering
     const matchesRegion =
       selectedRegion === '전국' ||
       course.location.startsWith(selectedRegion);
 
-    return matchesSearch && matchesCategory && matchesRegion;
+    return matchesSearch && matchesRegion;
   });
 
   // Split filtered list by course type
@@ -107,16 +98,16 @@ export const CourseList: React.FC = () => {
             Education Directory
           </span>
           <h1 className="text-2xl md:text-4xl font-black text-slate-900 mb-3 tracking-tight">
-            대한상공회의소 교육 과정
+            UnionAI 교육 과정
           </h1>
-          <p className="text-sm md:text-base text-slate-500 max-w-xl mx-auto leading-relaxed">
-            대한상공회의소가 검증하는 현장 밀착형 실무 교육입니다. 국비 지원 혜택을 받고 성공적인 취업 파트너를 만나보세요.
+          <p className="text-sm md:text-base text-slate-500 max-w-xl mx-auto leading-relaxed break-keep">
+            UnionAI가 검증하는 현장 밀착형 실무 교육입니다. 국비 지원 혜택을 받고 성공적인 취업 파트너를 만나보세요.
           </p>
         </div>
 
         {/* Education course type subtabs */}
         <div className="border-b border-slate-200 mb-8 w-full flex overflow-x-auto scrollbar-none gap-2 pb-px">
-          {['전체 과정', 'K-Digital Training', '새싹'].map((tab) => {
+          {['전체 과정', 'K-Digital Training', '새싹(SeSAC)'].map((tab) => {
             const isActive = activeSubTab === tab;
             return (
               <a
@@ -136,48 +127,24 @@ export const CourseList: React.FC = () => {
 
         {/* Filter and Search Console */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8 flex flex-col gap-6">
-          {/* Category Chips */}
-          <div className="flex flex-col md:flex-row gap-3 items-start">
-            <span className="text-base font-bold text-slate-400 mt-2 shrink-0 flex items-center gap-1.5">
-              <Layers size={14} />
-              분야별 필터
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-3.5 py-1.5 rounded-xl text-sm font-semibold tracking-wide border transition-all duration-200 ${selectedCategory === cat
-                    ? 'bg-brand-primary text-white border-brand-primary shadow-sm'
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                    }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
-          </div>
-
           {/* Region Chips */}
-          <div className="flex flex-col md:flex-row gap-3 items-start pt-4 border-t border-slate-100">
-            <span className="text-base font-bold text-slate-400 mt-2 shrink-0 flex items-center gap-1.5">
-              <MapPin size={14} />
-              지역별 필터
-            </span>
-            <div className="flex flex-wrap gap-1.5">
-              {REGIONS.map((reg) => (
-                <button
-                  key={reg}
-                  onClick={() => setSelectedRegion(reg)}
-                  className={`px-3.5 py-1.5 rounded-xl text-sm font-semibold tracking-wide border transition-all duration-200 ${selectedRegion === reg
-                    ? 'bg-brand-secondary text-white border-brand-secondary shadow-sm'
-                    : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                    }`}
-                >
-                  {reg}
-                </button>
-              ))}
-            </div>
+          <span className="text-base font-bold text-slate-400 mt-2 shrink-0 flex items-center gap-1.5">
+            <MapPin size={14} />
+            지역별 필터
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {REGIONS.map((reg) => (
+              <button
+                key={reg}
+                onClick={() => setSelectedRegion(reg)}
+                className={`px-3.5 py-1.5 rounded-xl text-sm font-semibold tracking-wide border transition-all duration-200 ${selectedRegion === reg
+                  ? 'bg-brand-secondary text-white border-brand-secondary shadow-sm'
+                  : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                  }`}
+              >
+                {reg}
+              </button>
+            ))}
           </div>
 
           {/* Search bar & Reset buttons */}
@@ -249,7 +216,7 @@ export const CourseList: React.FC = () => {
                 <div className="space-y-4">
                   <div className="flex items-center gap-2 border-l-4 border-brand-primary pl-3 py-1">
                     <h2 className="text-xl font-extrabold text-slate-800">K-Digital Training 과정</h2>
-                    <span className="text-xs text-slate-400 font-semibold mt-1">대한상공회의소 혁신 실무 인재 양성</span>
+                    <span className="text-xs text-slate-400 font-semibold mt-1">디지털 신기술 실전형 인재 양성</span>
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                     {kDigitalCourses.map((course) => (

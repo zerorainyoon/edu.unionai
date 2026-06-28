@@ -20,11 +20,10 @@ export const Footer: React.FC = () => {
               <div className="bg-brand-secondary/20 text-brand-accent p-1.5 rounded-lg">
                 <GraduationCap size={20} />
               </div>
-              <span className="text-base font-extrabold text-white tracking-tight">WORK.AI</span>
-              <span className="text-xs text-slate-500 font-semibold border-l border-slate-700 pl-2">대한상공회의소 인재개발원</span>
+              <span className="text-base font-extrabold text-white tracking-tight">UnionAI</span>
             </div>
-            <p className="text-sm leading-relaxed text-slate-500 max-w-sm">
-              대한상공회의소 WORK.AI는 AI 신기술 인재를 양성하고, 산업 수요 맞춤형 직무 교육을 통해 구직자의 취업 성공과 재직자의 역량 강화를 지원합니다.
+            <p className="text-sm leading-relaxed text-slate-500 max-w-sm break-keep">
+              UnionAI는 디지털 신기술 분야의 실전형 인재를 양성하고, 산업 수요 맞춤형 직무 교육을 통해 구직자의 취업 성공과 재직자의 역량 강화를 지원하는 교육 플랫폼입니다.
             </p>
           </div>
 

@@ -1,7 +1,6 @@
 export interface Course {
   id: string;
   title: string;
-  category: string;
   tags: string[];
   duration: string;
   applyPeriod: string;
@@ -52,7 +51,6 @@ export const MOCK_COURSES: Course[] = [
   {
     id: '1',
     title: '[K-Digital Training] 생성형 AI 모델 기반의 풀스택 웹 개발자 양성 과정',
-    category: '인공지능 / 웹개발',
     tags: ['국비지원', '선착순', '취업연계'],
     duration: '2026.07.20 ~ 2026.12.28',
     applyPeriod: '2026.06.01 ~ 2026.07.15',
@@ -91,7 +89,6 @@ export const MOCK_COURSES: Course[] = [
   {
     id: '2',
     title: '[K-Digital Academy] AWS 클라우드 아키텍처 및 DevSecOps 엔지니어 육성',
-    category: '클라우드 / 인프라',
     tags: ['국비지원', '대기업참여', '온오프병행'],
     duration: '2026.08.03 ~ 2027.01.29',
     applyPeriod: '2026.06.10 ~ 2026.07.25',
@@ -129,9 +126,8 @@ export const MOCK_COURSES: Course[] = [
   },
   {
     id: '3',
-    title: '자율주행 모빌리티를 위한 임베디드 및 ROS 제어 시스템 핵심 인재 양성',
-    category: '스마트모빌리티',
-    tags: ['국비지원', '임베디드', '협약기업채용'],
+    title: '[SeSAC] 로봇 자율주행(SLAM/Navigation) 제어 소프트웨어 전문인력 과정',
+    tags: ['SeSAC(새싹)', '청년취업사관학교', '포트폴리오', '실습장비지원'],
     duration: '2026.07.10 ~ 2026.12.18',
     applyPeriod: '2026.05.20 ~ 2026.07.05',
     location: '부산 / 부산상공회의소',
@@ -139,7 +135,7 @@ export const MOCK_COURSES: Course[] = [
     status: '마감임박',
     gradientFrom: GRADIENTS[2].from,
     gradientTo: GRADIENTS[2].to,
-    type: 'k-digital',
+    type: 'sesac',
     institution: '부산상공회의소 인재개발센터',
     hours: '800시간 (총 100일)',
     feeOriginal: '8,500,000원',
@@ -168,9 +164,8 @@ export const MOCK_COURSES: Course[] = [
   },
   {
     id: '4',
-    title: '스마트 팩토리 운영 및 제조 데이터 분석 전문가 양성 과정',
-    category: '스마트팩토리',
-    tags: ['정부지원', '제조업특화', '새싹'],
+    title: '[K-Digital Training] PLC/SCADA 기반의 스마트 팩토리 제어 엔지니어 양성 과정',
+    tags: ['국비지원', '산업체연계', '실무중심'],
     duration: '2026.07.25 ~ 2026.11.30',
     applyPeriod: '2026.06.01 ~ 2026.07.20',
     location: '인천 / 인천인재교육원',
@@ -178,7 +173,7 @@ export const MOCK_COURSES: Course[] = [
     status: '모집중',
     gradientFrom: GRADIENTS[3].from,
     gradientTo: GRADIENTS[3].to,
-    type: 'sesac',
+    type: 'k-digital',
     institution: '인천상공회의소 인재개발원',
     hours: '680시간 (총 85일)',
     feeOriginal: '7,200,000원',
@@ -207,9 +202,8 @@ export const MOCK_COURSES: Course[] = [
   },
   {
     id: '5',
-    title: '[K-디지털 특화] 빅데이터 플랫폼 구축 및 하둡 분산 시스템 설계 과정',
-    category: '빅데이터 / 데이터공학',
-    tags: ['국비지원', '취업추천'],
+    title: '[K-Digital Training] 대용량 빅데이터 파이프라인 구축 및 플랫폼 엔지니어 양성',
+    tags: ['국비지원', '빅데이터실습', '취업100%연계'],
     duration: '2026.05.15 ~ 2026.10.20',
     applyPeriod: '2026.04.01 ~ 2026.05.10',
     location: '서울 / 세종센터',
@@ -246,9 +240,8 @@ export const MOCK_COURSES: Course[] = [
   },
   {
     id: '6',
-    title: 'Flutter 기반 크로스플랫폼 하이브리드 모바일 앱 실무 엔지니어 과정',
-    category: '모바일앱 개발',
-    tags: ['온라인훈련', '단기집중', '새싹'],
+    title: '[SeSAC] Flutter 하이브리드 앱 개발 및 서비스 출시 포트폴리오 완성반',
+    tags: ['새싹과정', '단기완성', '스토어등록지원'],
     duration: '2026.07.15 ~ 2026.09.30',
     applyPeriod: '2026.06.05 ~ 2026.07.10',
     location: '전국 / 온라인 훈련관',
@@ -285,9 +278,8 @@ export const MOCK_COURSES: Course[] = [
   },
   {
     id: '7',
-    title: '대형 언어 모델(LLM) 파인튜닝 및 AI 에이전트 서비스 기획자 육성 과정',
-    category: 'AI 비즈니스 기획',
-    tags: ['인공지능', '기획특화', '국비지원', '새싹'],
+    title: '[K-Digital Academy] 대규모 언어 모델(LLM) 기반의 비즈니스 서비스 기획 전문가',
+    tags: ['국비지원', 'AI기획', '멘토링제공', 'K-Digital'],
     duration: '2026.08.10 ~ 2026.12.31',
     applyPeriod: '2026.06.15 ~ 2026.08.05',
     location: '서울 / 대한상의 본부',
@@ -295,7 +287,7 @@ export const MOCK_COURSES: Course[] = [
     status: '모집중',
     gradientFrom: GRADIENTS[6].from,
     gradientTo: GRADIENTS[6].to,
-    type: 'sesac',
+    type: 'k-digital',
     institution: '대한상공회의소 본부 교육원',
     hours: '640시간 (총 80일)',
     feeOriginal: '7,800,000원',
@@ -324,9 +316,8 @@ export const MOCK_COURSES: Course[] = [
   },
   {
     id: '8',
-    title: '생산 자동화 로봇 제어 및 PLC 설계 프로젝트 실무 과정',
-    category: '산업로봇 / 자동화',
-    tags: ['PLC제어', '로봇공학', '협약기업채용', '새싹'],
+    title: '[SeSAC] PLC 자동화 회로설계 및 산업용 다관절 로봇 제어 엔지니어 과정',
+    tags: ['새싹훈련', '현장실습', '수당지급', '협약기업채용', '새싹'],
     duration: '2026.07.18 ~ 2026.12.22',
     applyPeriod: '2026.06.01 ~ 2026.07.12',
     location: '광주 / 광주인재원',

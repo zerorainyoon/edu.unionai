@@ -49,82 +49,79 @@ const FAQ_DATA: FaqItem[] = [
 ];
 
 export const FAQ: React.FC = () => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'admission' | 'course' | 'system' | 'etc'>('all');
+  const [searchInput, setSearchInput] = useState('');
+  const [searchFilter, setSearchFilter] = useState('');
   const [openFaqId, setOpenFaqId] = useState<string | null>(null);
 
   const toggleFaq = (id: string) => {
     setOpenFaqId(openFaqId === id ? null : id);
   };
 
-  const categories = [
-    { key: 'all', label: '전체 FAQ' },
-    { key: 'admission', label: '수강 및 모집' },
-    { key: 'course', label: '교육과정/커리큘럼' },
-    { key: 'system', label: '내일배움카드/포털' },
-    { key: 'etc', label: '훈련수당/기타' }
-  ];
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSearchFilter(searchInput.trim());
+    setOpenFaqId(null);
+  };
 
   const filteredFaqs = FAQ_DATA.filter((faq) => {
-    const matchesCategory = selectedCategory === 'all' || faq.category === selectedCategory;
-    const matchesSearch =
-      faq.question.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      faq.answer.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return (
+      faq.question.toLowerCase().includes(searchFilter.toLowerCase()) ||
+      faq.answer.toLowerCase().includes(searchFilter.toLowerCase())
+    );
   });
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
       <div className="max-w-6xl mx-auto">
-        
+
         {/* Banner Section */}
-        <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl border border-slate-200 mb-8 animate-fade-in relative">
+        <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl border border-slate-200 mb-20 animate-fade-in relative">
           <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
-          <div className="relative z-10 px-8 py-10 md:py-12 flex flex-col items-center text-center max-w-3xl mx-auto">
-            <span className="text-xs font-black text-brand-accent-light uppercase tracking-widest bg-brand-primary/30 px-3 py-1 rounded-md mb-3 inline-block">
-              Support Center
-            </span>
-            <h1 className="text-3xl md:text-4xl font-black tracking-tight flex items-center gap-3">
-              <HelpCircle className="text-brand-accent-light stroke-[2.5]" size={36} />
+          <div className="relative z-10 px-8 py-8 md:py-10 text-left select-text">
+            <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
+              <HelpCircle className="text-brand-accent-light stroke-[2.5]" size={30} />
               자주 묻는 질문 (FAQ)
             </h1>
-            <p className="text-slate-400 text-sm md:text-base mt-3 font-medium leading-relaxed">
-              WORK.AI 대한상공회의소 교육과정 및 국비 무료 훈련에 대해 가장 많이 들어오는 문의 사항들을 모았습니다. 궁금한 점을 키워드로 직접 찾아보세요.
+            <p className="text-slate-400 text-xs md:text-sm mt-2 font-medium leading-relaxed break-keep">
+              UnionAI 교육과정 및 국비 무료 훈련에 대해 가장 많이 들어오는 문의 사항들을 모았습니다. 궁금한 점을 키워드로 직접 찾아보세요.
             </p>
-
-            {/* Live Search Input */}
-            <div className="w-full mt-8 relative max-w-xl">
-              <input
-                type="text"
-                placeholder="궁금한 사항이나 키워드를 입력해 보세요... (예: 내일배움카드)"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white text-slate-800 border border-slate-200 shadow-lg focus:outline-none focus:ring-2 focus:ring-brand-primary font-bold text-sm tracking-wide select-text"
-              />
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
-            </div>
           </div>
         </div>
 
-        {/* Tab Filters */}
-        <div className="flex flex-wrap gap-2.5 justify-center mb-8">
-          {categories.map((cat) => (
-            <button
-              key={cat.key}
-              onClick={() => {
-                setSelectedCategory(cat.key as any);
-                setOpenFaqId(null);
-              }}
-              className={`px-5 py-2.5 rounded-xl text-sm font-black tracking-wide border border-slate-200 cursor-pointer active:scale-95 transition-all duration-200 ${
-                selectedCategory === cat.key
-                  ? 'bg-brand-primary text-white border-brand-primary shadow-md shadow-brand-primary/10'
-                  : 'bg-white text-slate-600 hover:bg-slate-50'
-              }`}
-            >
-              {cat.label}
-            </button>
-          ))}
-        </div>
+        <form onSubmit={handleSearchSubmit} className="flex gap-2 mb-8 max-w-md mx-auto select-none">
+          <div className="relative flex-grow">
+            <input
+              type="text"
+              placeholder="궁금한 사항이나 키워드 검색..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="w-full pl-10 pr-14 py-3 rounded-xl bg-white text-slate-800 border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary font-bold text-sm tracking-wide transition-all select-text"
+            />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
+            {searchInput && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchInput('');
+                  setSearchFilter('');
+                  setOpenFaqId(null);
+                }}
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[10px] font-black text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
+              >
+                초기화
+              </button>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="px-5 py-3 bg-brand-primary hover:bg-brand-secondary text-white font-black rounded-xl text-sm tracking-wider shadow-sm hover:shadow-md transition-all active:scale-95 duration-150 cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
+          >
+            <Search size={14} />
+            검색
+          </button>
+        </form>
+
+
 
         {/* FAQ Accordion List */}
         <div className="space-y-4">

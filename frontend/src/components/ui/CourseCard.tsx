@@ -52,7 +52,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
       {/* Visual Thumbnail Banner */}
       <style>{`.card-gradient-${course.id} { background-image: linear-gradient(135deg, ${course.gradientFrom}, ${course.gradientTo}); }`}</style>
       <div
-        className={`h-36 w-full relative flex items-center justify-center overflow-hidden card-gradient-${course.id}`}
+        className={`h-44 w-full relative flex items-center justify-center overflow-hidden card-gradient-${course.id}`}
       >
         <div className="absolute inset-0 bg-black/10 opacity-60 group-hover:opacity-40 transition-opacity"></div>
         <div className="absolute top-4 left-4 flex gap-1.5 flex-wrap">
@@ -76,18 +76,13 @@ export const CourseCard: React.FC<CourseCardProps> = ({
         <div className="absolute -bottom-6 -right-6 w-24 h-24 rounded-full bg-white/10 blur-xl group-hover:scale-125 transition-transform duration-500"></div>
         <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-black/5 blur-lg"></div>
 
-        <div className="relative text-white font-extrabold text-xl translate-y-2 drop-shadow px-4 text-center select-none uppercase tracking-wide">
-          {course.category}
+        <div className="relative text-white font-extrabold text-base md:text-lg translate-y-2 drop-shadow px-4 text-center select-none uppercase tracking-wide line-clamp-2 max-w-[90%]">
+          {course.title}
         </div>
       </div>
 
-      {/* Course Info Content */}
-      <div className="p-5 flex flex-col flex-grow select-none">
-        <h3 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-brand-secondary transition-colors duration-200 line-clamp-2 min-h-[3rem]">
-          {course.title}
-        </h3>
-
-        <div className="mt-4 space-y-2.5 text-sm text-slate-500 flex-grow">
+      <div className="px-6 py-8 flex flex-col flex-grow select-none">
+        <div className="space-y-4 text-sm text-slate-500 flex-grow">
           <div className="flex items-center gap-2">
             <Calendar size={14} className="text-slate-400 shrink-0" />
             <span className="truncate">교육: {course.duration}</span>

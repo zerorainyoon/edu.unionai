@@ -104,9 +104,6 @@ export const CourseDetail: React.FC = () => {
               <span className="bg-brand-accent-light text-brand-secondary text-xs font-black px-2.5 py-1 rounded-md tracking-wider">
                 {course.institution}
               </span>
-              <span className="bg-slate-100 text-slate-600 text-xs font-bold px-2.5 py-1 rounded-md">
-                {course.category}
-              </span>
             </div>
             <h1 className="text-2xl md:text-4xl font-black text-slate-900 leading-tight tracking-tight mt-1">
               {course.title}
