@@ -112,27 +112,27 @@ export const Header: React.FC = () => {
               게시판 <ChevronDown size={14} className="opacity-60 group-hover:rotate-180 transition-transform duration-200" />
             </button>
             <div className="absolute top-[80%] left-1/2 -translate-x-1/2 hidden group-hover:block w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-fade-in select-none">
-              <button
-                onClick={(e) => handlePlaceholderClick(e, 'FAQ')}
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              <Link
+                to="/faq"
+                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <HelpCircle size={15} className="text-slate-400" />
                 FAQ
-              </button>
-              <button
-                onClick={(e) => handlePlaceholderClick(e, '게시판')}
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              </Link>
+              <Link
+                to="/board"
+                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <FileText size={15} className="text-slate-400" />
                 게시판
-              </button>
-              <button
-                onClick={(e) => handlePlaceholderClick(e, '1:1 문의')}
-                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              </Link>
+              <Link
+                to="/inquiry"
+                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <MessageSquare size={15} className="text-slate-400" />
                 1:1 문의
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -225,27 +225,30 @@ export const Header: React.FC = () => {
               <span className="block px-4 py-1 text-xs font-black text-slate-400 uppercase tracking-wider">
                 게시판
               </span>
-              <button
-                onClick={(e) => handlePlaceholderClick(e, 'FAQ')}
-                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              <Link
+                to="/faq"
+                onClick={() => setIsOpen(false)}
+                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <HelpCircle size={18} className="text-slate-400" />
                 FAQ
-              </button>
-              <button
-                onClick={(e) => handlePlaceholderClick(e, '게시판')}
-                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              </Link>
+              <Link
+                to="/board"
+                onClick={() => setIsOpen(false)}
+                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <FileText size={18} className="text-slate-400" />
                 게시판
-              </button>
-              <button
-                onClick={(e) => handlePlaceholderClick(e, '1:1 문의')}
-                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer border-none bg-transparent"
+              </Link>
+              <Link
+                to="/inquiry"
+                onClick={() => setIsOpen(false)}
+                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
               >
                 <MessageSquare size={18} className="text-slate-400" />
                 1:1 문의
-              </button>
+              </Link>
             </div>
 
             {/* Mobile Admin menu */}

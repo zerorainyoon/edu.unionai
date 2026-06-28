@@ -8,6 +8,9 @@ import { CourseDetail } from './pages/CourseDetail';
 import { AdminRegisterCourse } from './pages/admin/AdminRegisterCourse';
 import { AdminRegistrations } from './pages/admin/AdminRegistrations';
 import { AdminCourses } from './pages/admin/AdminCourses';
+import { FAQ } from './pages/FAQ';
+import { Board } from './pages/Board';
+import { Inquiry } from './pages/Inquiry';
 
 export function App() {
   return (
@@ -26,6 +29,9 @@ export function App() {
               <Route path="/admin/register-course" element={<AdminRegisterCourse />} />
               <Route path="/admin/registrations" element={<AdminRegistrations />} />
               <Route path="/admin/courses" element={<AdminCourses />} />
+              <Route path="/faq" element={<FAQ />} />
+              <Route path="/board" element={<Board />} />
+              <Route path="/inquiry" element={<Inquiry />} />
               {/* Fallback to homepage */}
               <Route path="*" element={<Home />} />
             </Routes>

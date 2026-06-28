@@ -70,9 +70,6 @@ export const AdminRegisterCourse: React.FC = () => {
           <div className="bg-slate-900 text-white px-8 py-8 relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
             <div className="relative z-10">
-              <span className="text-xs font-black text-brand-accent-light uppercase tracking-widest bg-brand-primary/30 px-3 py-1 rounded-md mb-3 inline-block">
-                Admin Console
-              </span>
               <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
                 <PlusCircle className="text-brand-accent-light" size={28} />
                 교육과정 등록

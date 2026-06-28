@@ -448,9 +448,6 @@ export const AdminCourses: React.FC = () => {
                 <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
                 <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <span className="text-xs font-black text-brand-accent-light uppercase tracking-widest bg-brand-primary/30 px-3 py-1 rounded-md mb-3 inline-block">
-                      Admin Console
-                    </span>
                     <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
                       <Settings className="text-brand-accent-light" size={28} />
                       교육과정 관리
