@@ -5,8 +5,9 @@ import { Footer } from './components/layout/Footer';
 import { Home } from './pages/Home';
 import { CourseList } from './pages/CourseList';
 import { CourseDetail } from './pages/CourseDetail';
-import { AdminRegisterCourse } from './pages/AdminRegisterCourse';
-import { AdminRegistrations } from './pages/AdminRegistrations';
+import { AdminRegisterCourse } from './pages/admin/AdminRegisterCourse';
+import { AdminRegistrations } from './pages/admin/AdminRegistrations';
+import { AdminCourses } from './pages/admin/AdminCourses';
 
 export function App() {
   return (
@@ -24,6 +25,7 @@ export function App() {
               <Route path="/course/:id" element={<CourseDetail />} />
               <Route path="/admin/register-course" element={<AdminRegisterCourse />} />
               <Route path="/admin/registrations" element={<AdminRegistrations />} />
+              <Route path="/admin/courses" element={<AdminCourses />} />
               {/* Fallback to homepage */}
               <Route path="*" element={<Home />} />
             </Routes>

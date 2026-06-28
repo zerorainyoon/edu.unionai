@@ -1,13 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, MapPin, Award, CheckCircle } from 'lucide-react';
+import { Calendar, MapPin, Award, CheckCircle, Edit3, Trash2 } from 'lucide-react';
 import type { Course } from '../../data/courses';
 
 interface CourseCardProps {
   course: Course;
+  isAdmin?: boolean;
+  onEdit?: (id: string) => void;
+  onDelete?: (id: string, title: string) => void;
 }
 
-export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+export const CourseCard: React.FC<CourseCardProps> = ({
+  course,
+  isAdmin = false,
+  onEdit,
+  onDelete,
+}) => {
   const getStatusBadgeColor = (status: Course['status']) => {
     switch (status) {
       case '모집중':
@@ -21,8 +29,26 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     }
   };
 
+  const CardWrapper = ({ children, className }: { children: React.ReactNode; className: string }) => {
+    if (isAdmin) {
+      return (
+        <div
+          onClick={() => onEdit?.(course.id)}
+          className={className}
+        >
+          {children}
+        </div>
+      );
+    }
+    return (
+      <Link to={`/course/${course.id}`} className={className}>
+        {children}
+      </Link>
+    );
+  };
+
   return (
-    <Link to={`/course/${course.id}`} className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group cursor-pointer">
+    <CardWrapper className="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col h-full group cursor-pointer">
       {/* Visual Thumbnail Banner */}
       <style>{`.card-gradient-${course.id} { background-image: linear-gradient(135deg, ${course.gradientFrom}, ${course.gradientTo}); }`}</style>
       <div
@@ -30,7 +56,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       >
         <div className="absolute inset-0 bg-black/10 opacity-60 group-hover:opacity-40 transition-opacity"></div>
         <div className="absolute top-4 left-4 flex gap-1.5 flex-wrap">
-          {course.tags.map((tag, idx) => (
+          {course.tags.slice(0, 2).map((tag, idx) => (
             <span
               key={idx}
               className="px-2 py-0.5 text-xs font-bold tracking-wider rounded-md uppercase text-white bg-white/20 backdrop-blur-md border border-white/30"
@@ -58,7 +84,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       {/* Course Info Content */}
       <div className="p-5 flex flex-col flex-grow select-none">
         <h3 className="text-lg font-bold text-slate-900 leading-snug group-hover:text-brand-secondary transition-colors duration-200 line-clamp-2 min-h-[3rem]">
-            {course.title}
+          {course.title}
         </h3>
 
         <div className="mt-4 space-y-2.5 text-sm text-slate-500 flex-grow">
@@ -80,6 +106,32 @@ export const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           </div>
         </div>
       </div>
-    </Link>
+
+      {/* Administrative Action Buttons */}
+      {isAdmin && (
+        <div className="p-4 border-t border-slate-100 bg-slate-50/50 flex gap-2">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onEdit?.(course.id);
+            }}
+            className="flex-1 py-2.5 px-3 border border-slate-200 hover:border-brand-primary bg-white hover:bg-brand-primary/5 text-slate-700 hover:text-brand-primary rounded-xl text-xs font-bold flex items-center justify-center gap-1 cursor-pointer transition-all active:scale-98 select-none"
+          >
+            <Edit3 size={12} />
+            관리 및 수정
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete?.(course.id, course.title);
+            }}
+            className="py-2.5 px-3 border border-rose-100 hover:border-rose-300 bg-white hover:bg-rose-50 text-rose-500 hover:text-rose-700 rounded-xl text-xs font-bold flex items-center justify-center cursor-pointer transition-all active:scale-98 select-none"
+            title="교육과정 삭제"
+          >
+            <Trash2 size={12} />
+          </button>
+        </div>
+      )}
+    </CardWrapper>
   );
 };

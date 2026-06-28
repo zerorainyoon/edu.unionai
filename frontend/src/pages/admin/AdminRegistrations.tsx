@@ -1,15 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ClipboardList, ArrowLeft, RefreshCw, Mail, Phone, Clock } from 'lucide-react';
-import { useToast } from '../components/ui/Toast';
-import { api } from '../services/api';
-import { courseService } from '../services/courseService';
+import { useToast } from '../../components/ui/Toast';
+import { api } from '../../services/api';
+import { courseService } from '../../services/courseService';
+import type { Course } from '../../data/courses';
+
+export interface Registration {
+  id: number;
+  course_id: number;
+  name: string;
+  phone: string;
+  email: string;
+  status: 'pending' | 'approved' | 'rejected';
+  comment: string | null;
+  created_at: string;
+  originalComment?: string | null;
+}
 
 export const AdminRegistrations: React.FC = () => {
   const navigate = useNavigate();
   const { showToast } = useToast();
-  const [registrations, setRegistrations] = useState<any[]>([]);
-  const [filteredCourses, setFilteredCourses] = useState<any[]>([]);
+  const [registrations, setRegistrations] = useState<Registration[]>([]);
+  const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
   const [selectedCourseId, setSelectedCourseId] = useState<string>('');
   const [loading, setLoading] = useState(true);
 
@@ -21,7 +34,7 @@ export const AdminRegistrations: React.FC = () => {
     return `${year}-${month}-${day}`;
   };
 
-  const filterCoursesByDate = (allCourses: any[]) => {
+  const filterCoursesByDate = (allCourses: Course[]) => {
     const todayStr = getTodayStr();
     return allCourses.filter(c => {
       const eduStart = c.edu_start_date;
@@ -52,8 +65,8 @@ export const AdminRegistrations: React.FC = () => {
       }
 
       // 3. Fetch registrations
-      const data = await api.get<{ response: any[] }>('/course-registrations/');
-      const loadedRegs = (data.response || []).map((r: any) => ({
+      const data = await api.get<{ response: Registration[] }>('/course-registrations/');
+      const loadedRegs: Registration[] = (data.response || []).map((r) => ({
         ...r,
         originalComment: r.comment
       }));
@@ -76,7 +89,7 @@ export const AdminRegistrations: React.FC = () => {
     );
   };
 
-  const handleCommentBlur = async (reg: any) => {
+  const handleCommentBlur = async (reg: Registration) => {
     // 코멘트 내용이 실제로 변경되었을 때만 API 호출
     if (reg.comment === reg.originalComment) return;
 
@@ -98,7 +111,7 @@ export const AdminRegistrations: React.FC = () => {
     }
   };
 
-  const handleStatusSelectChange = async (reg: any, newStatus: string) => {
+  const handleStatusSelectChange = async (reg: Registration, newStatus: Registration['status']) => {
     try {
       // 접수 상태가 변경된 경우 즉시 API 호출
       const targetComment = reg.comment ? reg.comment.trim() : null;
@@ -132,9 +145,9 @@ export const AdminRegistrations: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <button
             onClick={() => navigate(-1)}
-            className="group flex items-center gap-2 text-base font-bold text-slate-500 hover:text-brand-primary transition-colors cursor-pointer"
+            className="group flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary transition-colors cursor-pointer"
           >
-            <ArrowLeft size={18} className="group-hover:-translate-x-0.5 transition-transform" />
+            <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
             이전 페이지로 돌아가기
           </button>
 
@@ -155,20 +168,20 @@ export const AdminRegistrations: React.FC = () => {
             <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
             <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
-                <span className="text-sm font-black text-brand-accent-light uppercase tracking-widest bg-brand-primary/30 px-3 py-1.5 rounded-md mb-3 inline-block">
+                <span className="text-xs font-black text-brand-accent-light uppercase tracking-widest bg-brand-primary/30 px-3 py-1 rounded-md mb-3 inline-block">
                   Admin Console
                 </span>
-                <h1 className="text-3xl md:text-4xl font-black tracking-tight flex items-center gap-2.5">
-                  <ClipboardList className="text-brand-accent-light" size={32} />
+                <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
+                  <ClipboardList className="text-brand-accent-light" size={28} />
                   수강 신청 현황 관리
                 </h1>
-                <p className="text-slate-400 text-base mt-2 font-medium">
+                <p className="text-slate-400 text-sm mt-2 font-medium">
                   현재 날짜 기준 모집 중이거나 교육 중인 코스를 선택하고, 수강 신청 및 상세 상담 내역을 모니터링합니다.
                 </p>
               </div>
               <div className="bg-white/10 rounded-2xl px-5 py-3 border border-white/10 shrink-0 text-left">
-                <span className="text-sm font-bold text-slate-400 block mb-0.5">전체 접수 내역</span>
-                <span className="text-3xl font-black text-white">{loading ? '...' : registrations.length}건</span>
+                <span className="text-xs font-bold text-slate-400 block mb-0.5">전체 접수 내역</span>
+                <span className="text-2xl font-black text-white">{loading ? '...' : registrations.length}건</span>
               </div>
             </div>
           </div>
@@ -184,7 +197,7 @@ export const AdminRegistrations: React.FC = () => {
                   id="course-select"
                   value={selectedCourseId}
                   onChange={(e) => setSelectedCourseId(e.target.value)}
-                  className="w-full bg-white border border-slate-200 text-slate-800 font-extrabold px-4 py-3.5 pr-10 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent cursor-pointer appearance-none text-base transition-all"
+                  className="w-full bg-white border border-slate-200 text-slate-800 font-extrabold px-4 py-3.5 pr-10 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent cursor-pointer appearance-none text-sm transition-all"
                   disabled={filteredCourses.length === 0}
                 >
                   {filteredCourses.length === 0 ? (
@@ -225,15 +238,15 @@ export const AdminRegistrations: React.FC = () => {
             {loading ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <RefreshCw className="animate-spin text-brand-primary mb-3" size={40} />
-                <p className="text-slate-500 font-bold text-base">수강 신청 데이터를 불러오는 중...</p>
+                <p className="text-slate-500 font-bold text-sm">수강 신청 데이터를 불러오는 중...</p>
               </div>
             ) : filteredCourses.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <div className="bg-slate-100 text-slate-400 p-4.5 rounded-full mb-4">
                   <ClipboardList size={40} />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-800 mb-1">진행 중인 코스 없음</h3>
-                <p className="text-slate-400 text-base font-medium max-w-md">
+                <h3 className="text-xl font-bold text-slate-800 mb-1">진행 중인 코스 없음</h3>
+                <p className="text-slate-400 text-sm font-medium max-w-md">
                   현재 날짜를 기준으로 수강 접수 중이거나 교육 진행 중인 과정이 존재하지 않습니다.
                 </p>
               </div>
@@ -242,14 +255,14 @@ export const AdminRegistrations: React.FC = () => {
                 <div className="bg-slate-100 text-slate-400 p-4.5 rounded-full mb-4">
                   <ClipboardList size={40} />
                 </div>
-                <h3 className="text-2xl font-bold text-slate-800 mb-1">신청 내역이 없습니다</h3>
-                <p className="text-slate-400 text-base font-medium max-w-md">
+                <h3 className="text-xl font-bold text-slate-800 mb-1">신청 내역이 없습니다</h3>
+                <p className="text-slate-400 text-sm font-medium max-w-md">
                   선택하신 교육 과정에 접수된 수강 신청 또는 상세 상담 요청이 존재하지 않습니다.
                 </p>
               </div>
             ) : (
               <div className="overflow-hidden border border-slate-200 rounded-2xl">
-                <table className="w-full text-left border-collapse text-base">
+                <table className="w-full text-left border-collapse text-sm">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 font-extrabold text-slate-600">
                       <th className="p-4.5 select-none">신청자</th>
@@ -280,7 +293,7 @@ export const AdminRegistrations: React.FC = () => {
                         <td className="p-4.5 text-slate-800 font-bold">
                           <select
                             value={reg.status}
-                            onChange={(e) => handleStatusSelectChange(reg, e.target.value)}
+                            onChange={(e) => handleStatusSelectChange(reg, e.target.value as Registration['status'])}
                             className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-extrabold border cursor-pointer focus:outline-none transition-all ${reg.status === 'pending'
                                 ? 'bg-amber-50 text-amber-700 border-amber-200 focus:ring-2 focus:ring-amber-500'
                                 : reg.status === 'approved'

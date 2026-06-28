@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { PlusCircle, ArrowLeft, Calendar, MapPin, Tag, Landmark, Clock, FileText } from 'lucide-react';
-import { useToast } from '../components/ui/Toast';
-import { api } from '../services/api';
+import { useToast } from '../../components/ui/Toast';
+import { api } from '../../services/api';
 
 export const AdminRegisterCourse: React.FC = () => {
   const navigate = useNavigate();
@@ -75,7 +75,7 @@ export const AdminRegisterCourse: React.FC = () => {
               </span>
               <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
                 <PlusCircle className="text-brand-accent-light" size={28} />
-                새로운 교육과정 등록
+                교육과정 등록
               </h1>
               <p className="text-slate-400 text-sm mt-2 font-medium">
                 WORK.AI 플랫폼에 새로운 대한상공회의소 교육과정을 게시합니다. 아래의 세부사항들을 빠짐없이 기입해주세요.

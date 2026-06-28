@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Menu, X, User, LogIn, ExternalLink, GraduationCap, PlusCircle, ClipboardList, ChevronDown } from 'lucide-react';
+import { Menu, X, User, LogIn, ExternalLink, GraduationCap, PlusCircle, ClipboardList, ChevronDown, Settings } from 'lucide-react';
 import { useToast } from '../ui/Toast';
 
 export const Header: React.FC = () => {
@@ -113,6 +113,13 @@ export const Header: React.FC = () => {
             </button>
             <div className="absolute top-[80%] left-1/2 -translate-x-1/2 hidden group-hover:block w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-fade-in select-none">
               <Link
+                to="/admin/courses"
+                className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+              >
+                <Settings size={15} className="text-slate-400" />
+                교육과정 관리
+              </Link>
+              <Link
                 to="/admin/register-course"
                 className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
               >
@@ -188,6 +195,14 @@ export const Header: React.FC = () => {
               <span className="block px-4 py-1 text-xs font-black text-slate-400 uppercase tracking-wider">
                 관리자 메뉴
               </span>
+              <Link
+                to="/admin/courses"
+                onClick={() => setIsOpen(false)}
+                className="w-full text-left block px-4 py-3 text-lg font-semibold text-slate-700 hover:text-brand-secondary rounded-xl hover:bg-slate-50 transition-colors flex items-center gap-2 cursor-pointer"
+              >
+                <Settings size={18} className="text-slate-400" />
+                교육과정 관리
+              </Link>
               <Link
                 to="/admin/register-course"
                 onClick={() => setIsOpen(false)}

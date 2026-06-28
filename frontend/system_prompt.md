@@ -17,22 +17,20 @@
 ---
 
 ## 2. Directory Architecture (폴더 구조 규칙)
-모든 컴포넌트와 로직은 **기능 중심(Feature-Driven) 및 관심사 분리(SoC)** 원칙에 따라 아래 구조로 배치합니다.
+모든 컴포넌트와 로직은 **관심사 분리(SoC)** 원칙에 따라 아래 구조로 배치합니다.
 
 ```text
 src/
  ├── assets/        # 이미지, 폰트 등 정적 리소스
- ├── components/    # 전역 공통 컴포넌트 (UI 단일 요소: Button, Input, Modal 등)
+ ├── components/    # 전역 공통 컴포넌트 (UI 단일 요소, 레이아웃 구성 요소 등)
  │    ├── ui/       # 순수 UI 컴포넌트 (비즈니스 로직 없음)
- │    └── layout/   # Header, Footer, Sidebar 등 레이아웃 구성 요소
- ├── features/      # 특정 도메인/기능별 캡슐화된 모듈 (components, hooks, api, store 포함)
- ├── hooks/         # 전역 Custom Hooks (예: useAuth, useWindowSize)
- ├── pages/         # 라우팅 되는 페이지 단위 컴포넌트 (features의 컴포넌트를 조립)
- ├── services/      # 외부 API 호출 함수 및 Axios 인스턴스 (api.ts)
- ├── store/         # 전역 상태 관리 (Zustand 등)
+ │    └── layout/   # Header, Footer 등 레이아웃 구성 요소
+ ├── data/          # Mock 데이터 및 정적 상수 데이터
+ ├── pages/         # 라우팅 되는 페이지 단위 컴포넌트
+ │    └── admin/    # 관리자 전용 페이지 컴포넌트 (AdminCourses, AdminRegisterCourse, AdminRegistrations)
+ ├── services/      # 외부 API 호출 함수 및 Axios 인스턴스 (api.ts, courseService.ts)
  ├── types/         # 전역 TypeScript 인터페이스 및 타입 정의
  └── utils/         # 순수 자바스크립트 유틸리티 함수 (formatters, validators 등)
-
 ```
 
 ---
