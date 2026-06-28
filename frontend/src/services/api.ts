@@ -1,8 +1,22 @@
 import axios from 'axios';
 import type { AxiosInstance, AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-// Base API URL configuration (read from Vite environment variables or fallback to local api path)
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:18000/api/v1';
+// Dynamic API URL detection: relative path for production, localhost for development
+const getApiBaseUrl = () => {
+  if (import.meta.env.VITE_API_BASE_URL) {
+    return import.meta.env.VITE_API_BASE_URL;
+  }
+  if (typeof window !== 'undefined') {
+    const hostname = window.location.hostname;
+    // If not running on localhost, use the relative path (proxied via Nginx)
+    if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+      return '/api/v1';
+    }
+  }
+  return 'http://localhost:18000/api/v1';
+};
+
+const API_BASE_URL = getApiBaseUrl();
 const TIMEOUT_MS = 10000; // 10 seconds
 
 // Custom Axios Instance Setup
