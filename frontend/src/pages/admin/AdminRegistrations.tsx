@@ -140,7 +140,7 @@ export const AdminRegistrations: React.FC = () => {
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-6xl mx-auto">
         {/* Back Button */}
         <button
           onClick={() => navigate(-1)}
@@ -297,10 +297,10 @@ export const AdminRegistrations: React.FC = () => {
                             value={reg.status}
                             onChange={(e) => handleStatusSelectChange(reg, e.target.value as Registration['status'])}
                             className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-extrabold border cursor-pointer focus:outline-none transition-all ${reg.status === 'pending'
-                                ? 'bg-amber-50 text-amber-700 border-amber-200 focus:ring-2 focus:ring-amber-500'
-                                : reg.status === 'approved'
-                                  ? 'bg-emerald-50 text-emerald-700 border-emerald-200 focus:ring-2 focus:ring-emerald-500'
-                                  : 'bg-rose-50 text-rose-700 border-rose-200 focus:ring-2 focus:ring-rose-500'
+                              ? 'bg-amber-50 text-amber-700 border-amber-200 focus:ring-2 focus:ring-amber-500'
+                              : reg.status === 'approved'
+                                ? 'bg-emerald-50 text-emerald-700 border-emerald-200 focus:ring-2 focus:ring-emerald-500'
+                                : 'bg-rose-50 text-rose-700 border-rose-200 focus:ring-2 focus:ring-rose-500'
                               }`}
                           >
                             <option value="pending">대기중</option>
