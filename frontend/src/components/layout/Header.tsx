@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Menu, X, User, LogIn, ExternalLink, GraduationCap, PlusCircle, ClipboardList, ChevronDown, Settings, HelpCircle, MessageSquare, FileText } from 'lucide-react';
+import { Menu, X, User, LogIn, LogOut, ExternalLink, GraduationCap, PlusCircle, ClipboardList, ChevronDown, Settings, HelpCircle, MessageSquare, FileText, ShieldAlert } from 'lucide-react';
 import { useToast } from '../ui/Toast';
+import { useAuth } from '../../context/AuthContext';
 
 export const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,11 +10,53 @@ export const Header: React.FC = () => {
   const [adminOpen, setAdminOpen] = useState(false);
   const { showToast } = useToast();
   const location = useLocation();
+  const { user, login, signup, logout } = useAuth();
+
+  // Auth modal state
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fullName, setFullName] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const handlePlaceholderClick = (e: React.MouseEvent, menuName: string) => {
     e.preventDefault();
     showToast(`'${menuName}' 서비스는 현재 준비 중입니다.`);
     setIsOpen(false);
+  };
+
+  const handleAuthSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) {
+      showToast('이메일과 비밀번호를 입력해주세요.');
+      return;
+    }
+
+    try {
+      if (authMode === 'login') {
+        await login(email.trim(), password.trim());
+        showToast('성공적으로 로그인되었습니다.');
+        setIsAuthModalOpen(false);
+      } else {
+        if (!fullName.trim()) {
+          showToast('이름을 입력해주세요.');
+          return;
+        }
+        await signup(email.trim(), password.trim(), fullName.trim(), isAdmin);
+        showToast('회원가입이 완료되었습니다. 로그인해주세요.');
+        setAuthMode('login');
+      }
+      // Reset inputs
+      setEmail('');
+      setPassword('');
+      setFullName('');
+      setIsAdmin(false);
+    } catch (err: any) {
+      console.error(err);
+      const detail = err.response?.data?.detail || '요청 처리에 실패했습니다.';
+      showToast(detail);
+    }
   };
 
   const navItems = [
@@ -40,21 +83,52 @@ export const Header: React.FC = () => {
           </a>
         </div>
         <div className="flex items-center gap-4">
-          <button
-            onClick={(e) => handlePlaceholderClick(e, '로그인')}
-            className="hover:text-slate-800 flex items-center gap-1 transition-colors"
-          >
-            <LogIn size={11} />
-            로그인
-          </button>
-          <span className="text-slate-300">|</span>
-          <button
-            onClick={(e) => handlePlaceholderClick(e, '회원가입')}
-            className="hover:text-slate-800 flex items-center gap-1 transition-colors"
-          >
-            <User size={11} />
-            회원가입
-          </button>
+          {user ? (
+            <div className="flex items-center gap-3">
+              <span className="flex items-center gap-1 font-semibold text-slate-700">
+                <User size={11} className="text-slate-400" />
+                {user.full_name || user.email}
+                <span className={`ml-1 text-xxs px-1.5 py-0.5 rounded font-black ${user.is_admin ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'}`}>
+                  {user.is_admin ? '관리자' : '일반'}
+                </span>
+              </span>
+              <span className="text-slate-300">|</span>
+              <button
+                onClick={() => {
+                  logout();
+                  showToast('로그아웃되었습니다.');
+                }}
+                className="hover:text-slate-800 flex items-center gap-1 transition-colors font-semibold cursor-pointer"
+              >
+                <LogOut size={11} />
+                로그아웃
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => {
+                  setAuthMode('login');
+                  setIsAuthModalOpen(true);
+                }}
+                className="hover:text-slate-800 flex items-center gap-1 transition-colors font-semibold cursor-pointer"
+              >
+                <LogIn size={11} />
+                로그인
+              </button>
+              <span className="text-slate-300">|</span>
+              <button
+                onClick={() => {
+                  setAuthMode('signup');
+                  setIsAuthModalOpen(true);
+                }}
+                className="hover:text-slate-800 flex items-center gap-1 transition-colors font-semibold cursor-pointer"
+              >
+                <User size={11} />
+                회원가입
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
@@ -300,19 +374,158 @@ export const Header: React.FC = () => {
             </div>
 
             <div className="border-t border-slate-100 pt-4 mt-4 flex flex-col gap-2">
-              <button
-                onClick={(e) => handlePlaceholderClick(e, '로그인')}
-                className="w-full text-center py-2.5 rounded-xl text-base font-semibold text-slate-600 border border-slate-200 hover:bg-slate-50"
-              >
-                로그인
-              </button>
-              <button
-                onClick={(e) => handlePlaceholderClick(e, '맞춤형 상담 신청')}
-                className="w-full text-center py-2.5 rounded-xl text-base font-semibold text-white bg-brand-primary hover:bg-brand-secondary shadow-sm"
-              >
-                상담 및 신청하기
-              </button>
+              {user ? (
+                <>
+                  <div className="px-4 py-2 flex items-center justify-between text-sm font-semibold text-slate-600">
+                    <span className="flex items-center gap-1.5">
+                      <User size={16} />
+                      {user.full_name || user.email}
+                    </span>
+                    <span className={`text-xs px-2 py-0.5 rounded font-black ${user.is_admin ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'}`}>
+                      {user.is_admin ? '관리자' : '일반'}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => {
+                      logout();
+                      setIsOpen(false);
+                      showToast('로그아웃되었습니다.');
+                    }}
+                    className="w-full text-center py-2.5 rounded-xl text-base font-semibold text-rose-600 border border-rose-200 hover:bg-rose-50 cursor-pointer"
+                  >
+                    로그아웃
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      setAuthMode('login');
+                      setIsAuthModalOpen(true);
+                    }}
+                    className="w-full text-center py-2.5 rounded-xl text-base font-semibold text-slate-600 border border-slate-200 hover:bg-slate-50 cursor-pointer"
+                  >
+                    로그인
+                  </button>
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      setAuthMode('signup');
+                      setIsAuthModalOpen(true);
+                    }}
+                    className="w-full text-center py-2.5 rounded-xl text-base font-semibold text-brand-secondary border border-brand-secondary/30 hover:bg-brand-accent-light/30 cursor-pointer"
+                  >
+                    회원가입
+                  </button>
+                </>
+              )}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* Beautiful Glassmorphic Auth Modal */}
+      {isAuthModalOpen && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in select-text">
+          <div className="bg-white rounded-3xl max-w-md w-full border border-slate-200 shadow-2xl overflow-hidden animate-scale-in relative">
+            <button
+              onClick={() => setIsAuthModalOpen(false)}
+              className="absolute right-4 top-4 text-slate-400 hover:text-slate-800 p-1 transition-colors cursor-pointer select-none"
+              type="button"
+            >
+              <X size={20} />
+            </button>
+
+            {/* Modal Title Banner */}
+            <div className="bg-slate-900 text-white p-6 pt-8">
+              <h2 className="text-xl font-black flex items-center gap-2">
+                <GraduationCap className="text-brand-accent-light" size={24} />
+                {authMode === 'login' ? 'UnionAI 로그인' : 'UnionAI 회원가입'}
+              </h2>
+              <p className="text-xs text-slate-400 mt-1 font-medium">
+                {authMode === 'login'
+                  ? '계정에 로그인하고 교육생들과 학습 정보를 공유해 보세요.'
+                  : 'UnionAI 통합 커뮤니티의 일원이 되어 보세요.'}
+              </p>
+            </div>
+
+            {/* Auth Form */}
+            <form onSubmit={handleAuthSubmit} className="p-6 space-y-4">
+              {authMode === 'signup' && (
+                <div className="space-y-1.5">
+                  <label className="block text-xs font-black text-slate-700">이름 (실명) *</label>
+                  <input
+                    type="text"
+                    placeholder="홍길동"
+                    value={fullName}
+                    onChange={(e) => setFullName(e.target.value)}
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-semibold"
+                    required
+                  />
+                </div>
+              )}
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-black text-slate-700">이메일 주소 *</label>
+                <input
+                  type="email"
+                  placeholder="name@example.com"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-semibold"
+                  required
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block text-xs font-black text-slate-700">비밀번호 *</label>
+                <input
+                  type="password"
+                  placeholder="••••••••"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-semibold"
+                  required
+                />
+              </div>
+
+              {authMode === 'signup' && (
+                <div className="bg-amber-50/50 border border-amber-200/60 rounded-xl p-3 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <ShieldAlert size={16} className="text-amber-600" />
+                    <span className="text-xs font-black text-slate-700">관리자 계정으로 등록</span>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={isAdmin}
+                    onChange={(e) => setIsAdmin(e.target.checked)}
+                    className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary cursor-pointer"
+                  />
+                </div>
+              )}
+
+              <button
+                type="submit"
+                className="w-full py-3 bg-brand-secondary hover:bg-brand-primary text-white rounded-xl font-black text-xs tracking-widest shadow-md hover:shadow active:scale-95 transition-all duration-200 mt-2 cursor-pointer"
+              >
+                {authMode === 'login' ? '로그인 완료' : '회원 가입 완료'}
+              </button>
+
+              {/* Mode switch helper */}
+              <div className="pt-3 border-t border-slate-100 text-center select-none">
+                <span className="text-slate-400 text-xxs font-bold">
+                  {authMode === 'login' ? '계정이 없으신가요? ' : '이미 계정이 있으신가요? '}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')}
+                  className="text-brand-secondary hover:text-brand-primary text-xxs font-black underline cursor-pointer ml-1"
+                >
+                  {authMode === 'login' ? '회원가입 하기' : '로그인 하기'}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

@@ -8,6 +8,7 @@ class UserBase(SQLModel):
     """
     email: str = Field(index=True, unique=True, nullable=False)
     is_active: bool = Field(default=True)
+    is_admin: bool = Field(default=False)
     full_name: Optional[str] = Field(default=None)
 
 class User(UserBase, table=True):
@@ -38,6 +39,7 @@ class UserResponse(SQLModel):
     id: int
     email: str
     is_active: bool
+    is_admin: bool
     full_name: Optional[str] = None
     created_at: datetime
     updated_at: datetime

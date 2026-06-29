@@ -23,6 +23,7 @@ def upgrade() -> None:
         sa.Column('id', sa.Integer(), autoincrement=True, nullable=False, comment="사용자 고유 식별자"),
         sa.Column('email', sqlmodel.sql.sqltypes.AutoString(), nullable=False, comment="이메일 주소 (로그인 계정)"),
         sa.Column('is_active', sa.Boolean(), nullable=False, server_default=sa.text('1'), comment="계정 활성화 상태 (1: 활성, 0: 비활성)"),
+        sa.Column('is_admin', sa.Boolean(), nullable=False, server_default=sa.text('0'), comment="관리자 여부 (1: 관리자, 0: 일반사용자)"),
         sa.Column('full_name', sqlmodel.sql.sqltypes.AutoString(), nullable=True, comment="사용자 이름"),
         sa.Column('hashed_password', sqlmodel.sql.sqltypes.AutoString(), nullable=False, comment="암호화된 비밀번호 해시"),
         sa.Column('created_at', sa.DateTime(), nullable=False, comment="생성 일시"),
@@ -74,8 +75,54 @@ def upgrade() -> None:
     )
     op.create_index(op.f('ix_course_registrations_course_id'), 'course_registrations', ['course_id'], unique=False)
 
+    # 4. Create the 'posts' table
+    op.create_table(
+        'posts',
+        sa.Column('id', sa.Integer(), autoincrement=True, nullable=False, comment="게시글 고유 식별자"),
+        sa.Column('title', sqlmodel.sql.sqltypes.AutoString(), nullable=False, comment="게시글 제목"),
+        sa.Column('content', sa.Text(), nullable=False, comment="게시글 본문"),
+        sa.Column('is_private', sa.Boolean(), nullable=False, server_default=sa.text('0'), comment="비공개 여부 (1: 비공개, 0: 공개)"),
+        sa.Column('hashed_post_password', sqlmodel.sql.sqltypes.AutoString(), nullable=True, comment="비공개 게시글 비밀번호 해시"),
+        sa.Column('user_id', sa.Integer(), nullable=False, comment="작성자 ID (users.id 외래키)"),
+        sa.Column('views', sa.Integer(), nullable=False, server_default=sa.text('0'), comment="조회수"),
+        sa.Column('created_at', sa.DateTime(), nullable=False, comment="생성 일시"),
+        sa.Column('updated_at', sa.DateTime(), nullable=False, comment="수정 일시"),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
+        sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_posts_title'), 'posts', ['title'], unique=False)
+    op.create_index(op.f('ix_posts_user_id'), 'posts', ['user_id'], unique=False)
+
+    # 5. Create the 'comments' table
+    op.create_table(
+        'comments',
+        sa.Column('id', sa.Integer(), autoincrement=True, nullable=False, comment="댓글 고유 식별자"),
+        sa.Column('post_id', sa.Integer(), nullable=False, comment="게시글 ID (posts.id 외래키)"),
+        sa.Column('user_id', sa.Integer(), nullable=False, comment="작성자 ID (users.id 외래키)"),
+        sa.Column('parent_id', sa.Integer(), nullable=True, comment="부모 댓글 ID (comments.id 외래키)"),
+        sa.Column('content', sa.String(length=1000), nullable=False, comment="댓글 내용"),
+        sa.Column('created_at', sa.DateTime(), nullable=False, comment="생성 일시"),
+        sa.Column('updated_at', sa.DateTime(), nullable=False, comment="수정 일시"),
+        sa.ForeignKeyConstraint(['post_id'], ['posts.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['user_id'], ['users.id'], ondelete='CASCADE'),
+        sa.ForeignKeyConstraint(['parent_id'], ['comments.id'], ondelete='CASCADE'),
+        sa.PrimaryKeyConstraint('id')
+    )
+    op.create_index(op.f('ix_comments_post_id'), 'comments', ['post_id'], unique=False)
+    op.create_index(op.f('ix_comments_user_id'), 'comments', ['user_id'], unique=False)
+    op.create_index(op.f('ix_comments_parent_id'), 'comments', ['parent_id'], unique=False)
+
 def downgrade() -> None:
     # Drop tables in reverse order to respect foreign key constraints
+    op.drop_index(op.f('ix_comments_parent_id'), table_name='comments')
+    op.drop_index(op.f('ix_comments_user_id'), table_name='comments')
+    op.drop_index(op.f('ix_comments_post_id'), table_name='comments')
+    op.drop_table('comments')
+
+    op.drop_index(op.f('ix_posts_user_id'), table_name='posts')
+    op.drop_index(op.f('ix_posts_title'), table_name='posts')
+    op.drop_table('posts')
+
     op.drop_index(op.f('ix_course_registrations_course_id'), table_name='course_registrations')
     op.drop_table('course_registrations')
 
