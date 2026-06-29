@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { MessageSquare, Send, CheckCircle2, Clock, X, HelpCircle, User } from 'lucide-react';
 import { useToast } from '../components/ui/Toast';
+import mosaicBg from '../assets/background-l1-mosaic.svg';
 
 interface InquiryRecord {
   id: string;
@@ -79,19 +80,23 @@ export const Inquiry: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
       <div className="max-w-6xl mx-auto">
-        
-        {/* Banner Section */}
-        <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl border border-slate-200 mb-8 animate-fade-in relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
-          <div className="relative z-10 px-8 py-8 md:py-10 text-left select-text">
-            <span className="text-xs font-black text-brand-accent-light uppercase tracking-widest bg-brand-primary/30 px-3 py-1 rounded-md mb-3 inline-block">
-              1:1 ONLINE SUPPORT
-            </span>
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
-              <MessageSquare className="text-brand-accent-light stroke-[2.5]" size={30} />
-              1:1 온라인 문의
+
+        {/* Page Header Banner */}
+        <div
+          className="relative overflow-hidden bg-[#183544] text-white py-12 px-8 md:py-16 md:px-16 mb-8 shadow-sm animate-fade-in"
+          style={{
+            backgroundImage: `url(${mosaicBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <div className="relative z-10 max-w-3xl text-left select-text">
+            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+              <MessageSquare className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+              <span className="text-4xl md:text-4xl font-bold">1:1 온라인 문의</span>
             </h1>
-            <p className="text-slate-400 text-xs md:text-sm mt-2 font-medium leading-relaxed">
+            <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
               수강 신청 자격, 국민내일배움카드 연계, 커리큘럼 세부사항 등 교육 과정 전반에 관한 궁금증을 남겨주시면, 전문 상담원이 이메일과 대시보드를 통해 상세히 답변해 드립니다.
             </p>
           </div>
@@ -101,21 +106,19 @@ export const Inquiry: React.FC = () => {
         <div className="flex border-b border-slate-250 mb-8 max-w-md mx-auto select-none">
           <button
             onClick={() => setActiveTab('write')}
-            className={`flex-1 py-3 text-sm font-black cursor-pointer transition-colors border-b-2 text-center ${
-              activeTab === 'write'
+            className={`flex-1 py-3 text-sm font-black cursor-pointer transition-colors border-b-2 text-center ${activeTab === 'write'
                 ? 'border-brand-primary text-brand-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
+              }`}
           >
             문의 접수하기
           </button>
           <button
             onClick={() => setActiveTab('list')}
-            className={`flex-1 py-3 text-sm font-black cursor-pointer transition-colors border-b-2 text-center ${
-              activeTab === 'list'
+            className={`flex-1 py-3 text-sm font-black cursor-pointer transition-colors border-b-2 text-center ${activeTab === 'list'
                 ? 'border-brand-primary text-brand-primary'
                 : 'border-transparent text-slate-500 hover:text-slate-800'
-            }`}
+              }`}
           >
             내 문의 내역 ({inquiries.length})
           </button>
@@ -221,11 +224,10 @@ export const Inquiry: React.FC = () => {
 
                   <div className="flex items-center gap-4 shrink-0 select-none">
                     <span
-                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border ${
-                        inq.status === 'answered'
+                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border ${inq.status === 'answered'
                           ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
                           : 'bg-amber-50 text-amber-700 border-amber-200'
-                      }`}
+                        }`}
                     >
                       {inq.status === 'answered' ? (
                         <>

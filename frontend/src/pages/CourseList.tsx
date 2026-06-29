@@ -5,6 +5,7 @@ import { CourseCard } from '../components/ui/CourseCard';
 import { useToast } from '../components/ui/Toast';
 import type { Course } from '../data/courses';
 import { courseService } from '../services/courseService';
+import mosaicBg from '../assets/background-l1-mosaic.svg';
 
 const REGIONS = ['전국', '서울', '경기', '부산', '인천', '광주'];
 
@@ -92,17 +93,24 @@ export const CourseList: React.FC = () => {
     <div className="w-full min-h-screen bg-slate-50 py-10 px-4 sm:px-6 lg:px-8 select-none">
       <div className="max-w-6xl mx-auto">
 
-        {/* Page Header */}
-        <div className="text-center mb-10 animate-fade-in">
-          <span className="text-brand-secondary text-sm font-extrabold uppercase tracking-widest bg-brand-accent-light px-3 py-1 rounded-md mb-3 inline-block">
-            Education Directory
-          </span>
-          <h1 className="text-2xl md:text-4xl font-black text-slate-900 mb-3 tracking-tight">
-            UnionAI 교육 과정
-          </h1>
-          <p className="text-sm md:text-base text-slate-500 max-w-xl mx-auto leading-relaxed break-keep">
-            UnionAI가 검증하는 현장 밀착형 실무 교육입니다. 국비 지원 혜택을 받고 성공적인 취업 파트너를 만나보세요.
-          </p>
+        {/* Page Header Banner */}
+        <div
+          className="relative overflow-hidden bg-[#0071c5] text-white py-12 px-8 md:py-16 md:px-16 mb-10 shadow-sm animate-fade-in"
+          style={{
+            backgroundImage: `url(${mosaicBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <div className="relative z-10 max-w-3xl text-left">
+            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+              <span className="text-4xl md:text-4xl font-bold">Intel<sup className="text-2xl font-light ml-0.5 select-none">®</sup> 교육 과정</span>
+            </h1>
+            <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
+              Intel이 검증하는 현장 밀착형 실무 교육입니다. 국비 지원 혜택을 받고 성공적인 취업 파트너를 만나보세요.
+            </p>
+          </div>
         </div>
 
         {/* Education course type subtabs */}

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { NavLink, Link, useLocation } from 'react-router-dom';
-import { Menu, X, User, LogIn, LogOut, ExternalLink, GraduationCap, PlusCircle, ClipboardList, ChevronDown, Settings, HelpCircle, MessageSquare, FileText, ShieldAlert } from 'lucide-react';
+import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
+import { Menu, X, User, GraduationCap, PlusCircle, ClipboardList, ChevronDown, Settings, HelpCircle, MessageSquare, FileText, ShieldAlert, Search } from 'lucide-react';
 import { useToast } from '../ui/Toast';
 import { useAuth } from '../../context/AuthContext';
+import intelHeaderLogo from '../../assets/intel-header-logo.svg';
 
 export const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -10,7 +11,11 @@ export const Header: React.FC = () => {
   const [adminOpen, setAdminOpen] = useState(false);
   const { showToast } = useToast();
   const location = useLocation();
+  const navigate = useNavigate();
   const { user, login, signup, logout } = useAuth();
+
+  // Search state
+  const [searchQuery, setSearchQuery] = useState('');
 
   // Auth modal state
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -19,6 +24,14 @@ export const Header: React.FC = () => {
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [isAdmin, setIsAdmin] = useState(false);
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/courses?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+  };
 
   const handlePlaceholderClick = (e: React.MouseEvent, menuName: string) => {
     e.preventDefault();
@@ -60,7 +73,6 @@ export const Header: React.FC = () => {
   };
 
   const navItems = [
-    { name: 'UnionAI', path: '/', isPlaceholder: false },
     { name: '교육 과정', path: '/courses', isPlaceholder: false },
     // { name: '맞춤형교육신청', path: '/custom-training', isPlaceholder: true },
     // { name: '고객센터', path: '/support', isPlaceholder: true },
@@ -69,26 +81,146 @@ export const Header: React.FC = () => {
 
   return (
     <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-sm w-full select-none">
-      {/* Top Utility Bar (Desktop Only) */}
-      <div className="hidden md:flex border-b border-slate-100 bg-slate-50 text-xs text-slate-500 py-2.5 px-6 justify-between items-center w-full">
-        <div className="flex gap-4">
-          <a
-            href="https://www.korcham.net"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-slate-800 flex items-center gap-1 transition-colors"
-          >
-            대한상공회의소 바로가기
-            <ExternalLink size={10} />
-          </a>
+      {/* Main Navbar */}
+      <div className="w-full px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
+        {/* Left Side: Brand Logo & Navigation */}
+        <div className="flex items-center gap-8 h-full">
+          {/* Brand Logo */}
+          <Link to="/" className="flex items-center gap-3 group">
+            <img src={intelHeaderLogo} alt="UnionAI Logo" className="h-7 md:h-7 w-auto" />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="hidden md:flex items-center gap-1 lg:gap-2 h-full">
+            {navItems.map((item) => (
+              item.isPlaceholder ? (
+                <a
+                  key={item.name}
+                  href="#"
+                  onClick={(e) => handlePlaceholderClick(e, item.name)}
+                  className="px-4 py-2 text-base text-slate-600 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200"
+                >
+                  {item.name}
+                </a>
+              ) : (
+                <NavLink
+                  key={item.name}
+                  to={item.path}
+                  className={({ isActive }) =>
+                    `relative px-4 py-2 text-base transition-all duration-200 rounded-lg hover:bg-slate-50 ${isActive
+                      ? 'text-brand-secondary bg-brand-accent-light/50'
+                      : 'text-slate-700 hover:text-brand-secondary'
+                    }`
+                  }
+                >
+                  {item.name}
+                  {((item.path === '/' && location.pathname === '/') || (item.path !== '/' && location.pathname.startsWith(item.path))) && (
+                    <span className="absolute bottom-[-16px] left-4 right-4 h-0.75 bg-brand-secondary rounded-full"></span>
+                  )}
+                </NavLink>
+              )
+            ))}
+
+            {/* Board Hover Dropdown Menu */}
+            <div
+              className="relative h-full flex items-center"
+              onMouseEnter={() => setBoardOpen(true)}
+              onMouseLeave={() => setBoardOpen(false)}
+            >
+              <button className="px-4 py-2 text-base text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 flex items-center gap-1 cursor-pointer">
+                게시판 <ChevronDown size={14} className={`opacity-60 transition-transform duration-200 ${boardOpen ? 'rotate-180 text-brand-secondary' : ''}`} />
+              </button>
+              {boardOpen && (
+                <div className="absolute top-[80%] left-1/2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-slide-down select-none">
+                  <Link
+                    to="/faq"
+                    onClick={() => setBoardOpen(false)}
+                    className="w-full text-left px-4.5 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                  >
+                    <HelpCircle size={15} className="text-slate-400" />
+                    FAQ
+                  </Link>
+                  <Link
+                    to="/board"
+                    onClick={() => setBoardOpen(false)}
+                    className="w-full text-left px-4.5 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                  >
+                    <FileText size={15} className="text-slate-400" />
+                    게시판
+                  </Link>
+                  <Link
+                    to="/inquiry"
+                    onClick={() => setBoardOpen(false)}
+                    className="w-full text-left px-4.5 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                  >
+                    <MessageSquare size={15} className="text-slate-400" />
+                    1:1 문의
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Admin Hover Dropdown Menu */}
+            <div
+              className="relative h-full flex items-center"
+              onMouseEnter={() => setAdminOpen(true)}
+              onMouseLeave={() => setAdminOpen(false)}
+            >
+              <button className="px-4 py-2 text-base text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 flex items-center gap-1 cursor-pointer">
+                관리자 <ChevronDown size={14} className={`opacity-60 transition-transform duration-200 ${adminOpen ? 'rotate-180 text-brand-secondary' : ''}`} />
+              </button>
+              {adminOpen && (
+                <div className="absolute top-[80%] left-1/2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-slide-down select-none">
+                  <Link
+                    to="/admin/register-course"
+                    onClick={() => setAdminOpen(false)}
+                    className="w-full text-left px-4.5 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                  >
+                    <PlusCircle size={15} className="text-slate-400" />
+                    교육과정 등록
+                  </Link>
+                  <Link
+                    to="/admin/courses"
+                    onClick={() => setAdminOpen(false)}
+                    className="w-full text-left px-4.5 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                  >
+                    <Settings size={15} className="text-slate-400" />
+                    교육과정 관리
+                  </Link>
+                  <Link
+                    to="/admin/registrations"
+                    onClick={() => setAdminOpen(false)}
+                    className="w-full text-left px-4.5 py-3 text-sm text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
+                  >
+                    <ClipboardList size={15} className="text-slate-400" />
+                    수강 신청 현황
+                  </Link>
+                </div>
+              )}
+            </div>
+
+            {/* Search Box */}
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center bg-slate-50 border border-slate-200 rounded-xl px-3 py-1.5 focus-within:bg-white focus-within:border-brand-primary focus-within:ring-2 focus-within:ring-brand-accent-light/50 transition-all w-48 lg:w-128 ml-4">
+              <Search size={16} className="text-slate-400 mr-2 shrink-0" />
+              <input
+                type="text"
+                placeholder="교육과정 검색..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="bg-transparent border-none outline-none text-md font-semibold text-slate-700 w-full placeholder-slate-400"
+              />
+            </form>
+          </nav>
         </div>
-        <div className="flex items-center gap-4">
+
+        {/* Right Side: Auth / Actions */}
+        <div className="hidden md:flex items-center gap-4">
           {user ? (
-            <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 font-semibold text-slate-700">
-                <User size={11} className="text-slate-400" />
+            <div className="flex items-center gap-4">
+              <span className="flex items-center gap-1.5 font-bold text-slate-700 text-base">
+                <User size={16} className="text-slate-400" />
                 {user.full_name || user.email}
-                <span className={`ml-1 text-xxs px-1.5 py-0.5 rounded font-black ${user.is_admin ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'}`}>
+                <span className={`ml-1 text-xs px-2 py-0.5 rounded font-black ${user.is_admin ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'}`}>
                   {user.is_admin ? '관리자' : '일반'}
                 </span>
               </span>
@@ -98,174 +230,33 @@ export const Header: React.FC = () => {
                   logout();
                   showToast('로그아웃되었습니다.');
                 }}
-                className="hover:text-slate-800 flex items-center gap-1 transition-colors font-semibold cursor-pointer"
+                className="px-4 py-2 text-base font-semibold text-slate-500 hover:text-rose-600 rounded-lg hover:bg-rose-50 transition-all duration-200 cursor-pointer"
               >
-                <LogOut size={11} />
                 로그아웃
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
               <button
                 onClick={() => {
                   setAuthMode('login');
                   setIsAuthModalOpen(true);
                 }}
-                className="hover:text-slate-800 flex items-center gap-1 transition-colors font-semibold cursor-pointer"
+                className="px-4 py-2 text-base font-semibold text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 cursor-pointer"
               >
-                <LogIn size={11} />
                 로그인
               </button>
-              <span className="text-slate-300">|</span>
               <button
                 onClick={() => {
                   setAuthMode('signup');
                   setIsAuthModalOpen(true);
                 }}
-                className="hover:text-slate-800 flex items-center gap-1 transition-colors font-semibold cursor-pointer"
+                className="px-4.5 py-2 text-base font-semibold text-white bg-brand-primary hover:bg-brand-secondary rounded-xl transition-all duration-200 shadow-sm hover:shadow cursor-pointer active:scale-95"
               >
-                <User size={11} />
                 회원가입
               </button>
             </div>
           )}
-        </div>
-      </div>
-
-      {/* Main Navbar */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 md:h-20 flex items-center justify-between">
-        {/* Brand Logo */}
-        <div className="flex items-center gap-3">
-          <Link to="/" className="flex items-center gap-2 group">
-            <div className="bg-brand-primary text-white p-2 rounded-xl group-hover:bg-brand-secondary transition-colors duration-200">
-              <GraduationCap size={24} className="stroke-[2.5]" />
-            </div>
-            <div className="flex flex-col">
-              <span className="text-lg md:text-xl font-black text-brand-primary tracking-tight leading-none">
-                UnionAI
-              </span>
-            </div>
-          </Link>
-        </div>
-
-        {/* Desktop Navigation */}
-        <nav className="hidden md:flex items-center gap-1 lg:gap-2 h-full">
-          {navItems.map((item) => (
-            item.isPlaceholder ? (
-              <a
-                key={item.name}
-                href="#"
-                onClick={(e) => handlePlaceholderClick(e, item.name)}
-                className="px-4 py-2 text-lg font-bold text-slate-600 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200"
-              >
-                {item.name}
-              </a>
-            ) : (
-              <NavLink
-                key={item.name}
-                to={item.path}
-                className={({ isActive }) =>
-                  `relative px-4 py-2 text-lg font-bold transition-all duration-200 rounded-lg hover:bg-slate-50 ${isActive
-                    ? 'text-brand-secondary bg-brand-accent-light/50'
-                    : 'text-slate-700 hover:text-brand-secondary'
-                  }`
-                }
-              >
-                {item.name}
-                {((item.path === '/' && location.pathname === '/') || (item.path !== '/' && location.pathname.startsWith(item.path))) && (
-                  <span className="absolute bottom-[-16px] left-4 right-4 h-0.75 bg-brand-secondary rounded-full"></span>
-                )}
-              </NavLink>
-            )
-          ))}
-
-          {/* Board Hover Dropdown Menu */}
-          <div
-            className="relative h-full flex items-center"
-            onMouseEnter={() => setBoardOpen(true)}
-            onMouseLeave={() => setBoardOpen(false)}
-          >
-            <button className="px-4 py-2 text-lg font-bold text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 flex items-center gap-1 cursor-pointer">
-              게시판 <ChevronDown size={14} className={`opacity-60 transition-transform duration-200 ${boardOpen ? 'rotate-180 text-brand-secondary' : ''}`} />
-            </button>
-            {boardOpen && (
-              <div className="absolute top-[80%] left-1/2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-slide-down select-none">
-                <Link
-                  to="/faq"
-                  onClick={() => setBoardOpen(false)}
-                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-                >
-                  <HelpCircle size={15} className="text-slate-400" />
-                  FAQ
-                </Link>
-                <Link
-                  to="/board"
-                  onClick={() => setBoardOpen(false)}
-                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-                >
-                  <FileText size={15} className="text-slate-400" />
-                  게시판
-                </Link>
-                <Link
-                  to="/inquiry"
-                  onClick={() => setBoardOpen(false)}
-                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-                >
-                  <MessageSquare size={15} className="text-slate-400" />
-                  1:1 문의
-                </Link>
-              </div>
-            )}
-          </div>
-
-          {/* Admin Hover Dropdown Menu */}
-          <div
-            className="relative h-full flex items-center"
-            onMouseEnter={() => setAdminOpen(true)}
-            onMouseLeave={() => setAdminOpen(false)}
-          >
-            <button className="px-4 py-2 text-lg font-bold text-slate-700 hover:text-brand-secondary rounded-lg hover:bg-slate-50 transition-all duration-200 flex items-center gap-1 cursor-pointer">
-              관리자 <ChevronDown size={14} className={`opacity-60 transition-transform duration-200 ${adminOpen ? 'rotate-180 text-brand-secondary' : ''}`} />
-            </button>
-            {adminOpen && (
-              <div className="absolute top-[80%] left-1/2 w-48 bg-white border border-slate-200 rounded-2xl shadow-xl py-2.5 z-50 animate-slide-down select-none">
-                <Link
-                  to="/admin/register-course"
-                  onClick={() => setAdminOpen(false)}
-                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-                >
-                  <PlusCircle size={15} className="text-slate-400" />
-                  교육과정 등록
-                </Link>
-                <Link
-                  to="/admin/courses"
-                  onClick={() => setAdminOpen(false)}
-                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-                >
-                  <Settings size={15} className="text-slate-400" />
-                  교육과정 관리
-                </Link>
-                <Link
-                  to="/admin/registrations"
-                  onClick={() => setAdminOpen(false)}
-                  className="w-full text-left px-4.5 py-3 text-sm font-bold text-slate-700 hover:bg-slate-50 hover:text-brand-secondary transition-colors flex items-center gap-2 cursor-pointer"
-                >
-                  <ClipboardList size={15} className="text-slate-400" />
-                  수강 신청 현황
-                </Link>
-              </div>
-            )}
-          </div>
-        </nav>
-
-        {/* Action Button (Desktop Only) */}
-        <div className="hidden md:block">
-          {/* <button
-            onClick={(e) => handlePlaceholderClick(e, '맞춤형 상담 신청')}
-            className="bg-brand-primary hover:bg-brand-secondary text-white font-bold text-sm tracking-wider px-5 py-2.5 rounded-xl shadow-sm hover:shadow transition-all duration-200 active:scale-95"
-          >
-            상담 및 신청하기
-          </button> */}
         </div>
 
         {/* Mobile Hamburger Button */}

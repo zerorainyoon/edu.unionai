@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ClipboardList, ArrowLeft, RefreshCw } from 'lucide-react';
+import { ClipboardList, RefreshCw } from 'lucide-react';
 import { useToast } from '../../components/ui/Toast';
 import { api } from '../../services/api';
 import { courseService } from '../../services/courseService';
 import type { Course } from '../../data/courses';
+import mosaicBg from '../../assets/background-l1-mosaic.svg';
 
 export interface Registration {
   id: number;
@@ -19,7 +19,6 @@ export interface Registration {
 }
 
 export const AdminRegistrations: React.FC = () => {
-  const navigate = useNavigate();
   const { showToast } = useToast();
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [filteredCourses, setFilteredCourses] = useState<Course[]>([]);
@@ -141,43 +140,41 @@ export const AdminRegistrations: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
       <div className="max-w-6xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="group mb-6 flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary transition-colors cursor-pointer"
+        <div
+          className="relative overflow-hidden bg-[#653171] text-white py-12 px-8 md:py-16 md:px-16 mb-10 shadow-sm animate-fade-in"
+          style={{
+            backgroundImage: `url(${mosaicBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
         >
-          <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
-          이전 페이지로 돌아가기
-        </button>
-
-        {/* Console Container Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-fade-in select-text">
-          {/* Header */}
-          <div className="bg-slate-900 text-white px-8 py-8 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
-            <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-              <div>
-                <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
-                  <ClipboardList className="text-brand-accent-light" size={28} />
-                  수강 신청 현황 관리
-                </h1>
-                <p className="text-slate-400 text-sm mt-2 font-medium">
-                  현재 날짜 기준 모집 중이거나 교육 중인 코스를 선택하고, 수강 신청 및 상세 상담 내역을 모니터링합니다.
-                </p>
-              </div>
-              <div className="flex items-center gap-4.5 shrink-0 self-start md:self-auto select-none">
-                {/* Refresh Button */}
-                <button
-                  onClick={loadData}
-                  disabled={loading}
-                  className="flex items-center gap-1.5 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2.5 rounded-xl active:scale-95 transition-all cursor-pointer disabled:opacity-50"
-                >
-                  <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-                  새로고침
-                </button>
-              </div>
+          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="max-w-2xl text-left select-text">
+              <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+                <ClipboardList className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+                <span className="text-4xl md:text-4xl font-bold">수강 신청 현황 관리</span>
+              </h1>
+              <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
+                현재 날짜 기준 모집 중이거나 교육 중인 코스를 선택하고, 수강 신청 및 상세 상담 내역을 모니터링합니다.
+              </p>
+            </div>
+            <div className="flex items-center gap-4.5 shrink-0 self-start md:self-auto select-none">
+              {/* Refresh Button */}
+              <button
+                onClick={loadData}
+                disabled={loading}
+                className="flex items-center gap-1.5 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2.5 rounded-xl active:scale-95 transition-all cursor-pointer disabled:opacity-50"
+              >
+                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
+                <span>새로고침</span>
+              </button>
             </div>
           </div>
+        </div>
+
+        {/* Console Container Card */}
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden select-text">
 
           {/* Course Selector Section */}
           <div className="bg-slate-50 border-b border-slate-200 p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">

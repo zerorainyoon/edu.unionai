@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PlusCircle, ArrowLeft, Calendar, MapPin, Tag, Clock, FileText, X, Coins, BookOpen } from 'lucide-react';
+import { PlusCircle, Calendar, MapPin, Tag, Clock, FileText, X, Coins, BookOpen } from 'lucide-react';
 import { useToast } from '../../components/ui/Toast';
 import { api } from '../../services/api';
 import { RichTextEditor } from '../../components/ui/RichTextEditor';
+import mosaicBg from '../../assets/background-l1-mosaic.svg';
 
 const PREDEFINED_TAGS = [
   'K-Digital',
@@ -61,30 +62,28 @@ export const AdminRegisterCourse: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
       <div className="max-w-6xl mx-auto">
-        {/* Back Button */}
-        <button
-          onClick={() => navigate(-1)}
-          className="group mb-6 flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary transition-colors cursor-pointer"
+        <div
+          className="relative overflow-hidden bg-[#653171] text-white py-12 px-8 md:py-16 md:px-16 mb-10 shadow-sm animate-fade-in"
+          style={{
+            backgroundImage: `url(${mosaicBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
         >
-          <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
-          이전 페이지로 돌아가기
-        </button>
+          <div className="relative z-10 max-w-3xl text-left select-text">
+            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+              <PlusCircle className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+              <span className="text-4xl md:text-4xl font-bold">교육과정 등록</span>
+            </h1>
+            <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
+              UnionAI 교육과정을 게시합니다. 아래의 세부사항들을 빠짐없이 기입해주세요.
+            </p>
+          </div>
+        </div>
 
         {/* Form Container Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-fade-in select-text">
-          {/* Header */}
-          <div className="bg-slate-900 text-white px-8 py-8 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
-            <div className="relative z-10">
-              <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
-                <PlusCircle className="text-brand-accent-light" size={28} />
-                교육과정 등록
-              </h1>
-              <p className="text-slate-400 text-sm mt-2 font-medium">
-                UnionAI 교육과정을 게시합니다. 아래의 세부사항들을 빠짐없이 기입해주세요.
-              </p>
-            </div>
-          </div>
+        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden select-text">
 
           {/* Form */}
           <form onSubmit={handleCourseSubmit} className="p-8 space-y-12">

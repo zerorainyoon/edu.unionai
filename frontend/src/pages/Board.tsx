@@ -5,6 +5,7 @@ import { useToast } from '../components/ui/Toast';
 import { useAuth } from '../context/AuthContext';
 import { postService } from '../services/postService';
 import type { ApiPost, ApiPostDetail, ApiCommentTree } from '../services/postService';
+import mosaicBg from '../assets/background-l1-mosaic.svg';
 
 // Category extractor based on title prefix
 const getPostCategory = (title: string): 'notice' | 'review' | 'free' => {
@@ -30,11 +31,11 @@ export const Board: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedCategory, setSelectedCategory] = useState<'all' | 'notice' | 'free' | 'review'>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  
+
   // Modals state
   const [selectedPost, setSelectedPost] = useState<ApiPostDetail | null>(null);
   const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
-  
+
   // Private post password check state
   const [passwordTargetPostId, setPasswordTargetPostId] = useState<number | null>(null);
   const [postPassword, setPostPassword] = useState('');
@@ -163,7 +164,7 @@ export const Board: React.FC = () => {
         password: isPrivate ? writePassword : undefined
       });
       showToast('게시글이 성공적으로 등록되었습니다.');
-      
+
       // Reset form
       setNewTitle('');
       setNewCategory('free');
@@ -171,7 +172,7 @@ export const Board: React.FC = () => {
       setIsPrivate(false);
       setWritePassword('');
       setIsWriteModalOpen(false);
-      
+
       // Reload posts
       loadPosts();
     } catch (e: any) {
@@ -210,7 +211,7 @@ export const Board: React.FC = () => {
       await postService.createComment(selectedPost.id, newCommentContent.trim());
       setNewCommentContent('');
       showToast('댓글이 등록되었습니다.');
-      
+
       // Refresh details
       const detail = await postService.getPostDetail(selectedPost.id);
       setSelectedPost(detail);
@@ -294,7 +295,7 @@ export const Board: React.FC = () => {
                 {new Date(comment.created_at).toLocaleString('ko-KR')}
               </span>
             </div>
-            
+
             {/* Delete button */}
             {canDeleteComment && (
               <button
@@ -387,7 +388,7 @@ export const Board: React.FC = () => {
               <div className="flex flex-wrap gap-4 mt-5 text-xs font-bold text-slate-400">
                 <span className="flex items-center gap-1"><User size={13} /> 교육생 {selectedPost.user_id}</span>
                 <span className="flex items-center gap-1">
-                  <Calendar size={13} /> 
+                  <Calendar size={13} />
                   {new Date(selectedPost.created_at).toLocaleDateString('ko-KR')}
                 </span>
                 <span className="flex items-center gap-1"><Eye size={13} /> {selectedPost.views}회 조회</span>
@@ -469,36 +470,45 @@ export const Board: React.FC = () => {
         ) : (
           /* List View */
           <>
-            {/* Banner Section */}
-            <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl border border-slate-200 mb-8 relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
-              <div className="relative z-10 px-8 py-8 md:py-10 flex flex-col md:flex-row items-center justify-between gap-6">
-                <div className="text-left select-text max-w-xl">
-                  <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
-                    <FileText className="text-brand-accent-light stroke-[2.5]" size={30} />
-                    통합 게시판
+            {/* Page Header Banner */}
+            <div
+              className="relative overflow-hidden bg-[#183544] text-white py-12 px-8 md:py-16 md:px-16 mb-8 shadow-sm animate-fade-in"
+              style={{
+                backgroundImage: `url(${mosaicBg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            >
+              <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                <div className="max-w-3xl text-left select-text">
+                  <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+                    <FileText className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+                    <span className="text-4xl md:text-4xl font-bold">통합 게시판</span>
                   </h1>
-                  <p className="text-slate-400 text-xs md:text-sm mt-2 font-medium leading-relaxed">
+                  <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
                     대한상공회의소 교육생들을 위한 커뮤니티입니다. 공지사항 확인 및 유용한 취업 팁, 공부 관련 질문들을 자유롭게 나누어 보세요.
                   </p>
                 </div>
-                
-                {user ? (
-                  <button
-                    onClick={() => {
-                      setNewCategory('free');
-                      setIsWriteModalOpen(true);
-                    }}
-                    className="flex items-center gap-1.5 px-5 py-3.5 rounded-2xl bg-brand-secondary hover:bg-brand-primary text-white font-black text-sm tracking-wider shadow-md hover:shadow active:scale-95 transition-all duration-200 cursor-pointer self-stretch md:self-auto justify-center"
-                  >
-                    <PlusCircle size={18} />
-                    새 글 작성하기
-                  </button>
-                ) : (
-                  <p className="text-xxs md:text-xs font-bold text-slate-400 bg-slate-800/60 border border-slate-700 px-4 py-2.5 rounded-xl">
-                    게시글 작성을 하려면 로그인이 필요합니다.
-                  </p>
-                )}
+
+                <div className="shrink-0 w-full lg:w-auto">
+                  {user ? (
+                    <button
+                      onClick={() => {
+                        setNewCategory('free');
+                        setIsWriteModalOpen(true);
+                      }}
+                      className="flex items-center gap-1.5 px-5 py-3.5 rounded-2xl bg-brand-secondary hover:bg-brand-primary text-white font-black text-sm tracking-wider shadow-md hover:shadow active:scale-95 transition-all duration-200 cursor-pointer w-full lg:w-auto justify-center"
+                    >
+                      <PlusCircle size={18} />
+                      새 글 작성하기
+                    </button>
+                  ) : (
+                    <p className="text-xxs md:text-xs font-bold text-blue-100/90 bg-white/10 border border-white/10 px-4 py-2.5 rounded-xl text-center">
+                      게시글 작성을 하려면 로그인이 필요합니다.
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -510,8 +520,8 @@ export const Board: React.FC = () => {
                     key={cat.key}
                     onClick={() => setSelectedCategory(cat.key as any)}
                     className={`px-4 py-2 rounded-xl text-xs font-black tracking-wide border cursor-pointer active:scale-95 transition-all duration-200 ${selectedCategory === cat.key
-                        ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/10'
-                        : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                      ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/10'
+                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                       }`}
                   >
                     {cat.label}
@@ -565,10 +575,10 @@ export const Board: React.FC = () => {
                               <td className="px-6 py-4 text-center select-none">
                                 <span
                                   className={`inline-block px-2.5 py-1 rounded-lg text-xxs font-black tracking-wide ${category === 'notice'
-                                      ? 'bg-rose-50 text-rose-700 border border-rose-100'
-                                      : category === 'review'
-                                        ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
-                                        : 'bg-slate-100 text-slate-600'
+                                    ? 'bg-rose-50 text-rose-700 border border-rose-100'
+                                    : category === 'review'
+                                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
+                                      : 'bg-slate-100 text-slate-600'
                                     }`}
                                 >
                                   {category === 'notice' ? '공지' : category === 'review' ? '후기' : '자유'}
@@ -629,7 +639,7 @@ export const Board: React.FC = () => {
               >
                 <X size={20} />
               </button>
-              
+
               <div className="flex flex-col items-center text-center mt-2">
                 <div className="bg-amber-100 p-3 rounded-full text-amber-600 mb-3">
                   <Lock size={22} className="stroke-[2.5]" />
@@ -650,7 +660,7 @@ export const Board: React.FC = () => {
                   required
                   autoFocus
                 />
-                
+
                 <div className="flex gap-2 justify-end">
                   <button
                     type="button"

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Settings, ArrowLeft, RefreshCw, MapPin, Search, Calendar, Tag, Clock, FileText, X, Coins, BookOpen, AlertCircle } from 'lucide-react';
+import { useSearchParams } from 'react-router-dom';
+import { Settings, RefreshCw, MapPin, Search, Calendar, Tag, Clock, FileText, X, Coins, BookOpen, AlertCircle } from 'lucide-react';
 import { useToast } from '../../components/ui/Toast';
 import { api } from '../../services/api';
 import { courseService } from '../../services/courseService';
@@ -8,6 +8,7 @@ import type { ApiCourse } from '../../services/courseService';
 import { CourseCard } from '../../components/ui/CourseCard';
 import type { Course } from '../../data/courses';
 import { RichTextEditor } from '../../components/ui/RichTextEditor';
+import mosaicBg from '../../assets/background-l1-mosaic.svg';
 
 const REGIONS = ['전국', '서울', '경기', '부산', '인천', '광주'];
 
@@ -17,7 +18,6 @@ const PREDEFINED_TAGS = [
 ];
 
 export const AdminCourses: React.FC = () => {
-  const navigate = useNavigate();
   const { showToast } = useToast();
 
   // List View State
@@ -196,33 +196,29 @@ export const AdminCourses: React.FC = () => {
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
       <div className="max-w-6xl mx-auto">
-
-        {/* Back Button */}
-        <button
-          onClick={() => editingCourseId ? handleCancelEdit() : navigate(-1)}
-          className="group mb-6 flex items-center gap-2 text-sm font-bold text-slate-500 hover:text-brand-primary transition-colors cursor-pointer"
-        >
-          <ArrowLeft size={16} className="group-hover:-translate-x-0.5 transition-transform" />
-          이전 페이지로 돌아가기
-        </button>
-
         {editingCourseId ? (
           /* ========================================================
              1. EDIT MODE: Detailed Course Edit Form View
              ======================================================== */
           <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-fade-in select-text">
-            {/* Header */}
-            <div className="bg-slate-900 text-white px-8 py-8 relative overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
-              <div className="relative z-10">
-                <span className="text-xs font-black text-brand-accent-light uppercase tracking-widest bg-brand-primary/30 px-3 py-1 rounded-md mb-3 inline-block">
+            <div
+              className="relative overflow-hidden bg-[#653171] text-white py-12 px-8 md:py-16 md:px-16 relative overflow-hidden"
+              style={{
+                backgroundImage: `url(${mosaicBg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            >
+              <div className="relative z-10 select-text">
+                <span className="text-xs font-bold text-blue-200 uppercase tracking-widest bg-white/10 px-3 py-1 rounded-md mb-4 inline-block">
                   Admin Console / Edit Course
                 </span>
-                <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
-                  <Settings className="text-brand-accent-light" size={28} />
-                  교육과정 상세 정보 수정
+                <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+                  <Settings className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+                  <span className="text-4xl md:text-4xl font-bold">교육과정 상세 정보 수정</span>
                 </h1>
-                <p className="text-slate-400 text-sm mt-2 font-medium">
+                <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
                   교육과정의 세부 속성을 변경하고 저장합니다. 필요한 경우 하단의 삭제 버튼을 사용해 삭제할 수 있습니다.
                 </p>
               </div>
@@ -491,20 +487,24 @@ export const AdminCourses: React.FC = () => {
              2. LIST MODE: Course Filter and Card List View
              ======================================================== */
           <div className="space-y-8 select-text">
-            {/* Header */}
-            <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-fade-in">
-              <div className="bg-slate-900 text-white px-8 py-8 relative overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                  <div>
-                    <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
-                      <Settings className="text-brand-accent-light" size={28} />
-                      교육과정 관리
-                    </h1>
-                    <p className="text-slate-400 text-sm mt-2 font-medium">
-                      전체 등록된 교육과정을 상세 검색하고 수정하거나 신속히 삭제할 수 있습니다.
-                    </p>
-                  </div>
+            <div
+              className="relative overflow-hidden bg-[#653171] text-white py-12 px-8 md:py-16 md:px-16 mb-10 shadow-sm animate-fade-in"
+              style={{
+                backgroundImage: `url(${mosaicBg})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            >
+              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 select-text">
+                <div>
+                  <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+                    <Settings className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+                    <span className="text-4xl md:text-4xl font-bold">교육과정 관리</span>
+                  </h1>
+                  <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
+                    전체 등록된 교육과정을 상세 검색하고 수정하거나 신속히 삭제할 수 있습니다.
+                  </p>
                 </div>
               </div>
             </div>

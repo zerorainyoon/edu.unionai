@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { HelpCircle, ChevronDown, ChevronUp, Search, MessageSquare } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import mosaicBg from '../assets/background-l1-mosaic.svg';
 
 interface FaqItem {
   id: string;
@@ -74,16 +75,23 @@ export const FAQ: React.FC = () => {
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
       <div className="max-w-6xl mx-auto">
 
-        {/* Banner Section */}
-        <div className="bg-slate-900 text-white rounded-3xl overflow-hidden shadow-xl border border-slate-200 mb-20 animate-fade-in relative">
-          <div className="absolute inset-0 bg-gradient-to-r from-brand-primary/20 to-brand-secondary/20 mix-blend-overlay"></div>
-          <div className="relative z-10 px-8 py-8 md:py-10 text-left select-text">
-            <h1 className="text-2xl md:text-3xl font-black tracking-tight flex items-center gap-2.5">
-              <HelpCircle className="text-brand-accent-light stroke-[2.5]" size={30} />
-              자주 묻는 질문 (FAQ)
+        {/* Page Header Banner */}
+        <div
+          className="relative overflow-hidden bg-[#183544] text-white py-12 px-8 md:py-16 md:px-16 mb-10 shadow-sm animate-fade-in"
+          style={{
+            backgroundImage: `url(${mosaicBg})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat'
+          }}
+        >
+          <div className="relative z-10 max-w-3xl text-left">
+            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+              <HelpCircle className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+              <span className="text-4xl md:text-4xl font-bold">자주 묻는 질문 (FAQ)</span>
             </h1>
-            <p className="text-slate-400 text-xs md:text-sm mt-2 font-medium leading-relaxed break-keep">
-              UnionAI 교육과정 및 국비 무료 훈련에 대해 가장 많이 들어오는 문의 사항들을 모았습니다. 궁금한 점을 키워드로 직접 찾아보세요.
+            <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
+              Intel® 교육과정 및 국비 무료 훈련에 대해 가장 많이 들어오는 문의 사항들을 모았습니다. 궁금한 점을 키워드로 직접 찾아보세요.
             </p>
           </div>
         </div>
