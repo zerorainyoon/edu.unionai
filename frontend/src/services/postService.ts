@@ -9,6 +9,7 @@ export interface ApiPost {
   views: number;
   created_at: string;
   updated_at: string;
+  author_name?: string | null;
 }
 
 export interface ApiComment {
@@ -55,12 +56,12 @@ export const postService = {
     return res.response;
   },
 
-  createPost: async (postData: { title: string; content: string; is_private: boolean; password?: string }): Promise<ApiPost> => {
+  createPost: async (postData: { title: string; content: string; is_private: boolean; password?: string; author_name?: string }): Promise<ApiPost> => {
     const res = await api.post<WrappedResponse<ApiPost>>('/posts/', postData);
     return res.response;
   },
 
-  updatePost: async (postId: number, postData: { title?: string; content?: string; is_private?: boolean; password?: string }): Promise<ApiPost> => {
+  updatePost: async (postId: number, postData: { title?: string; content?: string; is_private?: boolean; password?: string; author_name?: string }): Promise<ApiPost> => {
     const res = await api.put<WrappedResponse<ApiPost>>(`/posts/${postId}`, postData);
     return res.response;
   },

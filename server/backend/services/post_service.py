@@ -55,6 +55,7 @@ class PostService:
             hashed_post_password=hashed_password,
             user_id=user_id,
             views=0,
+            author_name=post_create.author_name,
         )
         self.session.add(db_post)
         await self.session.commit()

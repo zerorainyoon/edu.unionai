@@ -77,7 +77,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-10 mb-8 animate-fade-in text-slate-800 select-text">
+    <div className="bg-white border border-slate-200 shadow-sm p-6 md:p-10 mb-8 animate-fade-in text-slate-800 select-text">
       <div className="flex items-center justify-between border-b border-slate-100 pb-5 mb-6">
         <div>
           <h2 className="text-2xl md:text-3xl font-black text-slate-900 mb-2">지원서 작성</h2>
@@ -105,7 +105,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
             value={formData.email}
             onChange={e => setFormData(prev => ({ ...prev, email: e.target.value }))}
             placeholder="이메일을 입력해 주세요."
-            className={`w-full px-5 py-3.5 rounded-xl border text-base font-semibold focus:outline-none transition-all ${formData.email === ''
+            className={`w-full px-5 py-3.5 border text-base font-semibold focus:outline-none transition-all ${formData.email === ''
               ? 'border-slate-200 focus:border-brand-primary'
               : isEmailValid
                 ? 'border-slate-200 focus:border-emerald-500'
@@ -128,7 +128,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
               value={formData.password}
               onChange={e => setFormData(prev => ({ ...prev, password: e.target.value }))}
               placeholder="비밀번호를 입력해 주세요."
-              className="w-full px-5 py-3.5 pr-12 rounded-xl border border-slate-200 text-base font-semibold focus:outline-none focus:border-brand-primary"
+              className="w-full px-5 py-3.5 pr-12 border border-slate-200 text-base font-semibold focus:outline-none focus:border-brand-primary"
             />
             <button
               type="button"
@@ -149,7 +149,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
             ].map((item, idx) => (
               <span
                 key={idx}
-                className={`px-3 py-2 rounded-xl text-xs font-extrabold transition-all border ${formData.password === ''
+                className={`px-3 py-2 text-xs font-extrabold transition-all border ${formData.password === ''
                     ? 'bg-slate-50 text-slate-400 border-slate-200'
                     : item.met
                       ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
@@ -173,7 +173,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
               value={formData.passwordConfirm}
               onChange={e => setFormData(prev => ({ ...prev, passwordConfirm: e.target.value }))}
               placeholder="비밀번호를 한번 더 입력해 주세요."
-              className={`w-full px-5 py-3.5 pr-12 rounded-xl border text-base font-semibold focus:outline-none transition-all ${
+              className={`w-full px-5 py-3.5 pr-12 border text-base font-semibold focus:outline-none transition-all ${
                 formData.passwordConfirm === ''
                   ? 'border-slate-200 focus:border-brand-primary'
                   : isPasswordMatch
@@ -204,7 +204,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
             value={formData.name}
             onChange={e => setFormData(prev => ({ ...prev, name: e.target.value }))}
             placeholder="이름을 입력해 주세요."
-            className="w-full px-5 py-3.5 rounded-xl border border-slate-200 text-base font-semibold focus:outline-none focus:border-brand-primary"
+            className="w-full px-5 py-3.5 border border-slate-200 text-base font-semibold focus:outline-none focus:border-brand-primary"
           />
         </div>
 
@@ -214,7 +214,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
             사용 중인 휴대폰 번호<span className="text-rose-500 ml-0.5">*</span>
           </label>
           <div className="flex gap-3.5">
-            {/* <span className="px-4 py-3.5 bg-slate-50 border border-slate-200 text-slate-600 rounded-xl text-base font-bold flex items-center gap-1.5 select-none">
+            {/* <span className="px-4 py-3.5 bg-slate-50 border border-slate-200 text-slate-600 text-base font-bold flex items-center gap-1.5 select-none">
               🇰🇷 +82
             </span> */}
             <input
@@ -222,7 +222,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
               value={formData.phone}
               onChange={e => setFormData(prev => ({ ...prev, phone: e.target.value }))}
               placeholder="휴대폰 번호를 입력해 주세요 (숫자만)"
-              className={`w-full px-5 py-3.5 rounded-xl border text-base font-semibold focus:outline-none transition-all ${formData.phone === ''
+              className={`w-full px-5 py-3.5 border text-base font-semibold focus:outline-none transition-all ${formData.phone === ''
                 ? 'border-slate-200 focus:border-brand-primary'
                 : isPhoneValid
                   ? 'border-slate-200 focus:border-emerald-500'
@@ -236,13 +236,13 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
         </div>
 
         {/* Terms and Conditions */}
-        <div className="flex flex-col gap-3 bg-slate-50 p-5 rounded-2xl border border-slate-200 mt-2 select-none font-medium">
+        <div className="flex flex-col gap-3 bg-slate-50 p-5 border border-slate-200 mt-2 select-none font-medium">
           <label className="flex items-center gap-2.5 cursor-pointer font-bold text-slate-800 text-base">
             <input
               type="checkbox"
               checked={formData.agreeAll}
               onChange={e => handleAgreeAllChange(e.target.checked)}
-              className="w-5 h-5 accent-brand-primary rounded cursor-pointer"
+              className="w-5 h-5 accent-brand-primary cursor-pointer"
             />
             필수 이용약관 모두 동의
           </label>
@@ -253,7 +253,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
                 type="checkbox"
                 checked={formData.agreeTerms}
                 onChange={e => handleTermChange('agreeTerms', e.target.checked)}
-                className="w-4 h-4 accent-brand-primary rounded cursor-pointer"
+                className="w-4 h-4 accent-brand-primary cursor-pointer"
               />
               서비스 이용약관 동의 (필수)
             </label>
@@ -262,7 +262,7 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
                 type="checkbox"
                 checked={formData.agreePrivacy}
                 onChange={e => handleTermChange('agreePrivacy', e.target.checked)}
-                className="w-4 h-4 accent-brand-primary rounded cursor-pointer"
+                className="w-4 h-4 accent-brand-primary cursor-pointer"
               />
               개인정보 수집 및 이용 동의 (필수)
             </label>
@@ -274,14 +274,14 @@ export const CourseRegistration: React.FC<CourseRegistrationProps> = ({
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 py-4 rounded-xl font-bold text-base text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors select-none"
+            className="flex-1 py-4 font-bold text-base text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors select-none"
           >
             취소
           </button>
           <button
             type="submit"
             disabled={!isFormValid}
-            className={`flex-[2] py-4 rounded-xl font-bold text-base text-white transition-all select-none ${isFormValid
+            className={`flex-[2] py-4 font-bold text-base text-white transition-all select-none ${isFormValid
               ? 'bg-brand-primary hover:bg-brand-secondary hover:shadow-md cursor-pointer'
               : 'bg-slate-200 text-slate-400 cursor-not-allowed'
               }`}

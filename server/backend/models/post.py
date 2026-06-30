@@ -9,6 +9,7 @@ class PostBase(SQLModel):
     title: str = Field(index=True, nullable=False)
     content: str = Field(nullable=False)
     is_private: bool = Field(default=False)
+    author_name: Optional[str] = Field(default=None, nullable=True)
 
 class Post(PostBase, table=True):
     """
@@ -53,6 +54,7 @@ class PostResponse(SQLModel):
     views: int
     created_at: datetime
     updated_at: datetime
+    author_name: Optional[str] = None
 
 from backend.models.comment import CommentTreeResponse
 

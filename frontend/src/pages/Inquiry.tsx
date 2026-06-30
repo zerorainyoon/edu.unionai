@@ -91,7 +91,7 @@ export const Inquiry: React.FC = () => {
             backgroundRepeat: 'no-repeat'
           }}
         >
-          <div className="relative z-10 max-w-3xl text-left select-text">
+          <div className="relative z-10 w-full text-left">
             <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
               <MessageSquare className="h-10 md:h-9 w-auto text-white stroke-[2]" />
               <span className="text-4xl md:text-4xl font-bold">1:1 온라인 문의</span>
@@ -107,8 +107,8 @@ export const Inquiry: React.FC = () => {
           <button
             onClick={() => setActiveTab('write')}
             className={`flex-1 py-3 text-sm font-black cursor-pointer transition-colors border-b-2 text-center ${activeTab === 'write'
-                ? 'border-brand-primary text-brand-primary'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+              ? 'border-brand-primary text-brand-primary'
+              : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
           >
             문의 접수하기
@@ -116,8 +116,8 @@ export const Inquiry: React.FC = () => {
           <button
             onClick={() => setActiveTab('list')}
             className={`flex-1 py-3 text-sm font-black cursor-pointer transition-colors border-b-2 text-center ${activeTab === 'list'
-                ? 'border-brand-primary text-brand-primary'
-                : 'border-transparent text-slate-500 hover:text-slate-800'
+              ? 'border-brand-primary text-brand-primary'
+              : 'border-transparent text-slate-500 hover:text-slate-800'
               }`}
           >
             내 문의 내역 ({inquiries.length})
@@ -126,7 +126,7 @@ export const Inquiry: React.FC = () => {
 
         {/* Tab 1: Form submission */}
         {activeTab === 'write' ? (
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-fade-in max-w-3xl mx-auto select-text">
+          <div className="bg-white border border-slate-200 shadow-xl overflow-hidden animate-fade-in max-w-3xl mx-auto select-text">
             <div className="bg-slate-50 px-6 py-4.5 border-b border-slate-200">
               <h2 className="text-sm font-black text-slate-700 flex items-center gap-2 select-none">
                 <Send size={15} className="text-brand-primary" />
@@ -141,7 +141,7 @@ export const Inquiry: React.FC = () => {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold cursor-pointer"
+                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold cursor-pointer"
                   >
                     <option value="수강 신청">수강 신청/자격</option>
                     <option value="교육과정">교육과정/커리큘럼</option>
@@ -157,7 +157,7 @@ export const Inquiry: React.FC = () => {
                     placeholder="example@domain.com"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold"
+                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold"
                     required
                   />
                 </div>
@@ -170,7 +170,7 @@ export const Inquiry: React.FC = () => {
                   placeholder="문의의 핵심 요지를 작성해 주세요."
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold"
                   required
                 />
               </div>
@@ -182,7 +182,7 @@ export const Inquiry: React.FC = () => {
                   placeholder="훈련 연계, 수당, 일정 등 자세한 질문 내역을 기입해 주시면 더욱 빠르고 정합성 높은 답변을 받아보실 수 있습니다."
                   value={content}
                   onChange={(e) => setContent(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-medium leading-relaxed"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-medium leading-relaxed"
                   required
                 />
               </div>
@@ -190,7 +190,7 @@ export const Inquiry: React.FC = () => {
               <div className="pt-4 border-t border-slate-100 flex justify-end select-none">
                 <button
                   type="submit"
-                  className="flex items-center gap-1.5 px-6 py-3 bg-brand-primary hover:bg-brand-secondary text-white font-bold text-xs tracking-wider rounded-xl shadow-md hover:shadow active:scale-95 transition-all duration-200 cursor-pointer"
+                  className="flex items-center gap-1.5 px-6 py-3 bg-brand-primary hover:bg-brand-secondary text-white font-bold text-xs tracking-wider shadow-md hover:shadow active:scale-95 transition-all duration-200 cursor-pointer"
                 >
                   <Send size={14} />
                   1:1 문의 제출하기
@@ -206,11 +206,11 @@ export const Inquiry: React.FC = () => {
                 <div
                   key={inq.id}
                   onClick={() => setSelectedInquiry(inq)}
-                  className="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4"
+                  className="bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-500 font-bold text-xxs">
+                      <span className="px-2 py-0.5 bg-slate-100 text-slate-500 font-bold text-xxs">
                         {inq.category}
                       </span>
                       <span className="text-xs font-semibold text-slate-400">
@@ -225,8 +225,8 @@ export const Inquiry: React.FC = () => {
                   <div className="flex items-center gap-4 shrink-0 select-none">
                     <span
                       className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border ${inq.status === 'answered'
-                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                          : 'bg-amber-50 text-amber-700 border-amber-200'
+                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                        : 'bg-amber-50 text-amber-700 border-amber-200'
                         }`}
                     >
                       {inq.status === 'answered' ? (
@@ -245,7 +245,7 @@ export const Inquiry: React.FC = () => {
                 </div>
               ))
             ) : (
-              <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center shadow-sm select-none">
+              <div className="bg-white border border-slate-200 p-12 text-center shadow-sm select-none">
                 <HelpCircle className="text-slate-300 mx-auto mb-3" size={48} />
                 <p className="text-lg font-black text-slate-700">접수된 문의 내역이 없습니다.</p>
                 <p className="text-sm text-slate-400 mt-1 font-semibold">궁금한 점이 있다면 첫 번째 탭에서 문의를 제출해 보세요.</p>
@@ -257,7 +257,7 @@ export const Inquiry: React.FC = () => {
         {/* Inquiry Detail Modal */}
         {selectedInquiry && (
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-            <div className="bg-white rounded-3xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden animate-scale-in select-text">
+            <div className="bg-white max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden animate-scale-in select-text">
               {/* Header */}
               <div className="bg-slate-900 text-white p-6 relative">
                 <button
@@ -267,7 +267,7 @@ export const Inquiry: React.FC = () => {
                   <X size={20} />
                 </button>
                 <div className="flex gap-2 items-center mb-2 select-none">
-                  <span className="inline-block px-2.5 py-0.5 rounded-lg text-xxs font-black tracking-wide bg-brand-primary/30 text-brand-accent-light uppercase">
+                  <span className="inline-block px-2.5 py-0.5 text-xxs font-black tracking-wide bg-brand-primary/30 text-brand-accent-light uppercase">
                     {selectedInquiry.category}
                   </span>
                   <span className="text-xs font-bold text-slate-400">
@@ -302,14 +302,14 @@ export const Inquiry: React.FC = () => {
                         {selectedInquiry.answerDate}
                       </span>
                     </div>
-                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-200/60">
+                    <div className="bg-slate-50 p-5 border border-slate-200/60">
                       <p className="text-slate-650 text-sm font-medium whitespace-pre-line leading-relaxed">
                         {selectedInquiry.answer}
                       </p>
                     </div>
                   </div>
                 ) : (
-                  <div className="pt-5 border-t border-slate-150 flex items-center gap-2 bg-amber-50/50 p-4.5 rounded-2xl border border-amber-250/50 select-none">
+                  <div className="pt-5 border-t border-slate-150 flex items-center gap-2 bg-amber-50/50 p-4.5 border border-amber-250/50 select-none">
                     <Clock size={16} className="text-amber-500 shrink-0" />
                     <div className="text-left">
                       <p className="text-xs font-black text-amber-800">현재 담당자가 문의 내용을 검토 중입니다.</p>
@@ -323,7 +323,7 @@ export const Inquiry: React.FC = () => {
               <div className="bg-slate-50 px-6 py-4 flex justify-end border-t border-slate-150 select-none">
                 <button
                   onClick={() => setSelectedInquiry(null)}
-                  className="px-4 py-2 bg-slate-200 hover:bg-slate-350 text-slate-700 rounded-xl font-bold text-xs cursor-pointer active:scale-95 transition-all"
+                  className="px-4 py-2 bg-slate-200 hover:bg-slate-350 text-slate-700 font-bold text-xs cursor-pointer active:scale-95 transition-all"
                 >
                   닫기
                 </button>

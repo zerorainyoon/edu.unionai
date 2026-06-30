@@ -203,7 +203,7 @@ export const AdminCourses: React.FC = () => {
           /* ========================================================
              1. EDIT MODE: Detailed Course Edit Form View
              ======================================================== */
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden animate-fade-in select-text">
+          <div className="bg-white border border-slate-200 shadow-xl overflow-hidden animate-fade-in select-text">
             <div
               className="relative overflow-hidden bg-[#653171] text-white py-12 px-8 md:py-16 md:px-16 relative overflow-hidden"
               style={{
@@ -214,7 +214,7 @@ export const AdminCourses: React.FC = () => {
               }}
             >
               <div className="relative z-10 select-text">
-                <span className="text-xs font-bold text-blue-200 uppercase tracking-widest bg-white/10 px-3 py-1 rounded-md mb-4 inline-block">
+                <span className="text-xs font-bold text-blue-200 uppercase tracking-widest bg-white/10 px-3 py-1 mb-4 inline-block">
                   Admin Console / Edit Course
                 </span>
                 <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
@@ -250,7 +250,7 @@ export const AdminCourses: React.FC = () => {
                         value={courseForm.title}
                         onChange={e => setCourseForm(prev => ({ ...prev, title: e.target.value }))}
                         placeholder="예: Physical AI 엔지니어"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
 
@@ -267,7 +267,7 @@ export const AdminCourses: React.FC = () => {
                           value={courseForm.tags}
                           onChange={e => setCourseForm(prev => ({ ...prev, tags: e.target.value }))}
                           placeholder="태그를 직접 입력하거나 우측 목록에서 선택해 주세요"
-                          className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                          className="flex-1 px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                         />
                         <select
                           onChange={(e) => {
@@ -280,7 +280,7 @@ export const AdminCourses: React.FC = () => {
                             }
                             e.target.value = '';
                           }}
-                          className="px-3 py-3 rounded-xl border border-slate-200 bg-white text-sm font-semibold focus:outline-none focus:border-brand-primary cursor-pointer max-w-[150px]"
+                          className="px-3 py-3 border border-slate-200 bg-white text-sm font-semibold focus:outline-none focus:border-brand-primary cursor-pointer max-w-[150px]"
                           defaultValue=""
                         >
                           <option value="" disabled>태그 선택...</option>
@@ -296,7 +296,7 @@ export const AdminCourses: React.FC = () => {
                           {courseForm.tags.split(',').map(t => t.trim()).filter(Boolean).map((tag, idx) => (
                             <span
                               key={idx}
-                              className="inline-flex items-center gap-1 bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-bold"
+                              className="inline-flex items-center gap-1 bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 text-xs font-bold"
                             >
                               {tag}
                               <button
@@ -328,7 +328,7 @@ export const AdminCourses: React.FC = () => {
                         value={courseForm.region}
                         onChange={e => setCourseForm(prev => ({ ...prev, region: e.target.value }))}
                         placeholder="예: 서울"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
                   </div>
@@ -349,7 +349,7 @@ export const AdminCourses: React.FC = () => {
                         required
                         value={courseForm.apply_start_date}
                         onChange={e => setCourseForm(prev => ({ ...prev, apply_start_date: e.target.value }))}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
 
@@ -361,7 +361,7 @@ export const AdminCourses: React.FC = () => {
                         required
                         value={courseForm.apply_end_date}
                         onChange={e => setCourseForm(prev => ({ ...prev, apply_end_date: e.target.value }))}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
 
@@ -373,7 +373,7 @@ export const AdminCourses: React.FC = () => {
                         required
                         value={courseForm.edu_start_date}
                         onChange={e => setCourseForm(prev => ({ ...prev, edu_start_date: e.target.value }))}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
 
@@ -385,7 +385,7 @@ export const AdminCourses: React.FC = () => {
                         required
                         value={courseForm.edu_end_date}
                         onChange={e => setCourseForm(prev => ({ ...prev, edu_end_date: e.target.value }))}
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
 
@@ -401,7 +401,7 @@ export const AdminCourses: React.FC = () => {
                         value={courseForm.edu_time}
                         onChange={e => setCourseForm(prev => ({ ...prev, edu_time: e.target.value }))}
                         placeholder="예: 매주 월/수 19:30 ~ 21:30"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
                   </div>
@@ -423,7 +423,7 @@ export const AdminCourses: React.FC = () => {
                         value={courseForm.edu_fee}
                         onChange={e => setCourseForm(prev => ({ ...prev, edu_fee: Number(e.target.value) }))}
                         placeholder="정상 교육비 금액 입력"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
 
@@ -436,7 +436,7 @@ export const AdminCourses: React.FC = () => {
                         value={courseForm.refund_amount}
                         onChange={e => setCourseForm(prev => ({ ...prev, refund_amount: Number(e.target.value) }))}
                         placeholder="환급 대상금액 입력"
-                        className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                        className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                       />
                     </div>
                   </div>
@@ -463,21 +463,21 @@ export const AdminCourses: React.FC = () => {
                   <button
                     type="button"
                     onClick={handleCancelEdit}
-                    className="flex-1 min-w-[120px] py-4 rounded-2xl font-bold text-sm text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors select-none cursor-pointer"
+                    className="flex-1 min-w-[120px] py-4 font-bold text-sm text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors select-none cursor-pointer"
                   >
                     취소
                   </button>
                   <button
                     type="button"
                     onClick={() => handleDeleteCourse(editingCourseId, courseForm.title)}
-                    className="flex-1 min-w-[120px] py-4 rounded-2xl font-bold text-sm text-rose-600 border border-rose-200 hover:bg-rose-50 transition-colors select-none cursor-pointer"
+                    className="flex-1 min-w-[120px] py-4 font-bold text-sm text-rose-600 border border-rose-200 hover:bg-rose-50 transition-colors select-none cursor-pointer"
                   >
                     과정 삭제하기
                   </button>
                   <button
                     type="submit"
                     disabled={submitting}
-                    className="flex-1 min-w-[200px] py-4 rounded-2xl font-bold text-sm text-white bg-brand-primary hover:bg-brand-secondary disabled:bg-slate-400 transition-all shadow-md select-none cursor-pointer"
+                    className="flex-1 min-w-[200px] py-4 font-bold text-sm text-white bg-brand-primary hover:bg-brand-secondary disabled:bg-slate-400 transition-all shadow-md select-none cursor-pointer"
                   >
                     {submitting ? '저장 중...' : '수정 완료'}
                   </button>
@@ -489,7 +489,7 @@ export const AdminCourses: React.FC = () => {
           /* ========================================================
              2. LIST MODE: Course Filter and Card List View
              ======================================================== */
-          <div className="space-y-8 select-text">
+          <div className="space-y-8">
             <div
               className="relative overflow-hidden bg-[#653171] text-white py-12 px-8 md:py-16 md:px-16 mb-10 shadow-sm animate-fade-in"
               style={{
@@ -499,7 +499,7 @@ export const AdminCourses: React.FC = () => {
                 backgroundRepeat: 'no-repeat'
               }}
             >
-              <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-4 select-text">
+              <div className="relative z-10 w-full text-left">
                 <div>
                   <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
                     <Settings className="h-10 md:h-9 w-auto text-white stroke-[2]" />
@@ -533,7 +533,7 @@ export const AdminCourses: React.FC = () => {
             </div>
 
             {/* Filter and Search Console */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col gap-6 select-none">
+            <div className="bg-white border border-slate-200 shadow-sm p-6 flex flex-col gap-6 select-none">
               {/* Region Chips */}
               <span className="text-base font-bold text-slate-400 mt-2 shrink-0 flex items-center gap-1.5">
                 <MapPin size={14} />
@@ -544,7 +544,7 @@ export const AdminCourses: React.FC = () => {
                   <button
                     key={reg}
                     onClick={() => setSelectedRegion(reg)}
-                    className={`px-3.5 py-1.5 rounded-xl text-sm font-semibold tracking-wide border transition-all duration-200 cursor-pointer ${selectedRegion === reg
+                    className={`px-3.5 py-1.5 text-sm font-semibold tracking-wide border transition-all duration-200 cursor-pointer ${selectedRegion === reg
                       ? 'bg-brand-secondary text-white border-brand-secondary shadow-sm'
                       : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                       }`}
@@ -556,7 +556,7 @@ export const AdminCourses: React.FC = () => {
 
               {/* Search bar & Reset buttons */}
               <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 items-stretch sm:items-center justify-between">
-                <form onSubmit={handleSearchSubmit} className="flex-grow max-w-md flex border border-slate-200 rounded-xl overflow-hidden p-1 bg-slate-50 focus-within:bg-white focus-within:border-brand-accent transition-all">
+                <form onSubmit={handleSearchSubmit} className="flex-grow max-w-md flex border border-slate-200 overflow-hidden p-1 bg-slate-50 focus-within:bg-white focus-within:border-brand-accent transition-all">
                   <div className="flex-grow flex items-center px-2">
                     <Search size={16} className="text-slate-400 shrink-0" />
                     <input
@@ -569,7 +569,7 @@ export const AdminCourses: React.FC = () => {
                   </div>
                   <button
                     type="submit"
-                    className="bg-brand-primary text-white font-bold text-sm px-4 py-2 rounded-lg hover:bg-brand-secondary transition-colors cursor-pointer"
+                    className="bg-brand-primary text-white font-bold text-sm px-4 py-2 hover:bg-brand-secondary transition-colors cursor-pointer"
                   >
                     검색
                   </button>
@@ -577,7 +577,7 @@ export const AdminCourses: React.FC = () => {
 
                 <button
                   onClick={handleClearFilters}
-                  className="flex items-center justify-center gap-1.5 text-sm font-bold text-slate-600 hover:text-brand-primary bg-white border border-slate-200 shadow-sm px-4 py-2.5 rounded-xl active:scale-95 transition-all cursor-pointer select-none"
+                  className="flex items-center justify-center gap-1.5 text-sm font-bold text-slate-600 hover:text-brand-primary bg-white border border-slate-200 shadow-sm px-4 py-2.5 active:scale-95 transition-all cursor-pointer select-none"
                 >
                   <RefreshCw size={12} />
                   필터 초기화
@@ -592,7 +592,7 @@ export const AdminCourses: React.FC = () => {
                 <p className="text-slate-500 font-bold text-sm">교육 과정 리스트를 불러오는 중...</p>
               </div>
             ) : filteredCourses.length === 0 ? (
-              <div className="bg-white rounded-3xl border border-slate-200 p-12 md:p-16 text-center shadow-sm max-w-xl mx-auto animate-fade-in">
+              <div className="bg-white border border-slate-200 p-12 md:p-16 text-center shadow-sm max-w-xl mx-auto animate-fade-in">
                 <div className="inline-flex p-4 rounded-full bg-slate-50 text-slate-400 mb-5">
                   <AlertCircle size={48} />
                 </div>
@@ -602,7 +602,7 @@ export const AdminCourses: React.FC = () => {
                 </p>
                 <button
                   onClick={handleClearFilters}
-                  className="bg-brand-primary text-white font-bold text-base px-6 py-3 rounded-xl hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200 cursor-pointer"
+                  className="bg-brand-primary text-white font-bold text-base px-6 py-3 hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200 cursor-pointer"
                 >
                   필터 초기화
                 </button>

@@ -78,7 +78,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ value, onChange,
   }, [value]);
 
   return (
-    <div className="w-full border border-slate-200 rounded-xl overflow-hidden bg-white text-sm font-semibold select-text">
+    <div className="w-full border border-slate-200 overflow-hidden bg-white text-sm font-semibold select-text">
       <style>{`
         .ql-toolbar.ql-snow {
           border: none !important;

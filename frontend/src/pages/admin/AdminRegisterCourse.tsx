@@ -72,7 +72,7 @@ export const AdminRegisterCourse: React.FC = () => {
             backgroundRepeat: 'no-repeat'
           }}
         >
-          <div className="relative z-10 max-w-3xl text-left select-text">
+          <div className="relative z-10 w-full text-left">
             <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
               <PlusCircle className="h-10 md:h-9 w-auto text-white stroke-[2]" />
               <span className="text-4xl md:text-4xl font-bold">교육과정 등록</span>
@@ -84,7 +84,7 @@ export const AdminRegisterCourse: React.FC = () => {
         </div>
 
         {/* Form Container Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden select-text">
+        <div className="bg-white border border-slate-200 shadow-xl overflow-hidden select-text">
 
           {/* Form */}
           <form onSubmit={handleCourseSubmit} className="p-8 space-y-12">
@@ -105,7 +105,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, title: e.target.value }))}
                     placeholder="예: Physical AI 엔지니어"
                     title="과정명"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
 
@@ -123,7 +123,7 @@ export const AdminRegisterCourse: React.FC = () => {
                       onChange={e => setCourseForm(prev => ({ ...prev, tags: e.target.value }))}
                       placeholder="태그를 직접 입력하거나 우측 목록에서 선택해 주세요"
                       title="태그"
-                      className="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                      className="flex-1 px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                     />
                     <select
                       onChange={(e) => {
@@ -136,7 +136,7 @@ export const AdminRegisterCourse: React.FC = () => {
                         }
                         e.target.value = '';
                       }}
-                      className="px-3 py-3 rounded-xl border border-slate-200 bg-white text-sm font-semibold focus:outline-none focus:border-brand-primary cursor-pointer max-w-[150px]"
+                      className="px-3 py-3 border border-slate-200 bg-white text-sm font-semibold focus:outline-none focus:border-brand-primary cursor-pointer max-w-[150px]"
                       defaultValue=""
                     >
                       <option value="" disabled>태그 선택...</option>
@@ -152,7 +152,7 @@ export const AdminRegisterCourse: React.FC = () => {
                       {courseForm.tags.split(',').map(t => t.trim()).filter(Boolean).map((tag, idx) => (
                         <span
                           key={idx}
-                          className="inline-flex items-center gap-1 bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 rounded-lg text-xs font-bold"
+                          className="inline-flex items-center gap-1 bg-slate-100 border border-slate-200 text-slate-700 px-2.5 py-1 text-xs font-bold"
                         >
                           {tag}
                           <button
@@ -185,7 +185,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, region: e.target.value }))}
                     placeholder="예: 서울"
                     title="교육 지역"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
               </div>
@@ -208,7 +208,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, apply_start_date: e.target.value }))}
                     placeholder="접수 시작일 (YYYY-MM-DD)"
                     title="접수 시작일"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
 
@@ -222,7 +222,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, apply_end_date: e.target.value }))}
                     placeholder="접수 종료일 (YYYY-MM-DD)"
                     title="접수 종료일"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
 
@@ -236,7 +236,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, edu_start_date: e.target.value }))}
                     placeholder="교육 시작일 (YYYY-MM-DD)"
                     title="교육 시작일"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
 
@@ -250,7 +250,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, edu_end_date: e.target.value }))}
                     placeholder="교육 종료일 (YYYY-MM-DD)"
                     title="교육 종료일"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
 
@@ -267,7 +267,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, edu_time: e.target.value }))}
                     placeholder="예: 매주 월/수 19:30 ~ 21:30"
                     title="교육 시간 및 요일 정보"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
               </div>
@@ -290,7 +290,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, edu_fee: Number(e.target.value) }))}
                     placeholder="정상 교육비 금액 입력"
                     title="정상 교육비 (원)"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
 
@@ -304,7 +304,7 @@ export const AdminRegisterCourse: React.FC = () => {
                     onChange={e => setCourseForm(prev => ({ ...prev, refund_amount: Number(e.target.value) }))}
                     placeholder="환급 대상금액 입력"
                     title="환급 대상금액 (원)"
-                    className="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
+                    className="w-full px-4 py-3 border border-slate-200 text-sm font-semibold focus:outline-none focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 transition-all select-text"
                   />
                 </div>
               </div>
@@ -331,14 +331,14 @@ export const AdminRegisterCourse: React.FC = () => {
               <button
                 type="button"
                 onClick={() => navigate(-1)}
-                className="flex-1 py-4 rounded-2xl font-bold text-sm text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors select-none cursor-pointer"
+                className="flex-1 py-4 font-bold text-sm text-slate-500 border border-slate-200 hover:bg-slate-50 transition-colors select-none cursor-pointer"
               >
                 취소
               </button>
               <button
                 type="submit"
                 disabled={submitting}
-                className="flex-1 py-4 rounded-2xl font-bold text-sm text-white bg-brand-primary hover:bg-brand-secondary disabled:bg-slate-400 transition-all shadow-md select-none cursor-pointer"
+                className="flex-1 py-4 font-bold text-sm text-white bg-brand-primary hover:bg-brand-secondary disabled:bg-slate-400 transition-all shadow-md select-none cursor-pointer"
               >
                 {submitting ? '등록 중...' : '과정 등록 완료'}
               </button>

@@ -36,10 +36,10 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className="pointer-events-auto bg-slate-900/95 backdrop-blur text-white px-4 py-3.5 rounded-xl shadow-2xl border border-slate-800 flex items-start justify-between gap-3 animate-slide-in-right select-none"
+            className="pointer-events-auto bg-slate-900/95 backdrop-blur text-white px-4 py-3.5 shadow-2xl border border-slate-800 flex items-start justify-between gap-3 animate-slide-in-right select-none"
           >
             <div className="flex gap-3 items-center">
-              <div className="bg-brand-secondary/20 p-2 rounded-lg text-brand-accent">
+              <div className="bg-brand-secondary/20 p-2 text-brand-accent">
                 <BellRing size={18} />
               </div>
               <p className="text-sm font-medium tracking-wide">{toast.message}</p>

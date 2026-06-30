@@ -105,7 +105,7 @@ export const CourseList: React.FC = () => {
             backgroundRepeat: 'no-repeat'
           }}
         >
-          <div className="relative z-10 max-w-3xl text-left">
+          <div className="relative z-10 w-full text-left">
             <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
               <span className="text-4xl md:text-4xl font-bold">Intel<sup className="text-2xl font-light ml-0.5 select-none">®</sup> 교육 과정</span>
             </h1>
@@ -136,7 +136,7 @@ export const CourseList: React.FC = () => {
         </div>
 
         {/* Filter and Search Console */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-8 flex flex-col gap-6">
+        <div className="bg-white border border-slate-200 shadow-sm p-6 mb-8 flex flex-col gap-6">
           {/* Region Chips */}
           <span className="text-base font-bold text-slate-400 mt-2 shrink-0 flex items-center gap-1.5">
             <MapPin size={14} />
@@ -147,7 +147,7 @@ export const CourseList: React.FC = () => {
               <button
                 key={reg}
                 onClick={() => setSelectedRegion(reg)}
-                className={`px-3.5 py-1.5 rounded-xl text-sm font-semibold tracking-wide border transition-all duration-200 ${selectedRegion === reg
+                className={`px-3.5 py-1.5 text-sm font-semibold tracking-wide border transition-all duration-200 ${selectedRegion === reg
                   ? 'bg-brand-secondary text-white border-brand-secondary shadow-sm'
                   : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                   }`}
@@ -159,7 +159,7 @@ export const CourseList: React.FC = () => {
 
           {/* Search bar & Reset buttons */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t border-slate-100 items-stretch sm:items-center justify-between">
-            <form onSubmit={handleSearchSubmit} className="flex-grow max-w-md flex border border-slate-200 rounded-xl overflow-hidden p-1 bg-slate-50 focus-within:bg-white focus-within:border-brand-accent transition-all">
+            <form onSubmit={handleSearchSubmit} className="flex-grow max-w-md flex border border-slate-200 overflow-hidden p-1 bg-slate-50 focus-within:bg-white focus-within:border-brand-accent transition-all">
               <div className="flex-grow flex items-center px-2">
                 <Search size={16} className="text-slate-400 shrink-0" />
                 <input
@@ -172,7 +172,7 @@ export const CourseList: React.FC = () => {
               </div>
               <button
                 type="submit"
-                className="bg-brand-primary text-white font-bold text-sm px-4 py-2 rounded-lg hover:bg-brand-secondary transition-colors"
+                className="bg-brand-primary text-white font-bold text-sm px-4 py-2 hover:bg-brand-secondary transition-colors"
               >
                 검색
               </button>
@@ -180,7 +180,7 @@ export const CourseList: React.FC = () => {
 
             <button
               onClick={handleClearFilters}
-              className="flex items-center justify-center gap-1.5 text-sm text-slate-500 hover:text-brand-secondary font-bold px-4 py-2.5 rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors"
+              className="flex items-center justify-center gap-1.5 text-sm text-slate-500 hover:text-brand-secondary font-bold px-4 py-2.5 border border-slate-200 hover:bg-slate-50 transition-colors"
             >
               <RefreshCw size={12} />
               필터 초기화
@@ -198,12 +198,12 @@ export const CourseList: React.FC = () => {
 
         {/* Course Grid View */}
         {loading ? (
-          <div className="flex flex-col items-center justify-center py-20 bg-white rounded-3xl border border-slate-200 shadow-sm p-12 max-w-xl mx-auto">
+          <div className="flex flex-col items-center justify-center py-20 bg-white border border-slate-200 shadow-sm p-12 max-w-xl mx-auto">
             <RefreshCw className="animate-spin text-brand-primary mb-4" size={40} />
             <p className="text-slate-500 font-bold">교육 과정 데이터를 불러오는 중...</p>
           </div>
         ) : error ? (
-          <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center shadow-sm max-w-xl mx-auto animate-fade-in">
+          <div className="bg-white border border-slate-200 p-12 text-center shadow-sm max-w-xl mx-auto animate-fade-in">
             <div className="inline-flex p-4 rounded-full bg-rose-50 text-rose-500 mb-5">
               <AlertCircle size={48} />
             </div>
@@ -213,7 +213,7 @@ export const CourseList: React.FC = () => {
             </p>
             <button
               onClick={fetchCourses}
-              className="bg-brand-primary text-white font-bold text-base px-6 py-3 rounded-xl hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200"
+              className="bg-brand-primary text-white font-bold text-base px-6 py-3 hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200"
             >
               다시 시도
             </button>
@@ -275,7 +275,7 @@ export const CourseList: React.FC = () => {
             </div>
           )
         ) : (
-          <div className="bg-white rounded-3xl border border-slate-200 p-12 md:p-16 text-center shadow-sm max-w-xl mx-auto animate-fade-in">
+          <div className="bg-white border border-slate-200 p-12 md:p-16 text-center shadow-sm max-w-xl mx-auto animate-fade-in">
             <div className="inline-flex p-4 rounded-full bg-slate-50 text-slate-400 mb-5">
               <AlertCircle size={48} />
             </div>
@@ -285,7 +285,7 @@ export const CourseList: React.FC = () => {
             </p>
             <button
               onClick={handleClearFilters}
-              className="bg-brand-primary text-white font-bold text-base px-6 py-3 rounded-xl hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200"
+              className="bg-brand-primary text-white font-bold text-base px-6 py-3 hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200"
             >
               필터 초기화
             </button>

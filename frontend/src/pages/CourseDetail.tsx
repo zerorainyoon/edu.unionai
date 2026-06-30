@@ -24,7 +24,7 @@ export const CourseDetail: React.FC = () => {
 
   if (!course) {
     return (
-      <div className="max-w-md mx-auto my-20 px-6 py-12 bg-white rounded-3xl border border-slate-200 text-center shadow-sm select-none">
+      <div className="max-w-md mx-auto my-20 px-6 py-12 bg-white border border-slate-200 text-center shadow-sm select-none">
         <div className="inline-flex p-4 rounded-full bg-rose-50 text-rose-500 mb-4">
           <AlertCircle size={36} />
         </div>
@@ -32,7 +32,7 @@ export const CourseDetail: React.FC = () => {
         <p className="text-sm text-slate-500 mb-6">존재하지 않거나 삭제된 교육 과정입니다.</p>
         <Link
           to="/courses"
-          className="inline-flex items-center gap-1.5 bg-brand-primary text-white font-bold text-sm px-5 py-2.5 rounded-xl hover:bg-brand-secondary transition-colors"
+          className="inline-flex items-center gap-1.5 bg-brand-primary text-white font-bold text-sm px-5 py-2.5 hover:bg-brand-secondary transition-colors"
         >
           <ArrowLeft size={14} />
           교육과정 목록으로
@@ -98,7 +98,7 @@ export const CourseDetail: React.FC = () => {
         </div>
 
         {/* Detailed Header Banner Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 mb-8 flex flex-col gap-6">
+        <div className="bg-white border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 mb-8 flex flex-col gap-6">
           <div className="flex flex-col gap-3">
             <h1 className="text-2xl md:text-4xl font-black text-slate-900 leading-tight tracking-tight mt-1">
               {course.title}
@@ -114,7 +114,7 @@ export const CourseDetail: React.FC = () => {
               }
             `}</style>
             <div
-              className={`lg:col-span-5 h-64 rounded-2xl relative overflow-hidden flex items-center justify-center select-none shadow-inner course-dynamic-gradient-${course.id}`}
+              className={`lg:col-span-5 h-64 relative overflow-hidden flex items-center justify-center select-none shadow-inner course-dynamic-gradient-${course.id}`}
             >
               <div className="absolute inset-0 bg-black/15"></div>
               {/* Decorative shapes */}
@@ -171,7 +171,7 @@ export const CourseDetail: React.FC = () => {
                     type="button"
                     onClick={handleEnrollClick}
                     disabled={course.status === '모집마감'}
-                    className={`w-full py-4 rounded-xl font-bold text-base tracking-widest shadow-md transition-all duration-200 active:scale-98 flex items-center justify-center gap-2 ${course.status === '모집마감'
+                    className={`w-full py-4 font-bold text-base tracking-widest shadow-md transition-all duration-200 active:scale-98 flex items-center justify-center gap-2 ${course.status === '모집마감'
                       ? 'bg-slate-100 text-slate-400 cursor-not-allowed shadow-none'
                       : isEnrolled
                         ? 'bg-slate-800 text-white hover:bg-slate-900'
@@ -212,7 +212,7 @@ export const CourseDetail: React.FC = () => {
             <div className="lg:col-span-2 space-y-8">
 
               {/* 1. 과정소개 (Course introduction details) */}
-              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8">
+              <div className="bg-white border border-slate-200 shadow-sm p-6 md:p-8">
                 <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-4 mb-5 flex items-center gap-2">
                   <span className="w-1.5 h-4 bg-brand-primary rounded-full"></span>
                   과정소개 및 운영 상세
@@ -221,7 +221,7 @@ export const CourseDetail: React.FC = () => {
                 <div className="space-y-6">
                   <div>
                     <h4 className="text-base font-bold text-slate-400 mb-2 uppercase tracking-wide">일일 훈련 시간대</h4>
-                    <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex gap-3 items-center">
+                    <div className="bg-slate-50 border border-slate-100 p-4 flex gap-3 items-center">
                       <Clock size={20} className="text-slate-400 shrink-0" />
                       <span className="text-base text-slate-700 font-semibold">{course.introHours}</span>
                     </div>
@@ -229,7 +229,7 @@ export const CourseDetail: React.FC = () => {
 
                   <div>
                     <h4 className="text-base font-bold text-slate-400 mb-2 uppercase tracking-wide">실습 및 강의 장소</h4>
-                    <div className="bg-slate-50 border border-slate-100 rounded-2xl p-4 flex gap-3 items-start">
+                    <div className="bg-slate-50 border border-slate-100 p-4 flex gap-3 items-start">
                       <MapPin size={20} className="text-slate-400 shrink-0 mt-0.5" />
                       <div>
                         <span className="text-base text-slate-800 font-bold block">{course.location}</span>
@@ -265,7 +265,7 @@ export const CourseDetail: React.FC = () => {
                         {course.recommendedRoles.map((role, idx) => (
                           <span
                             key={idx}
-                            className="bg-brand-accent-light text-brand-secondary text-sm font-bold px-3 py-2 rounded-lg border border-brand-accent-light"
+                            className="bg-brand-accent-light text-brand-secondary text-sm font-bold px-3 py-2 border border-brand-accent-light"
                           >
                             {role}
                           </span>
@@ -277,7 +277,7 @@ export const CourseDetail: React.FC = () => {
               </div>
 
               {/* 2. 교육내용 (Syllabus/Curriculum table) */}
-              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 md:p-8">
+              <div className="bg-white border border-slate-200 shadow-sm p-6 md:p-8">
                 <h3 className="text-lg font-bold text-slate-900 border-b border-slate-100 pb-4 mb-6 flex items-center gap-2">
                   <span className="w-1.5 h-4 bg-brand-primary rounded-full"></span>
                   상세 교육과정 커리큘럼
@@ -287,7 +287,7 @@ export const CourseDetail: React.FC = () => {
                   {course.curriculum.map((curr, idx) => (
                     <div
                       key={idx}
-                      className="border border-slate-200 rounded-2xl overflow-hidden shadow-sm"
+                      className="border border-slate-200 overflow-hidden shadow-sm"
                     >
                       <div className="bg-slate-900/5 px-4 py-3 flex items-center justify-between border-b border-slate-200 gap-4">
                         <div className="flex items-center gap-2">
@@ -324,7 +324,7 @@ export const CourseDetail: React.FC = () => {
             <div className="space-y-8">
 
               {/* 3. 환급 안내 (Refund/Discount guidance) */}
-              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
+              <div className="bg-white border border-slate-200 shadow-sm p-6">
                 <h4 className="text-base font-black text-slate-900 border-b border-slate-100 pb-3 mb-4 uppercase tracking-wider flex items-center gap-1.5">
                   <Award size={16} className="text-brand-secondary" />
                   기업 훈련 환급 조건 안내
@@ -334,11 +334,11 @@ export const CourseDetail: React.FC = () => {
                 </p>
 
                 <div className="space-y-3">
-                  <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                  <div className="p-3 bg-slate-50 border border-slate-100">
                     <span className="text-sm font-bold text-slate-400 uppercase tracking-wider block">우선 지원 대상 기업</span>
                     <span className="text-base font-bold text-slate-800 block mt-0.5">100% 전액 지원 (무료)</span>
                   </div>
-                  <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl">
+                  <div className="p-3 bg-slate-50 border border-slate-100">
                     <span className="text-sm font-bold text-slate-400 uppercase tracking-wider block">대규모 기업 (대기업)</span>
                     <span className="text-base font-bold text-slate-800 block mt-0.5">훈련비의 80% 지원 (20% 자부담)</span>
                   </div>
@@ -346,7 +346,7 @@ export const CourseDetail: React.FC = () => {
               </div>
 
               {/* 4. 유의 사항 (Important general conditions) */}
-              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm p-6 text-slate-500">
+              <div className="bg-white border border-slate-200 shadow-sm p-6 text-slate-500">
                 <h4 className="text-base font-black text-slate-900 border-b border-slate-100 pb-3 mb-4 uppercase tracking-wider flex items-center gap-1.5">
                   <ShieldAlert size={16} className="text-rose-500" />
                   훈련 참가 시 필수 유의사항

@@ -77,7 +77,7 @@ export const Footer: React.FC = () => {
             <p>서울 금천구 가산디지털2로 143 UnionAI | 사업자등록번호: 104-82-01234</p>
             <p>Copyright © 2026 UnionAI. All rights reserved.</p>
           </div>
-          <div className="flex items-center gap-2 bg-slate-800/40 px-3 py-1.5 rounded-lg border border-slate-800/60">
+          <div className="flex items-center gap-2 bg-slate-800/40 px-3 py-1.5 border border-slate-800/60">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
             <span className="text-xs font-medium text-slate-500">Service Status: Normal</span>
           </div>

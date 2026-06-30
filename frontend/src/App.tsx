@@ -12,6 +12,7 @@ import { AdminCourses } from './pages/admin/AdminCourses';
 import { FAQ } from './pages/FAQ';
 import { Board } from './pages/Board';
 import { Inquiry } from './pages/Inquiry';
+import { Login } from './pages/Login';
 
 export function App() {
   return (
@@ -34,6 +35,7 @@ export function App() {
                 <Route path="/faq" element={<FAQ />} />
                 <Route path="/board" element={<Board />} />
                 <Route path="/inquiry" element={<Inquiry />} />
+                <Route path="/login" element={<Login />} />
                 {/* Fallback to homepage */}
                 <Route path="*" element={<Home />} />
               </Routes>
@@ -56,7 +58,7 @@ export function App() {
               </svg>
 
               {/* Hover Tooltip */}
-              <span className="absolute right-16 bg-slate-900 text-white text-xs font-black px-3 py-1.5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-xl pointer-events-none border border-slate-800">
+              <span className="absolute right-16 bg-slate-900 text-white text-xs font-black px-3 py-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap shadow-xl pointer-events-none border border-slate-800">
                 디스코드 커뮤니티 참여하기
               </span>
             </a>

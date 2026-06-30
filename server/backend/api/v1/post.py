@@ -47,7 +47,7 @@ async def get_current_user_optional(
 )
 async def create_post(
     post_data: PostCreate,
-    current_user: User = Depends(get_current_user),
+    current_user: Optional[User] = Depends(get_current_user_optional),
     post_service: PostService = Depends(get_post_service),
 ) -> PostResponse:
     if post_data.is_private and not post_data.password:
@@ -55,8 +55,32 @@ async def create_post(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Password is required for private posts.",
         )
-    assert current_user.id is not None
-    post = await post_service.create(post_data, current_user.id)
+    
+    if current_user:
+        user_id = current_user.id
+    else:
+        # Get or create anonymous guest user
+        from backend.models.user import User as DBUser
+        from sqlmodel import select
+        
+        stmt = select(DBUser).where(DBUser.email == "anonymous@unionai.com")
+        res = await post_service.session.execute(stmt)
+        anon_user = res.scalar_one_or_none()
+        if not anon_user:
+            anon_user = DBUser(
+                email="anonymous@unionai.com",
+                hashed_password="disabled_password_hash",
+                full_name="비회원",
+                is_active=True,
+                is_admin=False
+            )
+            post_service.session.add(anon_user)
+            await post_service.session.commit()
+            await post_service.session.refresh(anon_user)
+        user_id = anon_user.id
+
+    assert user_id is not None
+    post = await post_service.create(post_data, user_id)
     return post  # type: ignore[return-value]
 
 @router.get(
@@ -69,7 +93,7 @@ async def create_post(
 async def list_posts(
     search: Optional[str] = Query(None, description="Search keyword for title or content"),
     skip: int = Query(0, ge=0),
-    limit: int = Query(10, ge=1, le=100),
+    limit: int = Query(10, ge=1, le=9999),
     post_service: PostService = Depends(get_post_service),
 ) -> List[PostResponse]:
     return await post_service.get_all(search=search, skip=skip, limit=limit)  # type: ignore[return-value]

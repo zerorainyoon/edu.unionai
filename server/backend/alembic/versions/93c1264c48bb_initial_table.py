@@ -82,6 +82,7 @@ def upgrade() -> None:
         sa.Column('title', sqlmodel.sql.sqltypes.AutoString(), nullable=False, comment="게시글 제목"),
         sa.Column('content', sa.Text(), nullable=False, comment="게시글 본문"),
         sa.Column('is_private', sa.Boolean(), nullable=False, server_default=sa.text('0'), comment="비공개 여부 (1: 비공개, 0: 공개)"),
+        sa.Column('author_name', sqlmodel.sql.sqltypes.AutoString(), nullable=True, comment="작성자 이름"),
         sa.Column('hashed_post_password', sqlmodel.sql.sqltypes.AutoString(), nullable=True, comment="비공개 게시글 비밀번호 해시"),
         sa.Column('user_id', sa.Integer(), nullable=False, comment="작성자 ID (users.id 외래키)"),
         sa.Column('views', sa.Integer(), nullable=False, server_default=sa.text('0'), comment="조회수"),

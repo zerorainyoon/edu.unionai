@@ -7,12 +7,7 @@ import { postService } from '../services/postService';
 import type { ApiPost, ApiPostDetail, ApiCommentTree } from '../services/postService';
 import mosaicBg from '../assets/background-l1-mosaic.svg';
 
-// Category extractor based on title prefix
-const getPostCategory = (title: string): 'notice' | 'review' | 'free' => {
-  if (title.startsWith('[공지]')) return 'notice';
-  if (title.startsWith('[후기]') || title.startsWith('[취업후기]')) return 'review';
-  return 'free';
-};
+
 
 // Title cleaner (removes category prefixes for clean display)
 const getCleanTitle = (title: string): string => {
@@ -29,12 +24,13 @@ export const Board: React.FC = () => {
   // State lists
   const [posts, setPosts] = useState<ApiPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [selectedCategory, setSelectedCategory] = useState<'all' | 'notice' | 'free' | 'review'>('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const postsPerPage = 25;
 
   // Modals state
   const [selectedPost, setSelectedPost] = useState<ApiPostDetail | null>(null);
-  const [isWriteModalOpen, setIsWriteModalOpen] = useState(false);
+  const isWriting = searchParams.get('write') === 'true';
 
   // Private post password check state
   const [passwordTargetPostId, setPasswordTargetPostId] = useState<number | null>(null);
@@ -47,7 +43,7 @@ export const Board: React.FC = () => {
 
   // New Post Form State
   const [newTitle, setNewTitle] = useState('');
-  const [newCategory, setNewCategory] = useState<'free' | 'review' | 'notice'>('free');
+  const [writeAuthor, setWriteAuthor] = useState('');
   const [newContent, setNewContent] = useState('');
   const [isPrivate, setIsPrivate] = useState(false);
   const [writePassword, setWritePassword] = useState('');
@@ -56,7 +52,7 @@ export const Board: React.FC = () => {
   const loadPosts = async () => {
     setLoading(true);
     try {
-      const data = await postService.getPosts(searchQuery);
+      const data = await postService.getPosts(searchQuery, 0, 9999);
       setPosts(data);
     } catch (e: any) {
       console.error(e);
@@ -67,6 +63,13 @@ export const Board: React.FC = () => {
   };
 
   useEffect(() => {
+    if (isWriting && !writeAuthor) {
+      setWriteAuthor(user?.full_name || user?.email || '');
+    }
+  }, [isWriting, user, writeAuthor]);
+
+  useEffect(() => {
+    setCurrentPage(1);
     loadPosts();
   }, [searchQuery]);
 
@@ -135,12 +138,12 @@ export const Board: React.FC = () => {
   // Create post
   const handleCreatePost = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      showToast('글을 작성하려면 먼저 로그인해야 합니다.');
-      return;
-    }
     if (!newTitle.trim() || !newContent.trim()) {
       showToast('제목과 내용을 모두 입력해 주세요.');
+      return;
+    }
+    if (!writeAuthor.trim()) {
+      showToast('작성자명을 입력해 주세요.');
       return;
     }
     if (isPrivate && !writePassword.trim()) {
@@ -148,30 +151,23 @@ export const Board: React.FC = () => {
       return;
     }
 
-    // Prefix title based on category
-    let prefixedTitle = newTitle.trim();
-    if (newCategory === 'notice') {
-      prefixedTitle = `[공지] ${newTitle.trim()}`;
-    } else if (newCategory === 'review') {
-      prefixedTitle = `[후기] ${newTitle.trim()}`;
-    }
-
     try {
       await postService.createPost({
-        title: prefixedTitle,
+        title: newTitle.trim(),
         content: newContent.trim(),
         is_private: isPrivate,
-        password: isPrivate ? writePassword : undefined
+        password: isPrivate ? writePassword : undefined,
+        author_name: writeAuthor.trim()
       });
       showToast('게시글이 성공적으로 등록되었습니다.');
 
       // Reset form
       setNewTitle('');
-      setNewCategory('free');
+      setWriteAuthor('');
       setNewContent('');
       setIsPrivate(false);
       setWritePassword('');
-      setIsWriteModalOpen(false);
+      setSearchParams({});
 
       // Reload posts
       loadPosts();
@@ -263,19 +259,14 @@ export const Board: React.FC = () => {
     }
   };
 
-  const categories = [
-    { key: 'all', label: '전체글' },
-    { key: 'notice', label: '공지사항' },
-    { key: 'review', label: '취업 후기' },
-    { key: 'free', label: '자유게시판' }
-  ];
-
   // Filter posts on UI
-  const filteredPosts = posts.filter(post => {
-    const category = getPostCategory(post.title);
-    const matchesCategory = selectedCategory === 'all' || category === selectedCategory;
-    return matchesCategory;
-  });
+  const filteredPosts = posts;
+
+  // Pagination calculations
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
+  const totalPages = Math.max(Math.ceil(filteredPosts.length / postsPerPage), 1);
 
   // Recursive Comment Node Component
   const CommentNode: React.FC<{ comment: ApiCommentTree; depth?: number }> = ({ comment, depth = 0 }) => {
@@ -284,11 +275,11 @@ export const Board: React.FC = () => {
 
     return (
       <div className={`flex flex-col gap-2 mt-4 text-xs select-text ${depth > 0 ? 'ml-6 border-l-2 border-slate-100 pl-4' : ''}`}>
-        <div className="bg-slate-50 rounded-2xl p-4 border border-slate-100/80 shadow-sm relative group">
+        <div className="bg-slate-50 p-4 border border-slate-100/80 shadow-sm relative group">
           <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-1.5 font-bold text-slate-700">
               {depth > 0 && <CornerDownRight size={12} className="text-slate-400" />}
-              <span className="text-xxs px-2 py-0.5 bg-slate-200 text-slate-600 rounded">
+              <span className="text-xxs px-2 py-0.5 bg-slate-200 text-slate-600">
                 교육생 {comment.user_id}
               </span>
               <span className="text-slate-400 font-medium font-mono text-xxs">
@@ -337,11 +328,11 @@ export const Board: React.FC = () => {
                 placeholder="답글 내용을 입력해 주세요..."
                 value={newReplyContent}
                 onChange={(e) => setNewReplyContent(e.target.value)}
-                className="flex-grow px-3 py-2 border border-slate-200 rounded-xl bg-slate-50 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                className="flex-grow px-3 py-2 border border-slate-200 bg-slate-50 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-primary"
               />
               <button
                 onClick={() => handleAddReply(comment.id)}
-                className="px-4 py-2 bg-brand-secondary hover:bg-brand-primary text-white font-black rounded-xl active:scale-95 transition-all text-xs cursor-pointer"
+                className="px-4 py-2 bg-brand-secondary hover:bg-brand-primary text-white font-black active:scale-95 transition-all text-xs cursor-pointer"
               >
                 등록
               </button>
@@ -367,26 +358,23 @@ export const Board: React.FC = () => {
 
         {selectedPost ? (
           /* Post Detail In-place View */
-          <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden select-text animate-scale-in">
+          <div className="bg-white border border-slate-200 shadow-sm overflow-hidden select-text animate-scale-in">
             {/* Header banner */}
             <div className="bg-slate-900 text-white p-8 relative select-none">
-              <div className="flex items-center gap-2 mb-3">
-                <span className={`inline-block px-2.5 py-1 rounded-lg text-xxs font-black tracking-wide bg-brand-primary/30 text-brand-accent-light uppercase`}>
-                  {getPostCategory(selectedPost.title) === 'notice' ? '공지사항' : getPostCategory(selectedPost.title) === 'review' ? '취업 후기' : '자유게시글'}
-                </span>
-                {selectedPost.is_private && (
-                  <span className="inline-flex items-center gap-1 text-xxs px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
+              {selectedPost.is_private && (
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="inline-flex items-center gap-1 text-xxs px-2.5 py-1 bg-amber-500/20 text-amber-300 font-bold border border-amber-500/30">
                     <Lock size={10} />
                     비공개
                   </span>
-                )}
-              </div>
+                </div>
+              )}
 
               <h2 className="text-xl md:text-2xl font-black leading-snug">{getCleanTitle(selectedPost.title)}</h2>
 
               {/* Meta details */}
               <div className="flex flex-wrap gap-4 mt-5 text-xs font-bold text-slate-400">
-                <span className="flex items-center gap-1"><User size={13} /> 교육생 {selectedPost.user_id}</span>
+                <span className="flex items-center gap-1"><User size={13} /> {selectedPost.author_name || '비회원'}</span>
                 <span className="flex items-center gap-1">
                   <Calendar size={13} />
                   {new Date(selectedPost.created_at).toLocaleDateString('ko-KR')}
@@ -429,18 +417,18 @@ export const Board: React.FC = () => {
                       placeholder="관리자 공식 의견을 입력해 주세요..."
                       value={newCommentContent}
                       onChange={(e) => setNewCommentContent(e.target.value)}
-                      className="flex-grow px-3.5 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                      className="flex-grow px-3.5 py-2.5 border border-slate-200 bg-slate-50 text-xs font-semibold focus:outline-none focus:ring-2 focus:ring-brand-primary"
                       required
                     />
                     <button
                       type="submit"
-                      className="px-5 py-2.5 bg-brand-primary hover:bg-brand-secondary text-white font-black rounded-xl active:scale-95 transition-all text-xs cursor-pointer"
+                      className="px-5 py-2.5 bg-brand-primary hover:bg-brand-secondary text-white font-black active:scale-95 transition-all text-xs cursor-pointer"
                     >
                       댓글 등록
                     </button>
                   </form>
                 ) : (
-                  <div className="mt-4 p-4 bg-slate-50 border border-slate-100 rounded-xl text-center select-none">
+                  <div className="mt-4 p-4 bg-slate-50 border border-slate-100 text-center select-none">
                     <p className="text-xxs font-bold text-slate-400">
                       🔒 댓글 및 대댓글은 **관리자(Admin) 권한 계정만** 작성할 수 있습니다.
                     </p>
@@ -453,14 +441,14 @@ export const Board: React.FC = () => {
             <div className="bg-slate-50 px-8 py-5 flex justify-between items-center border-t border-slate-150 select-none">
               <button
                 onClick={() => setSearchParams({})}
-                className="px-5 py-2.5 bg-slate-200 hover:bg-slate-350 text-slate-700 rounded-xl font-bold text-xs cursor-pointer active:scale-95 transition-all"
+                className="px-5 py-2.5 bg-slate-200 hover:bg-slate-350 text-slate-700 font-bold text-xs cursor-pointer active:scale-95 transition-all"
               >
                 목록으로
               </button>
               {(user?.is_admin || user?.id === selectedPost.user_id) && (
                 <button
                   onClick={() => handleDeletePost(selectedPost.id)}
-                  className="px-5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 rounded-xl font-bold text-xs cursor-pointer transition-colors"
+                  className="px-5 py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-600 border border-rose-200 font-bold text-xs cursor-pointer transition-colors"
                 >
                   게시글 삭제
                 </button>
@@ -480,146 +468,252 @@ export const Board: React.FC = () => {
                 backgroundRepeat: 'no-repeat'
               }}
             >
-              <div className="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
-                <div className="max-w-3xl text-left select-text">
-                  <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-                    <FileText className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-                    <span className="text-4xl md:text-4xl font-bold">통합 게시판</span>
-                  </h1>
-                  <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
-                    대한상공회의소 교육생들을 위한 커뮤니티입니다. 공지사항 확인 및 유용한 취업 팁, 공부 관련 질문들을 자유롭게 나누어 보세요.
-                  </p>
+              <div className="relative z-10 w-full text-left select-text">
+                <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+                  <FileText className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+                  <span className="text-4xl md:text-4xl font-bold">통합 게시판</span>
+                </h1>
+                <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
+                  Intel 교육생들을 위한 커뮤니티입니다. 공지사항 확인 및 유용한 취업 팁, 공부 관련 질문들을 자유롭게 나누어 보세요.
+                </p>
+              </div>
+            </div>
+
+
+            {/* Conditional Render: Write View vs List View */}
+            {isWriting ? (
+              /* Inline Write View (instead of list) */
+              <div className="bg-white border border-slate-200 shadow-sm overflow-hidden select-text animate-scale-in">
+                {/* Header banner */}
+                <div className="bg-slate-900 text-white p-8 relative select-none">
+                  <h2 className="text-xl md:text-2xl font-black flex items-center gap-2">
+                    <PlusCircle className="text-brand-accent-light" size={24} />
+                    새로운 커뮤니티 글 작성
+                  </h2>
+                  <p className="text-xs text-slate-400 mt-2 font-semibold">동료 교육생 및 강사진과 자유롭게 피드백을 교환해 보세요.</p>
                 </div>
 
-                <div className="shrink-0 w-full lg:w-auto">
-                  {user ? (
+                <form onSubmit={handleCreatePost} className="p-8 space-y-6">
+                  <div className="space-y-2">
+                    <label htmlFor="writer-input" className="block text-xs font-black text-slate-700">작성자 *</label>
+                    <input
+                      id="writer-input"
+                      type="text"
+                      value={writeAuthor}
+                      onChange={(e) => setWriteAuthor(e.target.value)}
+                      title="작성자"
+                      placeholder="작성자명을 기입해주세요."
+                      className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm font-bold transition-all"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-black text-slate-700">글 제목 *</label>
+                    <input
+                      type="text"
+                      placeholder="글의 주요 요점을 드러내는 제목을 기입해주세요."
+                      value={newTitle}
+                      onChange={(e) => setNewTitle(e.target.value)}
+                      className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm font-bold transition-all"
+                      required
+                    />
+                  </div>
+
+                  <div className="space-y-2">
+                    <label className="block text-xs font-black text-slate-700">상세 본문 내용 *</label>
+                    <textarea
+                      rows={8}
+                      placeholder="질문 사항이나 정보를 성실하게 기재해주세요. 타인에게 불쾌감을 주는 비방글은 예고 없이 삭제될 수 있습니다."
+                      value={newContent}
+                      onChange={(e) => setNewContent(e.target.value)}
+                      className="w-full px-4 py-3.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm font-medium leading-relaxed transition-all"
+                      required
+                    />
+                  </div>
+
+                  {/* Private post option */}
+                  <div className="bg-slate-50 border border-slate-150 p-6 space-y-4">
+                    <div className="flex items-center justify-between">
+                      <label htmlFor="private-checkbox" className="text-sm font-black text-slate-700 flex items-center gap-2 cursor-pointer select-none">
+                        <Lock size={16} className="text-slate-400" />
+                        이 게시글을 비공개로 등록
+                      </label>
+                      <input
+                        id="private-checkbox"
+                        type="checkbox"
+                        checked={isPrivate}
+                        onChange={(e) => {
+                          setIsPrivate(e.target.checked);
+                          if (!e.target.checked) setWritePassword('');
+                        }}
+                        title="이 게시글을 비공개로 등록"
+                        className="w-5 h-5 text-brand-primary focus:ring-brand-primary cursor-pointer transition-all"
+                      />
+                    </div>
+
+                    {isPrivate && (
+                      <div className="space-y-2 animate-slide-down">
+                        <label className="block text-xs font-black text-slate-600">비공개 게시글 비밀번호 설정 *</label>
+                        <input
+                          type="password"
+                          placeholder="이 게시글을 읽을 때 사용할 비밀번호 입력"
+                          value={writePassword}
+                          onChange={(e) => setWritePassword(e.target.value)}
+                          className="w-full px-4 py-3 bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm font-semibold"
+                          required={isPrivate}
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Footer Buttons */}
+                  <div className="pt-6 border-t border-slate-100 flex items-center justify-end gap-3 select-none">
                     <button
-                      onClick={() => {
-                        setNewCategory('free');
-                        setIsWriteModalOpen(true);
-                      }}
-                      className="flex items-center gap-1.5 px-5 py-3.5 rounded-2xl bg-brand-secondary hover:bg-brand-primary text-white font-black text-sm tracking-wider shadow-md hover:shadow active:scale-95 transition-all duration-200 cursor-pointer w-full lg:w-auto justify-center"
+                      type="button"
+                      onClick={() => setSearchParams({})}
+                      className="px-6 py-3 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-sm cursor-pointer transition-colors active:scale-95 transition-all"
                     >
-                      <PlusCircle size={18} />
-                      새 글 작성하기
+                      작성 취소
                     </button>
-                  ) : (
-                    <p className="text-xxs md:text-xs font-bold text-blue-100/90 bg-white/10 border border-white/10 px-4 py-2.5 rounded-xl text-center">
-                      게시글 작성을 하려면 로그인이 필요합니다.
-                    </p>
-                  )}
-                </div>
+                    <button
+                      type="submit"
+                      className="px-6 py-3 bg-brand-secondary hover:bg-brand-primary text-white font-black text-sm cursor-pointer shadow-sm hover:shadow active:scale-95 transition-all"
+                    >
+                      글 등록 완료
+                    </button>
+                  </div>
+                </form>
               </div>
-            </div>
-
-            {/* Filter and Search Bar */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-4 mb-6 shadow-sm flex flex-col sm:flex-row items-center justify-between gap-4 select-text">
-              <div className="flex flex-wrap gap-1.5 w-full sm:w-auto">
-                {categories.map((cat) => (
-                  <button
-                    key={cat.key}
-                    onClick={() => setSelectedCategory(cat.key as any)}
-                    className={`px-4 py-2 rounded-xl text-xs font-black tracking-wide border cursor-pointer active:scale-95 transition-all duration-200 ${selectedCategory === cat.key
-                      ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/10'
-                      : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
-                      }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
-              </div>
-
-              <div className="relative w-full sm:w-72">
-                <input
-                  type="text"
-                  placeholder="제목, 내용, 작성자 검색..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 text-slate-800 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary font-bold text-xs tracking-wide select-text"
-                />
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
-              </div>
-            </div>
-
-            {/* Loading Spinner or Grid Content */}
-            {loading ? (
+            ) : loading ? (
+              /* Loading Spinner */
               <div className="flex flex-col items-center justify-center py-24 select-none">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-brand-primary"></div>
                 <p className="mt-4 text-xs font-bold text-slate-500">데이터를 로드하는 중입니다...</p>
               </div>
             ) : (
               /* Posts Table List */
-              <div className="bg-white rounded-3xl border border-slate-200 shadow-sm overflow-hidden select-text">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="bg-slate-50 border-b border-slate-200 text-xs font-black text-slate-500 uppercase tracking-wider">
-                        <th className="px-6 py-4.5 w-24 text-center">구분</th>
-                        <th className="px-6 py-4.5">제목</th>
-                        <th className="px-6 py-4.5 w-28 text-center">작성일</th>
-                        <th className="px-6 py-4.5 w-24 text-center">조회수</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-slate-100">
-                      {filteredPosts.length > 0 ? (
-                        filteredPosts.map((post) => {
-                          const category = getPostCategory(post.title);
-                          const cleanTitle = getCleanTitle(post.title);
-
-                          return (
-                            <tr
-                              key={post.id}
-                              onClick={() => handlePostClick(post)}
-                              className="hover:bg-slate-50/50 transition-colors cursor-pointer"
-                            >
-                              <td className="px-6 py-4 text-center select-none">
-                                <span
-                                  className={`inline-block px-2.5 py-1 rounded-lg text-xxs font-black tracking-wide ${category === 'notice'
-                                    ? 'bg-rose-50 text-rose-700 border border-rose-100'
-                                    : category === 'review'
-                                      ? 'bg-emerald-50 text-emerald-700 border border-emerald-100'
-                                      : 'bg-slate-100 text-slate-600'
-                                    }`}
-                                >
-                                  {category === 'notice' ? '공지' : category === 'review' ? '후기' : '자유'}
-                                </span>
-                              </td>
-                              <td className="px-6 py-4">
-                                <div className="flex items-center gap-1.5">
-                                  {post.is_private && <Lock size={13} className="text-slate-400 stroke-[2.5]" />}
-                                  <span className="font-extrabold text-slate-800 text-sm tracking-tight hover:text-brand-secondary transition-colors">
-                                    {cleanTitle}
-                                  </span>
-                                  {post.is_private && (
-                                    <span className="text-xxs px-1.5 py-0.5 bg-slate-100 border border-slate-200 text-slate-400 font-bold rounded">
-                                      비공개
-                                    </span>
-                                  )}
-                                </div>
-                                <div className="flex items-center gap-2 mt-1 text-xxs font-semibold text-slate-400 select-none">
-                                  <span>교육생 {post.user_id}</span>
-                                </div>
-                              </td>
-                              <td className="px-6 py-4 text-center text-xs font-semibold text-slate-500">
-                                {new Date(post.created_at).toLocaleDateString('ko-KR')}
-                              </td>
-                              <td className="px-6 py-4 text-center text-xs font-semibold text-slate-400">
-                                {post.views}
-                              </td>
-                            </tr>
-                          );
-                        })
-                      ) : (
-                        <tr>
-                          <td colSpan={4} className="px-6 py-16 text-center text-slate-400 font-medium select-none">
-                            등록된 게시글이 없습니다.
-                          </td>
+              <>
+                <div className="bg-white border border-slate-200 shadow-sm overflow-hidden select-text">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left border-collapse">
+                      <thead>
+                        <tr className="bg-slate-50 border-b border-slate-200 text-xs text-slate-500 uppercase tracking-wider">
+                          <th className="px-6 py-4.5 text-left font-bold">제목</th>
+                          <th className="px-6 py-4.5 w-32 text-center whitespace-nowrap font-bold">작성자</th>
+                          <th className="px-6 py-4.5 w-24 text-center whitespace-nowrap font-bold">조회수</th>
+                          <th className="px-6 py-4.5 w-36 text-center whitespace-nowrap font-bold">작성일</th>
                         </tr>
-                      )}
-                    </tbody>
-                  </table>
+                      </thead>
+                      <tbody className="divide-y divide-slate-100">
+                        {currentPosts.length > 0 ? (
+                          currentPosts.map((post) => {
+                            const cleanTitle = getCleanTitle(post.title);
+
+                            return (
+                              <tr
+                                key={post.id}
+                                onClick={() => handlePostClick(post)}
+                                className="hover:bg-slate-50/50 transition-colors cursor-pointer"
+                              >
+                                <td className="px-6 py-4">
+                                  <div className="flex items-center gap-1.5">
+                                    {post.is_private && <Lock size={13} className="text-slate-400 stroke-[2.5]" />}
+                                    <span className="text-slate-800 text-sm tracking-tight hover:text-brand-secondary transition-colors">
+                                      {cleanTitle}
+                                    </span>
+                                    {post.is_private && (
+                                      <span className="text-xxs px-1.5 py-0.5 bg-slate-100 border border-slate-200 text-slate-400 font-bold">
+                                        비공개
+                                      </span>
+                                    )}
+                                  </div>
+                                </td>
+                                <td className="px-6 py-4 text-center text-xs font-semibold text-slate-600 whitespace-nowrap">
+                                  {post.author_name || '비회원'}
+                                </td>
+                                <td className="px-6 py-4 text-center text-xs font-semibold text-slate-400 whitespace-nowrap">
+                                  {post.views}
+                                </td>
+                                <td className="px-6 py-4 text-center text-xs font-semibold text-slate-500 whitespace-nowrap">
+                                  {new Date(post.created_at).toLocaleDateString('ko-KR')}
+                                </td>
+                              </tr>
+                            );
+                          })
+                        ) : (
+                          <tr>
+                            <td colSpan={4} className="px-6 py-16 text-center text-slate-400 font-medium select-none">
+                              등록된 게시글이 없습니다.
+                            </td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
-              </div>
+
+                {/* Pagination & Write button wrapper */}
+                <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mt-6 select-none">
+                  {/* Left Spacer to balance the right Write button for centering pagination on desktop */}
+                  <div className="hidden sm:block w-28"></div>
+
+                  {/* Pagination buttons */}
+                  <div className="flex items-center gap-1.5 justify-center">
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                      disabled={currentPage === 1}
+                      className="px-3 py-2 border border-slate-200 text-xs font-bold text-slate-600 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all cursor-pointer"
+                    >
+                      이전
+                    </button>
+                    {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                      <button
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
+                        className={`w-9 h-9 text-xs font-bold transition-all border cursor-pointer active:scale-95 ${currentPage === page
+                            ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/10'
+                            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                          }`}
+                      >
+                        {page}
+                      </button>
+                    ))}
+                    <button
+                      onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                      disabled={currentPage === totalPages}
+                      className="px-3 py-2 border border-slate-200 text-xs font-bold text-slate-600 bg-white hover:bg-slate-50 disabled:opacity-40 disabled:hover:bg-white transition-all cursor-pointer"
+                    >
+                      다음
+                    </button>
+                  </div>
+
+                  <button
+                    onClick={() => {
+                      setSearchParams({ write: 'true' });
+                      setWriteAuthor(user?.full_name || user?.email || '');
+                    }}
+                    className="flex items-center gap-1.5 px-5 py-2.5 bg-brand-secondary hover:bg-brand-primary text-white font-black text-xs tracking-wider shadow-sm hover:shadow active:scale-95 transition-all duration-200 cursor-pointer self-end sm:self-auto"
+                  >
+                    <PlusCircle size={15} />
+                    <span>글작성</span>
+                  </button>
+                </div>
+
+                {/* Search Bar below pagination */}
+                <div className="mt-6 flex justify-center w-full select-text">
+                  <div className="relative w-full max-w-md">
+                    <input
+                      type="text"
+                      placeholder="제목, 내용, 작성자 검색..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-9 pr-4 py-2.5 bg-white text-slate-800 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary font-bold text-xs tracking-wide select-text shadow-sm"
+                    />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={15} />
+                  </div>
+                </div>
+              </>
             )}
           </>
         )}
@@ -627,7 +721,7 @@ export const Board: React.FC = () => {
         {/* Private Post Password Input Modal */}
         {passwordTargetPostId !== null && (
           <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-            <div className="bg-white rounded-3xl max-w-sm w-full border border-slate-200 shadow-2xl p-6 relative animate-scale-in">
+            <div className="bg-white max-w-sm w-full border border-slate-200 shadow-2xl p-6 relative animate-scale-in">
               <button
                 onClick={() => {
                   setPasswordTargetPostId(null);
@@ -656,7 +750,7 @@ export const Board: React.FC = () => {
                   placeholder="게시글 비밀번호 입력"
                   value={postPassword}
                   onChange={(e) => setPostPassword(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-semibold text-center"
+                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-semibold text-center"
                   required
                   autoFocus
                 />
@@ -668,13 +762,13 @@ export const Board: React.FC = () => {
                       setPasswordTargetPostId(null);
                       setSearchParams({});
                     }}
-                    className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-bold text-xs cursor-pointer transition-colors"
+                    className="flex-1 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-xs cursor-pointer transition-colors"
                   >
                     취소
                   </button>
                   <button
                     type="submit"
-                    className="flex-1 py-2 bg-brand-primary hover:bg-brand-secondary text-white rounded-xl font-black text-xs cursor-pointer transition-colors"
+                    className="flex-1 py-2 bg-brand-primary hover:bg-brand-secondary text-white font-black text-xs cursor-pointer transition-colors"
                   >
                     게시글 열기
                   </button>
@@ -684,136 +778,7 @@ export const Board: React.FC = () => {
           </div>
         )}
 
-        {/* Create Post Form Modal */}
-        {isWriteModalOpen && (
-          <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-fade-in">
-            <div className="bg-white rounded-3xl max-w-xl w-full border border-slate-200 shadow-2xl overflow-hidden animate-scale-in select-text">
-              {/* Header */}
-              <div className="bg-slate-900 text-white p-6 relative select-none">
-                <button
-                  onClick={() => setIsWriteModalOpen(false)}
-                  className="absolute right-4 top-4 text-slate-400 hover:text-white p-1 transition-colors cursor-pointer"
-                  title="닫기"
-                  aria-label="닫기"
-                >
-                  <X size={20} />
-                </button>
-                <h2 className="text-lg font-black flex items-center gap-2">
-                  <PlusCircle className="text-brand-accent-light" size={22} />
-                  새로운 커뮤니티 글 작성
-                </h2>
-                <p className="text-xs text-slate-400 mt-1 font-semibold">동료 교육생 및 강사진과 자유롭게 피드백을 교환해 보세요.</p>
-              </div>
 
-              <form onSubmit={handleCreatePost} className="p-6 space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-1.5">
-                    <label htmlFor="category-select" className="block text-xs font-black text-slate-700">작성 카테고리 *</label>
-                    <select
-                      id="category-select"
-                      value={newCategory}
-                      onChange={(e) => setNewCategory(e.target.value as any)}
-                      title="작성 카테고리"
-                      className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold cursor-pointer"
-                    >
-                      <option value="free">자유게시판</option>
-                      <option value="review">취업 후기</option>
-                      {user && user.is_admin && <option value="notice">공지사항</option>}
-                    </select>
-                  </div>
-                  <div className="space-y-1.5">
-                    <label htmlFor="writer-input" className="block text-xs font-black text-slate-700">작성자</label>
-                    <input
-                      id="writer-input"
-                      type="text"
-                      value={user?.full_name || user?.email || ''}
-                      disabled
-                      title="작성자"
-                      placeholder="작성자"
-                      className="w-full px-3 py-2 rounded-xl bg-slate-100 border border-slate-200 text-xs font-bold text-slate-500 cursor-not-allowed select-none"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-black text-slate-700">글 제목 *</label>
-                  <input
-                    type="text"
-                    placeholder="글의 주요 요점을 드러내는 제목을 기입해주세요."
-                    value={newTitle}
-                    onChange={(e) => setNewTitle(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold"
-                    required
-                  />
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-black text-slate-700">상세 본문 내용 *</label>
-                  <textarea
-                    rows={6}
-                    placeholder="질문 사항이나 정보를 성실하게 기재해주세요. 타인에게 불쾌감을 주는 비방글은 예고 없이 삭제될 수 있습니다."
-                    value={newContent}
-                    onChange={(e) => setNewContent(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-medium leading-relaxed"
-                    required
-                  />
-                </div>
-
-                {/* Private post option */}
-                <div className="bg-slate-50 border border-slate-150 rounded-2xl p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <label htmlFor="private-checkbox" className="text-xs font-black text-slate-700 flex items-center gap-1.5 cursor-pointer">
-                      <Lock size={14} className="text-slate-400" />
-                      이 게시글을 비공개로 등록
-                    </label>
-                    <input
-                      id="private-checkbox"
-                      type="checkbox"
-                      checked={isPrivate}
-                      onChange={(e) => {
-                        setIsPrivate(e.target.checked);
-                        if (!e.target.checked) setWritePassword('');
-                      }}
-                      title="이 게시글을 비공개로 등록"
-                      className="w-4 h-4 rounded text-brand-primary focus:ring-brand-primary cursor-pointer"
-                    />
-                  </div>
-
-                  {isPrivate && (
-                    <div className="space-y-1.5 animate-slide-down">
-                      <label className="block text-xxs font-black text-slate-600">비공개 게시글 비밀번호 설정 *</label>
-                      <input
-                        type="password"
-                        placeholder="이 게시글을 읽을 때 사용할 비밀번호 입력"
-                        value={writePassword}
-                        onChange={(e) => setWritePassword(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-xl bg-white border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-semibold"
-                        required={isPrivate}
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Footer Buttons */}
-                <div className="pt-4 border-t border-slate-100 flex items-center justify-end gap-2.5 select-none">
-                  <button
-                    type="button"
-                    onClick={() => setIsWriteModalOpen(false)}
-                    className="px-4.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl font-bold text-xs cursor-pointer transition-colors"
-                  >
-                    작성 취소
-                  </button>
-                  <button
-                    type="submit"
-                    className="px-5 py-2.5 bg-brand-secondary hover:bg-brand-primary text-white rounded-xl font-black text-xs cursor-pointer shadow-sm hover:shadow active:scale-95 transition-all"
-                  >
-                    글 등록 완료
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
-        )}
 
       </div>
     </div>

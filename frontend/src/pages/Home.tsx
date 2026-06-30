@@ -75,7 +75,7 @@ export const Home: React.FC = () => {
           </p>
 
           {/* Dynamic Search Bar */}
-          <form onSubmit={handleSearchSubmit} className="max-w-xl mx-auto flex bg-white/95 backdrop-blur rounded-2xl shadow-xl overflow-hidden p-1.5 border border-white/30">
+          <form onSubmit={handleSearchSubmit} className="max-w-xl mx-auto flex bg-white/95 backdrop-blur shadow-xl overflow-hidden p-1.5 border border-white/30">
             <div className="flex-grow flex items-center px-3">
               <Search className="text-slate-400 shrink-0" size={20} />
               <input
@@ -88,7 +88,7 @@ export const Home: React.FC = () => {
             </div>
             <button
               type="submit"
-              className="bg-brand-secondary hover:bg-brand-primary-light text-white font-bold text-base px-6 py-3 rounded-xl transition-all duration-200 shadow active:scale-95 shrink-0"
+              className="bg-brand-secondary hover:bg-brand-primary-light text-white font-bold text-base px-6 py-3 transition-all duration-200 shadow active:scale-95 shrink-0"
             >
               과정 검색
             </button>
@@ -98,12 +98,12 @@ export const Home: React.FC = () => {
 
       {/* Metrics Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8 relative z-20">
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-md grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 overflow-hidden">
+        <div className="bg-white border border-slate-200 shadow-md grid grid-cols-2 lg:grid-cols-4 divide-y lg:divide-y-0 lg:divide-x divide-slate-100 overflow-hidden">
           {metrics.map((m, idx) => {
             const Icon = m.icon;
             return (
               <div key={idx} className="p-6 flex flex-col items-center text-center">
-                <div className={`p-3 rounded-2xl ${m.color} mb-3`}>
+                <div className={`p-3 ${m.color} mb-3`}>
                   <Icon size={22} className="stroke-[2.5]" />
                 </div>
                 <span className="text-sm font-bold text-slate-400 tracking-wider mb-1">{m.label}</span>
@@ -127,10 +127,10 @@ export const Home: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
           {features.map((f, idx) => (
-            <div key={idx} className="bg-white border border-slate-200 rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between group">
+            <div key={idx} className="bg-white border border-slate-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-300 flex flex-col justify-between group">
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <span className="bg-brand-accent-light text-brand-secondary text-xs font-extrabold px-2.5 py-1 rounded-md tracking-wider">
+                  <span className="bg-brand-accent-light text-brand-secondary text-xs font-extrabold px-2.5 py-1 tracking-wider">
                     {f.badge}
                   </span>
                   <span className="text-slate-200 group-hover:text-brand-accent-light text-2xl font-black tracking-tight transition-colors duration-300">
@@ -147,7 +147,7 @@ export const Home: React.FC = () => {
 
       {/* Corporate Customized Training Banner */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
-        <div className="bg-gradient-to-r from-slate-900 to-brand-primary-dark text-white rounded-3xl p-8 md:p-12 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
+        <div className="bg-gradient-to-r from-slate-900 to-brand-primary-dark text-white p-8 md:p-12 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-80 h-80 rounded-full bg-brand-secondary/10 blur-3xl -z-1"></div>
 
           <div className="space-y-4 text-center lg:text-left max-w-xl">
@@ -162,7 +162,7 @@ export const Home: React.FC = () => {
 
           <button
             onClick={handleApplyClick}
-            className="bg-brand-accent text-white hover:bg-brand-secondary font-bold text-base tracking-wider px-6 py-3.5 rounded-xl shadow-lg flex items-center gap-2 group transition-all duration-200 hover:-translate-y-0.5 active:scale-95 shrink-0"
+            className="bg-brand-accent text-white hover:bg-brand-secondary font-bold text-base tracking-wider px-6 py-3.5 shadow-lg flex items-center gap-2 group transition-all duration-200 hover:-translate-y-0.5 active:scale-95 shrink-0"
           >
             기업 맞춤형 교육 문의
             <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />

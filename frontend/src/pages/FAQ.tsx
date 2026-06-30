@@ -85,7 +85,7 @@ export const FAQ: React.FC = () => {
             backgroundRepeat: 'no-repeat'
           }}
         >
-          <div className="relative z-10 max-w-3xl text-left">
+          <div className="relative z-10 w-full text-left">
             <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
               <HelpCircle className="h-10 md:h-9 w-auto text-white stroke-[2]" />
               <span className="text-4xl md:text-4xl font-bold">자주 묻는 질문 (FAQ)</span>
@@ -103,7 +103,7 @@ export const FAQ: React.FC = () => {
               placeholder="궁금한 사항이나 키워드 검색..."
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              className="w-full pl-10 pr-14 py-3 rounded-xl bg-white text-slate-800 border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary font-bold text-sm tracking-wide transition-all select-text"
+              className="w-full pl-10 pr-14 py-3 bg-white text-slate-800 border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary font-bold text-sm tracking-wide transition-all select-text"
             />
             <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
             {searchInput && (
@@ -122,7 +122,7 @@ export const FAQ: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="px-5 py-3 bg-brand-primary hover:bg-brand-secondary text-white font-black rounded-xl text-sm tracking-wider shadow-sm hover:shadow-md transition-all active:scale-95 duration-150 cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
+            className="px-5 py-3 bg-brand-primary hover:bg-brand-secondary text-white font-black text-sm tracking-wider shadow-sm hover:shadow-md transition-all active:scale-95 duration-150 cursor-pointer flex items-center justify-center gap-1.5 shrink-0"
           >
             <Search size={14} />
             검색
@@ -137,7 +137,7 @@ export const FAQ: React.FC = () => {
               return (
                 <div
                   key={faq.id}
-                  className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md animate-fade-in"
+                  className="bg-white border border-slate-200 shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md animate-fade-in"
                 >
                   <button
                     onClick={() => toggleFaq(faq.id)}
@@ -167,7 +167,7 @@ export const FAQ: React.FC = () => {
               );
             })
           ) : (
-            <div className="bg-white rounded-3xl border border-slate-200 p-12 text-center shadow-sm select-text">
+            <div className="bg-white border border-slate-200 p-12 text-center shadow-sm select-text">
               <HelpCircle className="text-slate-300 mx-auto mb-3" size={48} />
               <p className="text-lg font-black text-slate-700">검색 결과가 존재하지 않습니다.</p>
               <p className="text-sm text-slate-400 mt-1 font-medium">검색 키워드를 바꾸거나 다른 필터 카테고리를 선택해 보세요.</p>
@@ -176,9 +176,9 @@ export const FAQ: React.FC = () => {
         </div>
 
         {/* Footer Support Info */}
-        <div className="mt-12 bg-white rounded-3xl border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
+        <div className="mt-12 bg-white border border-slate-200 p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-sm">
           <div className="flex items-center gap-4">
-            <div className="bg-brand-accent-light p-3 rounded-2xl text-brand-secondary flex items-center justify-center">
+            <div className="bg-brand-accent-light p-3 text-brand-secondary flex items-center justify-center">
               <MessageSquare size={24} className="stroke-[2.5]" />
             </div>
             <div className="text-left select-text">
@@ -188,7 +188,7 @@ export const FAQ: React.FC = () => {
           </div>
           <Link
             to="/inquiry"
-            className="px-5 py-3 rounded-xl bg-brand-secondary hover:bg-brand-primary text-white font-bold text-sm tracking-wider shadow-sm hover:shadow active:scale-95 transition-all duration-200 cursor-pointer text-center whitespace-nowrap"
+            className="px-5 py-3 bg-brand-secondary hover:bg-brand-primary text-white font-bold text-sm tracking-wider shadow-sm hover:shadow active:scale-95 transition-all duration-200 cursor-pointer text-center whitespace-nowrap"
           >
             1:1 문의하러 가기
           </Link>

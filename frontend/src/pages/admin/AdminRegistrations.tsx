@@ -149,32 +149,19 @@ export const AdminRegistrations: React.FC = () => {
             backgroundRepeat: 'no-repeat'
           }}
         >
-          <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="max-w-2xl text-left select-text">
-              <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-                <ClipboardList className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-                <span className="text-4xl md:text-4xl font-bold">수강 신청 현황 관리</span>
-              </h1>
-              <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
-                현재 날짜 기준 모집 중이거나 교육 중인 코스를 선택하고, 수강 신청 및 상세 상담 내역을 모니터링합니다.
-              </p>
-            </div>
-            <div className="flex items-center gap-4.5 shrink-0 self-start md:self-auto select-none">
-              {/* Refresh Button */}
-              <button
-                onClick={loadData}
-                disabled={loading}
-                className="flex items-center gap-1.5 text-sm font-bold text-white bg-white/10 hover:bg-white/20 border border-white/20 px-4 py-2.5 rounded-xl active:scale-95 transition-all cursor-pointer disabled:opacity-50"
-              >
-                <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-                <span>새로고침</span>
-              </button>
-            </div>
+          <div className="relative z-10 w-full text-left">
+            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
+              <ClipboardList className="h-10 md:h-9 w-auto text-white stroke-[2]" />
+              <span className="text-4xl md:text-4xl font-bold">수강 신청 현황 관리</span>
+            </h1>
+            <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
+              현재 날짜 기준 모집 중이거나 교육 중인 코스를 선택하고, 수강 신청 및 상세 상담 내역을 모니터링합니다.
+            </p>
           </div>
         </div>
 
         {/* Console Container Card */}
-        <div className="bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden select-text">
+        <div className="bg-white border border-slate-200 shadow-xl overflow-hidden select-text">
 
           {/* Course Selector Section */}
           <div className="bg-slate-50 border-b border-slate-200 p-6 flex flex-col md:flex-row md:items-center justify-between gap-6">
@@ -187,7 +174,7 @@ export const AdminRegistrations: React.FC = () => {
                   id="course-select"
                   value={selectedCourseId}
                   onChange={(e) => setSelectedCourseId(e.target.value)}
-                  className="w-full bg-white border border-slate-200 text-slate-800 font-extrabold px-4 py-3.5 pr-10 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent cursor-pointer appearance-none text-sm transition-all"
+                  className="w-full bg-white border border-slate-200 text-slate-800 font-extrabold px-4 py-3.5 pr-10 shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent cursor-pointer appearance-none text-sm transition-all"
                   disabled={filteredCourses.length === 0}
                 >
                   {filteredCourses.length === 0 ? (
@@ -211,7 +198,7 @@ export const AdminRegistrations: React.FC = () => {
             {/* Selected Course Quick Meta Details */}
             {selectedCourse && (
               <div className="flex flex-wrap gap-3 md:self-end">
-                <div className="bg-white border border-slate-200 rounded-2xl px-4 py-2.5 text-sm shadow-sm">
+                <div className="bg-white border border-slate-200 px-4 py-2.5 text-sm shadow-sm">
                   <span className="block text-xs font-bold text-slate-400 uppercase mb-0.5">모집 기간</span>
                   <span className="font-extrabold text-slate-700">{selectedCourse.applyPeriod}</span>
                 </div>
@@ -247,7 +234,7 @@ export const AdminRegistrations: React.FC = () => {
                 </p>
               </div>
             ) : (
-              <div className="overflow-hidden border border-slate-200 rounded-2xl">
+              <div className="overflow-hidden border border-slate-200">
                 <table className="w-full text-left border-collapse text-sm">
                   <thead>
                     <tr className="bg-slate-50 border-b border-slate-200 font-extrabold text-slate-600">
@@ -285,7 +272,7 @@ export const AdminRegistrations: React.FC = () => {
                           <select
                             value={reg.status}
                             onChange={(e) => handleStatusSelectChange(reg, e.target.value as Registration['status'])}
-                            className={`inline-flex items-center gap-1 px-3 py-1.5 rounded-xl text-sm font-extrabold border cursor-pointer focus:outline-none transition-all ${reg.status === 'pending'
+                            className={`inline-flex items-center gap-1 px-3 py-1.5 text-sm font-extrabold border cursor-pointer focus:outline-none transition-all ${reg.status === 'pending'
                               ? 'bg-amber-50 text-amber-700 border-amber-200 focus:ring-2 focus:ring-amber-500'
                               : reg.status === 'approved'
                                 ? 'bg-emerald-50 text-emerald-700 border-emerald-200 focus:ring-2 focus:ring-emerald-500'
@@ -303,7 +290,7 @@ export const AdminRegistrations: React.FC = () => {
                             value={reg.comment || ''}
                             onChange={(e) => handleCommentChange(reg.id, e.target.value)}
                             onBlur={() => handleCommentBlur(reg)}
-                            className="w-full text-sm font-semibold px-4 py-2.5 rounded-xl transition-all shadow-sm border bg-white border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
+                            className="w-full text-sm font-semibold px-4 py-2.5 transition-all shadow-sm border bg-white border-slate-200 text-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-primary focus:border-transparent"
                           />
                         </td>
                         <td className="p-4.5 text-sm text-slate-400 font-semibold">
