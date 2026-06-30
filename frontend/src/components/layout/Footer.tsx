@@ -1,6 +1,7 @@
 import React from 'react';
-import { GraduationCap, ShieldCheck, FileText, Phone, Mail } from 'lucide-react';
+import { ShieldCheck, FileText, Phone, Mail } from 'lucide-react';
 import { useToast } from '../ui/Toast';
+import intelHeaderLogo from '../../assets/intel-header-logo.svg';
 
 export const Footer: React.FC = () => {
   const { showToast } = useToast();
@@ -15,15 +16,12 @@ export const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-8 border-b border-slate-800">
           {/* Brand Info */}
-          <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-2">
-              <div className="bg-brand-secondary/20 text-brand-accent p-1.5 rounded-lg">
-                <GraduationCap size={20} />
-              </div>
-              <span className="text-base font-extrabold text-white tracking-tight">UnionAI</span>
+          <div className="flex flex-col gap-4 text-left">
+            <div className="flex items-center select-none">
+              <img src={intelHeaderLogo} alt="Intel Logo" className="h-6 w-auto brightness-0 invert" />
             </div>
             <p className="text-sm leading-relaxed text-slate-500 max-w-sm break-keep">
-              UnionAI는 디지털 신기술 분야의 실전형 인재를 양성하고, 산업 수요 맞춤형 직무 교육을 통해 구직자의 취업 성공과 재직자의 역량 강화를 지원하는 교육 플랫폼입니다.
+              Intel은 디지털 신기술 분야의 실전형 인재를 양성하고, 산업 수요 맞춤형 직무 교육을 통해 구직자의 취업 성공과 재직자의 역량 강화를 지원하는 교육 플랫폼입니다.
             </p>
           </div>
 

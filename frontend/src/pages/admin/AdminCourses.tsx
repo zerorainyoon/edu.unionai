@@ -10,11 +10,12 @@ import type { Course } from '../../data/courses';
 import { RichTextEditor } from '../../components/ui/RichTextEditor';
 import mosaicBg from '../../assets/background-l1-mosaic.svg';
 
-const REGIONS = ['전국', '서울', '경기', '부산', '인천', '광주'];
+const REGIONS = ['전국', '서울', '경기도', '강원도', '충청도', '전라도', '경상도', '부산', '대구', '인천', '광주', '대전'];
 
 const PREDEFINED_TAGS = [
-  'K-Digital',
   '새싹(SeSAC)',
+  'K-뉴딜',
+  'KDT',
 ];
 
 export const AdminCourses: React.FC = () => {
@@ -174,8 +175,9 @@ export const AdminCourses: React.FC = () => {
   const filteredCourses = courses.filter((course) => {
     const matchesTab =
       activeSubTab === '전체 과정' ||
-      (activeSubTab === 'K-Digital Training' && course.type === 'k-digital') ||
-      (activeSubTab === '새싹(SeSAC)' && course.type === 'sesac');
+      (activeSubTab === '새싹(SeSAC)' && course.type === 'sesac') ||
+      (activeSubTab === 'K-뉴딜' && course.type === 'k-newdeal') ||
+      (activeSubTab === 'KDT' && course.type === 'kdt');
 
     if (!matchesTab) return false;
 
@@ -190,8 +192,9 @@ export const AdminCourses: React.FC = () => {
     return matchesSearch && matchesRegion;
   });
 
-  const kDigitalCourses = filteredCourses.filter(c => c.type === 'k-digital');
   const sesacCourses = filteredCourses.filter(c => c.type === 'sesac');
+  const knewdealCourses = filteredCourses.filter(c => c.type === 'k-newdeal');
+  const kDigitalCourses = filteredCourses.filter(c => c.type === 'kdt');
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
@@ -511,7 +514,7 @@ export const AdminCourses: React.FC = () => {
 
             {/* Education course type subtabs */}
             <div className="border-b border-slate-200 w-full flex overflow-x-auto scrollbar-none gap-2 pb-px select-none">
-              {['전체 과정', 'K-Digital Training', '새싹(SeSAC)'].map((tab) => {
+              {['전체 과정', '새싹(SeSAC)', 'K-뉴딜', 'KDT'].map((tab) => {
                 const isActive = activeSubTab === tab;
                 return (
                   <a
@@ -607,15 +610,15 @@ export const AdminCourses: React.FC = () => {
             ) : (
               activeSubTab === '전체 과정' ? (
                 <div className="space-y-12 animate-fade-in text-left">
-                  {/* K-Digital Section */}
-                  {kDigitalCourses.length > 0 && (
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-2 border-l-4 border-brand-primary pl-3 py-1">
-                        <h2 className="text-lg font-extrabold text-slate-800">K-Digital Training 과정</h2>
-                        <span className="text-xs text-slate-400 font-semibold mt-1">디지털 신기술 실전형 인재 양성</span>
+                  {/* SeSAC Section */}
+                  {sesacCourses.length > 0 && (
+                    <div className="space-y-4 pt-6 border-t border-slate-200">
+                      <div className="flex items-center gap-2 border-l-4 border-brand-secondary pl-3 py-1">
+                        <h2 className="text-lg font-extrabold text-slate-800">새싹 (SeSAC) 교육 과정</h2>
+                        <span className="text-xs text-slate-400 font-semibold mt-1">서울형 청년 혁신 교육 아카데미</span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {kDigitalCourses.map((course) => (
+                        {sesacCourses.map((course) => (
                           <CourseCard
                             key={course.id}
                             course={course}
@@ -628,15 +631,36 @@ export const AdminCourses: React.FC = () => {
                     </div>
                   )}
 
-                  {/* SeSAC Section */}
-                  {sesacCourses.length > 0 && (
+                  {/* K-뉴딜 Section */}
+                  {knewdealCourses.length > 0 && (
                     <div className="space-y-4 pt-6 border-t border-slate-200">
-                      <div className="flex items-center gap-2 border-l-4 border-brand-secondary pl-3 py-1">
-                        <h2 className="text-lg font-extrabold text-slate-800">새싹 (SeSAC) 교육 과정</h2>
-                        <span className="text-xs text-slate-400 font-semibold mt-1">서울형 청년 혁신 교육 아카데미</span>
+                      <div className="flex items-center gap-2 border-l-4 border-brand-primary pl-3 py-1">
+                        <h2 className="text-lg font-extrabold text-slate-800">K-뉴딜 과정</h2>
+                        <span className="text-xs text-slate-400 font-semibold mt-1">기업에 특화된 직업능력개발 과정</span>
                       </div>
                       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                        {sesacCourses.map((course) => (
+                        {knewdealCourses.map((course) => (
+                          <CourseCard
+                            key={course.id}
+                            course={course}
+                            isAdmin={true}
+                            onEdit={handleStartEdit}
+                            onDelete={handleDeleteCourse}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* KDT Section */}
+                  {kDigitalCourses.length > 0 && (
+                    <div className="space-y-4 pt-6 border-t border-slate-200">
+                      <div className="flex items-center gap-2 border-l-4 border-brand-primary pl-3 py-1">
+                        <h2 className="text-lg font-extrabold text-slate-800">KDT 과정</h2>
+                        <span className="text-xs text-slate-400 font-semibold mt-1">디지털 신기술 실전형 인재 양성</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        {kDigitalCourses.map((course) => (
                           <CourseCard
                             key={course.id}
                             course={course}

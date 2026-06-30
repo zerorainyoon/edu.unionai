@@ -57,11 +57,21 @@ const mapApiCourseToCourse = (apiCourse: ApiCourse): Course => {
   const gradientTo = GRADIENTS[gradIndex].to;
 
   const titleLower = apiCourse.title.toLowerCase();
-  const hasSesac = titleLower.includes('sesac') || titleLower.includes('새싹') || apiCourse.tags.some(t => {
-    const lower = t.toLowerCase();
-    return lower.includes('sesac') || lower.includes('새싹');
-  });
-  const type = hasSesac ? 'sesac' : 'k-digital';
+  const tagsLower = apiCourse.tags.map(t => t.toLowerCase());
+
+  let type: 'sesac' | 'k-newdeal' | 'kdt' = 'kdt'; // default
+
+  const hasSesac = titleLower.includes('sesac') || titleLower.includes('새싹') || tagsLower.some(t => t.includes('sesac') || t.includes('새싹'));
+  const hasKNewdeal = titleLower.includes('k-newdeal') || titleLower.includes('k-뉴딜') || tagsLower.some(t => t.includes('k-newdeal') || t.includes('k-뉴딜'));
+  const hasKdt = titleLower.includes('kdt') || titleLower.includes('k-digital') || titleLower.includes('k-디지털') || tagsLower.some(t => t.includes('kdt') || t.includes('k-digital') || t.includes('k-디지털'));
+
+  if (hasSesac) {
+    type = 'sesac';
+  } else if (hasKNewdeal) {
+    type = 'k-newdeal';
+  } else if (hasKdt) {
+    type = 'kdt';
+  }
 
   const institution = apiCourse.tags.find(t => t.includes('원') || t.includes('센터') || t.includes('협회')) || '대한상공회의소';
 

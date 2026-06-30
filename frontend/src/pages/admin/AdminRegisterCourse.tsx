@@ -7,8 +7,9 @@ import { RichTextEditor } from '../../components/ui/RichTextEditor';
 import mosaicBg from '../../assets/background-l1-mosaic.svg';
 
 const PREDEFINED_TAGS = [
-  'K-Digital',
   '새싹(SeSAC)',
+  'K-뉴딜',
+  'KDT',
 ];
 
 export const AdminRegisterCourse: React.FC = () => {
@@ -77,7 +78,7 @@ export const AdminRegisterCourse: React.FC = () => {
               <span className="text-4xl md:text-4xl font-bold">교육과정 등록</span>
             </h1>
             <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
-              UnionAI 교육과정을 게시합니다. 아래의 세부사항들을 빠짐없이 기입해주세요.
+              Intel 교육과정을 게시합니다. 아래의 세부사항들을 빠짐없이 기입해주세요.
             </p>
           </div>
         </div>

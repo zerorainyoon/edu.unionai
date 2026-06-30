@@ -11,7 +11,7 @@ export interface Course {
   gradientTo: string;
 
   // Categorization property
-  type: 'k-digital' | 'sesac';
+  type: 'sesac' | 'k-newdeal' | 'kdt';
 
   // Detailed attributes for view page
   institution: string;
@@ -58,7 +58,7 @@ export const MOCK_COURSES: Course[] = [
     status: '모집중',
     gradientFrom: GRADIENTS[0].from,
     gradientTo: GRADIENTS[0].to,
-    type: 'k-digital',
+    type: 'kdt',
     institution: '서울IT인재개발원',
     hours: '840시간 (총 120일)',
     feeOriginal: '9,820,000원',
@@ -96,7 +96,7 @@ export const MOCK_COURSES: Course[] = [
     status: '모집중',
     gradientFrom: GRADIENTS[1].from,
     gradientTo: GRADIENTS[1].to,
-    type: 'k-digital',
+    type: 'kdt',
     institution: '경기인재개발센터',
     hours: '960시간 (총 120일)',
     feeOriginal: '11,200,000원',
@@ -172,7 +172,7 @@ export const MOCK_COURSES: Course[] = [
     status: '모집중',
     gradientFrom: GRADIENTS[3].from,
     gradientTo: GRADIENTS[3].to,
-    type: 'k-digital',
+    type: 'kdt',
     institution: '인천상공회의소 인재개발원',
     hours: '680시간 (총 85일)',
     feeOriginal: '7,200,000원',
@@ -210,7 +210,7 @@ export const MOCK_COURSES: Course[] = [
     status: '모집마감',
     gradientFrom: GRADIENTS[4].from,
     gradientTo: GRADIENTS[4].to,
-    type: 'k-digital',
+    type: 'kdt',
     institution: '서울중앙인재개발센터',
     hours: '800시간 (총 100일)',
     feeOriginal: '9,100,000원',
@@ -286,7 +286,7 @@ export const MOCK_COURSES: Course[] = [
     status: '모집중',
     gradientFrom: GRADIENTS[6].from,
     gradientTo: GRADIENTS[6].to,
-    type: 'k-digital',
+    type: 'kdt',
     institution: '대한상공회의소 본부 교육원',
     hours: '640시간 (총 80일)',
     feeOriginal: '7,800,000원',

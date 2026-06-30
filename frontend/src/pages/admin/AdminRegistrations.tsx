@@ -195,7 +195,7 @@ export const AdminRegistrations: React.FC = () => {
                   ) : (
                     filteredCourses.map((c) => (
                       <option key={c.id} value={c.id}>
-                        [{c.type === 'k-digital' ? 'K-Digital' : 'SeSAC'}] {c.title}
+                        [{c.type === 'sesac' ? '새싹(SeSAC)' : c.type === 'k-newdeal' ? 'K-뉴딜' : 'KDT'}] {c.title}
                       </option>
                     ))
                   )}
