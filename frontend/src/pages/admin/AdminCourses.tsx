@@ -217,9 +217,9 @@ export const AdminCourses: React.FC = () => {
                 <span className="text-xs font-bold text-blue-200 uppercase tracking-widest bg-white/10 px-3 py-1 mb-4 inline-block">
                   Admin Console / Edit Course
                 </span>
-                <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-                  <Settings className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-                  <span className="text-4xl md:text-4xl font-bold">교육과정 상세 정보 수정</span>
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-white">
+                  <Settings className="h-8 md:h-9 w-auto text-white stroke-[2]" />
+                  교육과정 상세 정보 수정
                 </h1>
                 <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
                   교육과정의 세부 속성을 변경하고 저장합니다. 필요한 경우 하단의 삭제 버튼을 사용해 삭제할 수 있습니다.
@@ -501,9 +501,9 @@ export const AdminCourses: React.FC = () => {
             >
               <div className="relative z-10 w-full text-left">
                 <div>
-                  <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-                    <Settings className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-                    <span className="text-4xl md:text-4xl font-bold">교육과정 관리</span>
+                  <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-white">
+                    <Settings className="h-8 md:h-9 w-auto text-white stroke-[2]" />
+                    교육과정 관리
                   </h1>
                   <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
                     전체 등록된 교육과정을 상세 검색하고 수정하거나 신속히 삭제할 수 있습니다.
@@ -592,17 +592,17 @@ export const AdminCourses: React.FC = () => {
                 <p className="text-slate-500 font-bold text-sm">교육 과정 리스트를 불러오는 중...</p>
               </div>
             ) : filteredCourses.length === 0 ? (
-              <div className="bg-white border border-slate-200 p-12 md:p-16 text-center shadow-sm max-w-xl mx-auto animate-fade-in">
-                <div className="inline-flex p-4 rounded-full bg-slate-50 text-slate-400 mb-5">
-                  <AlertCircle size={48} />
+              <div className="bg-white border border-slate-200 p-8 text-center shadow-sm max-w-md mx-auto animate-fade-in">
+                <div className="inline-flex p-4 rounded-full bg-slate-50 text-slate-400 mb-4">
+                  <AlertCircle size={40} />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-black text-slate-900 mb-4">검색 결과가 없습니다</h3>
-                <p className="text-base md:text-lg text-slate-500 leading-relaxed mb-8 max-w-md mx-auto">
+                <h3 className="text-xl font-bold text-slate-900 mb-3">검색 결과가 없습니다</h3>
+                <p className="text-sm text-slate-500 leading-relaxed mb-6 max-w-xs mx-auto">
                   선택한 필터 조건에 해당하는 교육 과정이 존재하지 않습니다. 필터를 초기화해 보세요.
                 </p>
                 <button
                   onClick={handleClearFilters}
-                  className="bg-brand-primary text-white font-bold text-base px-6 py-3 hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200 cursor-pointer"
+                  className="bg-brand-primary text-white font-bold text-sm px-5 py-2.5 hover:bg-brand-secondary transition-colors shadow-md active:scale-95 duration-200 cursor-pointer"
                 >
                   필터 초기화
                 </button>

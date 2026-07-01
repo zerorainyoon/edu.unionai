@@ -25,6 +25,7 @@ export const Board: React.FC = () => {
   const [posts, setPosts] = useState<ApiPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedQuery, setDebouncedQuery] = useState('');
   const [currentPage, setCurrentPage] = useState<number>(1);
   const postsPerPage = 25;
 
@@ -49,10 +50,10 @@ export const Board: React.FC = () => {
   const [writePassword, setWritePassword] = useState('');
 
   // Load all posts on mount or search
-  const loadPosts = async () => {
+  const loadPosts = async (query = debouncedQuery) => {
     setLoading(true);
     try {
-      const data = await postService.getPosts(searchQuery, 0, 9999);
+      const data = await postService.getPosts(query, 0, 9999);
       setPosts(data);
     } catch (e: any) {
       console.error(e);
@@ -68,10 +69,22 @@ export const Board: React.FC = () => {
     }
   }, [isWriting, user, writeAuthor]);
 
+  // Debounce search query changes with 500ms delay to prevent server overload
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery);
+    }, 500);
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [searchQuery]);
+
+  // Trigger loading when debounced query updates
   useEffect(() => {
     setCurrentPage(1);
-    loadPosts();
-  }, [searchQuery]);
+    loadPosts(debouncedQuery);
+  }, [debouncedQuery]);
 
   // Synchronize URL search params with detail view
   useEffect(() => {
@@ -280,7 +293,7 @@ export const Board: React.FC = () => {
             <div className="flex items-center gap-1.5 font-bold text-slate-700">
               {depth > 0 && <CornerDownRight size={12} className="text-slate-400" />}
               <span className="text-xxs px-2 py-0.5 bg-slate-200 text-slate-600">
-                교육생 {comment.user_id}
+                관리자
               </span>
               <span className="text-slate-400 font-medium font-mono text-xxs">
                 {new Date(comment.created_at).toLocaleString('ko-KR')}
@@ -404,7 +417,7 @@ export const Board: React.FC = () => {
                     ))}
                   </div>
                 ) : (
-                  <p className="text-xs font-medium text-slate-400 py-6 text-center select-none">
+                  <p className="text-sm font-medium text-slate-400 py-6 text-center select-none">
                     등록된 댓글이 없습니다.
                   </p>
                 )}
@@ -468,10 +481,10 @@ export const Board: React.FC = () => {
                 backgroundRepeat: 'no-repeat'
               }}
             >
-              <div className="relative z-10 w-full text-left select-text">
-                <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-                  <FileText className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-                  <span className="text-4xl md:text-4xl font-bold">통합 게시판</span>
+              <div className="relative z-10 w-full text-left">
+                <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-white">
+                  <FileText className="h-8 md:h-9 w-auto text-white stroke-[2]" />
+                  통합 게시판
                 </h1>
                 <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
                   Intel 교육생들을 위한 커뮤니티입니다. 공지사항 확인 및 유용한 취업 팁, 공부 관련 질문들을 자유롭게 나누어 보세요.
@@ -483,7 +496,7 @@ export const Board: React.FC = () => {
             {/* Conditional Render: Write View vs List View */}
             {isWriting ? (
               /* Inline Write View (instead of list) */
-              <div className="bg-white border border-slate-200 shadow-sm overflow-hidden select-text animate-scale-in">
+              <div className="bg-white border border-slate-200 shadow-sm overflow-hidden animate-scale-in">
                 {/* Header banner */}
                 <div className="bg-slate-900 text-white p-8 relative select-none">
                   <h2 className="text-xl md:text-2xl font-black flex items-center gap-2">
@@ -643,7 +656,7 @@ export const Board: React.FC = () => {
                           })
                         ) : (
                           <tr>
-                            <td colSpan={4} className="px-6 py-16 text-center text-slate-400 font-medium select-none">
+                            <td colSpan={4} className="px-6 py-16 text-center text-sm font-medium text-slate-400 select-none">
                               등록된 게시글이 없습니다.
                             </td>
                           </tr>
@@ -672,8 +685,8 @@ export const Board: React.FC = () => {
                         key={page}
                         onClick={() => setCurrentPage(page)}
                         className={`w-9 h-9 text-xs font-bold transition-all border cursor-pointer active:scale-95 ${currentPage === page
-                            ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/10'
-                            : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
+                          ? 'bg-brand-primary text-white border-brand-primary shadow-sm shadow-brand-primary/10'
+                          : 'bg-white text-slate-600 border-slate-200 hover:bg-slate-50'
                           }`}
                       >
                         {page}
@@ -777,9 +790,6 @@ export const Board: React.FC = () => {
             </div>
           </div>
         )}
-
-
-
       </div>
     </div>
   );

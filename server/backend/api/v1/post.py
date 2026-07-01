@@ -153,6 +153,7 @@ async def get_post(
         views=post.views,
         created_at=post.created_at,
         updated_at=post.updated_at,
+        author_name=post.author_name,
         comments=comment_tree
     )
     return response

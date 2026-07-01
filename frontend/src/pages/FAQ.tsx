@@ -86,9 +86,9 @@ export const FAQ: React.FC = () => {
           }}
         >
           <div className="relative z-10 w-full text-left">
-            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-              <HelpCircle className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-              <span className="text-4xl md:text-4xl font-bold">자주 묻는 질문 (FAQ)</span>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-white">
+              <HelpCircle className="h-8 md:h-9 w-auto text-white stroke-[2]" />
+              자주 묻는 질문 (FAQ)
             </h1>
             <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
               Intel® 교육과정 및 국비 무료 훈련에 대해 가장 많이 들어오는 문의 사항들을 모았습니다. 궁금한 점을 키워드로 직접 찾아보세요.
@@ -167,10 +167,12 @@ export const FAQ: React.FC = () => {
               );
             })
           ) : (
-            <div className="bg-white border border-slate-200 p-12 text-center shadow-sm select-text">
-              <HelpCircle className="text-slate-300 mx-auto mb-3" size={48} />
-              <p className="text-lg font-black text-slate-700">검색 결과가 존재하지 않습니다.</p>
-              <p className="text-sm text-slate-400 mt-1 font-medium">검색 키워드를 바꾸거나 다른 필터 카테고리를 선택해 보세요.</p>
+            <div className="bg-white border border-slate-200 p-8 text-center shadow-sm select-none max-w-md mx-auto">
+              <HelpCircle className="text-slate-350 mx-auto mb-3" size={40} />
+              <h3 className="text-xl font-bold text-slate-900 mb-2">검색 결과가 존재하지 않습니다</h3>
+              <p className="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">
+                검색 키워드를 바꾸거나 다른 키워드를 입력해 보세요.
+              </p>
             </div>
           )}
         </div>
@@ -182,8 +184,8 @@ export const FAQ: React.FC = () => {
               <MessageSquare size={24} className="stroke-[2.5]" />
             </div>
             <div className="text-left select-text">
-              <h3 className="font-black text-slate-800">원하시는 답변을 찾기 어려우신가요?</h3>
-              <p className="text-xs text-slate-500 font-medium mt-0.5">상세한 개인 맞춤형 상담을 원하시면 언제든 1:1 온라인 문의를 이용해 주세요.</p>
+              <h3 className="font-bold text-slate-900 text-base">원하시는 답변을 찾기 어려우신가요?</h3>
+              <p className="text-sm text-slate-500 font-medium mt-0.5">상세한 개인 맞춤형 상담을 원하시면 언제든 1:1 온라인 문의를 이용해 주세요.</p>
             </div>
           </div>
           <Link

@@ -3,6 +3,7 @@ import { ToastProvider } from './components/ui/Toast';
 import { AuthProvider } from './context/AuthContext';
 import { Header } from './components/layout/Header';
 import { Footer } from './components/layout/Footer';
+import { ScrollToTop } from './components/layout/ScrollToTop';
 import { Home } from './pages/Home';
 import { CourseList } from './pages/CourseList';
 import { CourseDetail } from './pages/CourseDetail';
@@ -19,6 +20,7 @@ export function App() {
     <ToastProvider>
       <AuthProvider>
         <Router>
+          <ScrollToTop />
           <div className="flex flex-col min-h-screen bg-slate-50 text-slate-800 antialiased">
             {/* Responsive Header Navigation */}
             <Header />

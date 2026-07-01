@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { MessageSquare, Send, CheckCircle2, Clock, X, HelpCircle, User } from 'lucide-react';
+import { MessageSquare, Send, CheckCircle2, Clock, X, HelpCircle, User, ClipboardList } from 'lucide-react';
 import { useToast } from '../components/ui/Toast';
+import { useAuth } from '../context/AuthContext';
 import mosaicBg from '../assets/background-l1-mosaic.svg';
 
 interface InquiryRecord {
@@ -40,9 +41,9 @@ const INITIAL_INQUIRIES: InquiryRecord[] = [
 
 export const Inquiry: React.FC = () => {
   const [inquiries, setInquiries] = useState<InquiryRecord[]>(INITIAL_INQUIRIES);
-  const [activeTab, setActiveTab] = useState<'write' | 'list'>('write');
   const [selectedInquiry, setSelectedInquiry] = useState<InquiryRecord | null>(null);
   const { showToast } = useToast();
+  const { user } = useAuth();
 
   // Form State
   const [category, setCategory] = useState('수강 신청');
@@ -70,12 +71,89 @@ export const Inquiry: React.FC = () => {
     setInquiries(prev => [newInquiry, ...prev]);
     showToast('1:1 문의가 안전하게 접수되었습니다.');
 
-    // Clear form and navigate to list
+    // Clear form
     setTitle('');
     setContent('');
     setEmail('');
-    setActiveTab('list');
   };
+
+  const isAdmin = user?.is_admin === true;
+
+  // Render Inquiry Form Component (Full Width)
+  const renderInquiryForm = () => (
+    <div className="bg-white border border-slate-200 shadow-xl overflow-hidden animate-fade-in w-full select-text">
+      <div className="bg-slate-50 px-6 py-4.5 border-b border-slate-200">
+        <h2 className="text-base font-bold text-slate-900 flex items-center gap-2 select-none">
+          <Send size={15} className="text-brand-primary" />
+          온라인 문의 신청서 작성
+        </h2>
+      </div>
+
+      <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="space-y-1.5">
+            <label className="block text-sm font-bold text-slate-700">문의 구분 *</label>
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm font-medium cursor-pointer"
+            >
+              <option value="수강 신청">수강 신청/자격</option>
+              <option value="교육과정">교육과정/커리큘럼</option>
+              <option value="시스템 장애">홈페이지/시스템 이용</option>
+              <option value="기타">기타 문의</option>
+            </select>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="block text-sm font-bold text-slate-700">답변 수신용 이메일 *</label>
+            <input
+              type="email"
+              placeholder="example@domain.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm font-medium"
+              required
+            />
+          </div>
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-sm font-bold text-slate-700">문의 제목 *</label>
+          <input
+            type="text"
+            placeholder="문의의 핵심 요지를 작성해 주세요."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm font-medium"
+            required
+          />
+        </div>
+
+        <div className="space-y-1.5">
+          <label className="block text-sm font-bold text-slate-700">문의 내용 상세 *</label>
+          <textarea
+            rows={6}
+            placeholder="훈련 연계, 수당, 일정 등 자세한 질문 내역을 기입해 주시면 더욱 빠르고 정합성 높은 답변을 받아보실 수 있습니다."
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            className="w-full px-4 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-sm font-medium leading-relaxed"
+            required
+          />
+        </div>
+
+        <div className="pt-4 border-t border-slate-100 flex justify-end select-none">
+          <button
+            type="submit"
+            className="flex items-center gap-1.5 px-5 py-2.5 bg-brand-primary hover:bg-brand-secondary text-white font-bold text-sm tracking-wider shadow-md hover:shadow active:scale-95 transition-all duration-200 cursor-pointer"
+          >
+            <Send size={14} />
+            1:1 문의 제출하기
+          </button>
+        </div>
+      </form>
+    </div>
+  );
 
   return (
     <div className="w-full min-h-screen bg-slate-50 py-12 px-4 sm:px-6 lg:px-8 select-none">
@@ -92,165 +170,94 @@ export const Inquiry: React.FC = () => {
           }}
         >
           <div className="relative z-10 w-full text-left">
-            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-              <MessageSquare className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-              <span className="text-4xl md:text-4xl font-bold">1:1 온라인 문의</span>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-white">
+              <MessageSquare className="h-8 md:h-9 w-auto text-white stroke-[2]" />
+              {isAdmin ? '1:1 문의 현황 관리' : '1:1 온라인 문의'}
             </h1>
             <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
-              수강 신청 자격, 국민내일배움카드 연계, 커리큘럼 세부사항 등 교육 과정 전반에 관한 궁금증을 남겨주시면, 전문 상담원이 이메일과 대시보드를 통해 상세히 답변해 드립니다.
+              {isAdmin 
+                ? '사용자가 접수한 1:1 온라인 문의 및 상담 신청 내역을 모니터링하고 답변을 검토합니다.'
+                : '수강 신청 자격, 국민내일배움카드 연계, 커리큘럼 세부사항 등 교육 과정 전반에 관한 궁금증을 남겨주시면, 전문 상담원이 이메일과 대시보드를 통해 상세히 답변해 드립니다.'
+              }
             </p>
           </div>
         </div>
 
-        {/* Tab Filters */}
-        <div className="flex border-b border-slate-250 mb-8 max-w-md mx-auto select-none">
-          <button
-            onClick={() => setActiveTab('write')}
-            className={`flex-1 py-3 text-sm font-black cursor-pointer transition-colors border-b-2 text-center ${activeTab === 'write'
-              ? 'border-brand-primary text-brand-primary'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-          >
-            문의 접수하기
-          </button>
-          <button
-            onClick={() => setActiveTab('list')}
-            className={`flex-1 py-3 text-sm font-black cursor-pointer transition-colors border-b-2 text-center ${activeTab === 'list'
-              ? 'border-brand-primary text-brand-primary'
-              : 'border-transparent text-slate-500 hover:text-slate-800'
-              }`}
-          >
-            내 문의 내역 ({inquiries.length})
-          </button>
-        </div>
-
-        {/* Tab 1: Form submission */}
-        {activeTab === 'write' ? (
-          <div className="bg-white border border-slate-200 shadow-xl overflow-hidden animate-fade-in max-w-3xl mx-auto select-text">
-            <div className="bg-slate-50 px-6 py-4.5 border-b border-slate-200">
-              <h2 className="text-sm font-black text-slate-700 flex items-center gap-2 select-none">
-                <Send size={15} className="text-brand-primary" />
-                온라인 문의 신청서 작성
-              </h2>
-            </div>
-
-            <form onSubmit={handleSubmit} className="p-6 md:p-8 space-y-5">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-black text-slate-700">문의 구분 *</label>
-                  <select
-                    value={category}
-                    onChange={(e) => setCategory(e.target.value)}
-                    className="w-full px-3 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold cursor-pointer"
-                  >
-                    <option value="수강 신청">수강 신청/자격</option>
-                    <option value="교육과정">교육과정/커리큘럼</option>
-                    <option value="시스템 장애">홈페이지/시스템 이용</option>
-                    <option value="기타">기타 문의</option>
-                  </select>
-                </div>
-
-                <div className="space-y-1.5">
-                  <label className="block text-xs font-black text-slate-700">답변 수신용 이메일 *</label>
-                  <input
-                    type="email"
-                    placeholder="example@domain.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold"
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-black text-slate-700">문의 제목 *</label>
-                <input
-                  type="text"
-                  placeholder="문의의 핵심 요지를 작성해 주세요."
-                  value={title}
-                  onChange={(e) => setTitle(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-bold"
-                  required
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="block text-xs font-black text-slate-700">문의 내용 상세 *</label>
-                <textarea
-                  rows={6}
-                  placeholder="훈련 연계, 수당, 일정 등 자세한 질문 내역을 기입해 주시면 더욱 빠르고 정합성 높은 답변을 받아보실 수 있습니다."
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 focus:outline-none focus:ring-2 focus:ring-brand-primary text-xs font-medium leading-relaxed"
-                  required
-                />
-              </div>
-
-              <div className="pt-4 border-t border-slate-100 flex justify-end select-none">
-                <button
-                  type="submit"
-                  className="flex items-center gap-1.5 px-6 py-3 bg-brand-primary hover:bg-brand-secondary text-white font-bold text-xs tracking-wider shadow-md hover:shadow active:scale-95 transition-all duration-200 cursor-pointer"
-                >
-                  <Send size={14} />
-                  1:1 문의 제출하기
-                </button>
-              </div>
-            </form>
-          </div>
+        {/* Conditional Layout: Admin View (Dashboard + Form) vs General User View (Form Only) */}
+        {!isAdmin ? (
+          /* ==========================================
+             1. General User View: Inquiry Form Only
+             ========================================== */
+          renderInquiryForm()
         ) : (
-          /* Tab 2: Inquiry List */
-          <div className="space-y-4 max-w-4xl mx-auto select-text animate-fade-in">
-            {inquiries.length > 0 ? (
-              inquiries.map((inq) => (
-                <div
-                  key={inq.id}
-                  onClick={() => setSelectedInquiry(inq)}
-                  className="bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4"
-                >
-                  <div className="space-y-2">
-                    <div className="flex items-center gap-2">
-                      <span className="px-2 py-0.5 bg-slate-100 text-slate-500 font-bold text-xxs">
-                        {inq.category}
-                      </span>
-                      <span className="text-xs font-semibold text-slate-400">
-                        {inq.date}
-                      </span>
-                    </div>
-                    <h3 className="font-extrabold text-slate-800 text-sm hover:text-brand-secondary transition-colors">
-                      {inq.title}
-                    </h3>
-                  </div>
-
-                  <div className="flex items-center gap-4 shrink-0 select-none">
-                    <span
-                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black border ${inq.status === 'answered'
-                        ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
-                        : 'bg-amber-50 text-amber-700 border-amber-200'
-                        }`}
-                    >
-                      {inq.status === 'answered' ? (
-                        <>
-                          <CheckCircle2 size={13} />
-                          답변 완료
-                        </>
-                      ) : (
-                        <>
-                          <Clock size={13} className="animate-pulse" />
-                          답변 대기
-                        </>
-                      )}
-                    </span>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="bg-white border border-slate-200 p-12 text-center shadow-sm select-none">
-                <HelpCircle className="text-slate-300 mx-auto mb-3" size={48} />
-                <p className="text-lg font-black text-slate-700">접수된 문의 내역이 없습니다.</p>
-                <p className="text-sm text-slate-400 mt-1 font-semibold">궁금한 점이 있다면 첫 번째 탭에서 문의를 제출해 보세요.</p>
+          /* ==========================================
+             2. Admin View: Board List AND Inquiry Form (Both Accessible)
+             ========================================== */
+          <div className="space-y-12 w-full animate-fade-in">
+            {/* Admin Board List */}
+            <div className="space-y-4 select-text">
+              <div className="flex items-center justify-between border-b border-slate-200 pb-3 mb-2 select-none">
+                <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+                  <ClipboardList size={16} className="text-brand-primary" />
+                  접수된 1:1 온라인 문의 목록 ({inquiries.length})
+                </h2>
               </div>
-            )}
+
+              {inquiries.length > 0 ? (
+                <div className="space-y-4">
+                  {inquiries.map((inq) => (
+                    <div
+                      key={inq.id}
+                      onClick={() => setSelectedInquiry(inq)}
+                      className="bg-white border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col md:flex-row md:items-center justify-between gap-4"
+                    >
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="px-2 py-0.5 bg-slate-100 text-slate-500 font-bold text-xs">
+                            {inq.category}
+                          </span>
+                          <span className="text-xs font-semibold text-slate-400">
+                            {inq.date}
+                          </span>
+                        </div>
+                        <h3 className="font-bold text-slate-900 text-base hover:text-brand-secondary transition-colors">
+                          {inq.title}
+                        </h3>
+                      </div>
+
+                      <div className="flex items-center gap-4 shrink-0 select-none">
+                        <span
+                          className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${inq.status === 'answered'
+                            ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                            : 'bg-amber-50 text-amber-700 border-amber-200'
+                            }`}
+                        >
+                          {inq.status === 'answered' ? (
+                            <>
+                              <CheckCircle2 size={13} />
+                              답변 완료
+                            </>
+                          ) : (
+                            <>
+                              <Clock size={13} className="animate-pulse" />
+                              답변 대기
+                            </>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="bg-white border border-slate-200 p-8 text-center shadow-sm select-none max-w-md mx-auto">
+                  <HelpCircle className="text-slate-350 mx-auto mb-3" size={40} />
+                  <h3 className="text-xl font-bold text-slate-900 mb-2">접수된 문의 내역이 없습니다</h3>
+                  <p className="text-sm text-slate-500 leading-relaxed max-w-xs mx-auto">
+                    사용자가 제출한 문의 내역이 아직 존재하지 않습니다.
+                  </p>
+                </div>
+              )}
+            </div>
           </div>
         )}
 
@@ -262,30 +269,30 @@ export const Inquiry: React.FC = () => {
               <div className="bg-slate-900 text-white p-6 relative">
                 <button
                   onClick={() => setSelectedInquiry(null)}
-                  className="absolute right-4 top-4 text-slate-400 hover:text-white p-1 transition-colors cursor-pointer select-none"
+                  className="absolute right-4 top-4 text-slate-450 hover:text-white p-1 transition-colors cursor-pointer select-none"
                 >
                   <X size={20} />
                 </button>
                 <div className="flex gap-2 items-center mb-2 select-none">
-                  <span className="inline-block px-2.5 py-0.5 text-xxs font-black tracking-wide bg-brand-primary/30 text-brand-accent-light uppercase">
+                  <span className="inline-block px-2 py-0.5 text-xs font-semibold tracking-wide bg-brand-primary/20 text-brand-accent-light uppercase">
                     {selectedInquiry.category}
                   </span>
                   <span className="text-xs font-bold text-slate-400">
                     {selectedInquiry.date}
                   </span>
                 </div>
-                <h2 className="text-base md:text-lg font-black leading-snug pr-8">{selectedInquiry.title}</h2>
+                <h2 className="text-lg font-bold leading-snug pr-8 text-white">{selectedInquiry.title}</h2>
               </div>
 
               {/* Inquiry details */}
               <div className="p-6 space-y-6 overflow-y-auto max-h-[60vh]">
                 {/* User Inquiry content */}
                 <div className="space-y-2">
-                  <h3 className="text-xs font-black text-slate-400 flex items-center gap-1 select-none">
+                  <h3 className="text-sm font-bold text-slate-400 flex items-center gap-1 select-none">
                     <User size={13} />
                     질문 내용 ({selectedInquiry.email})
                   </h3>
-                  <p className="text-slate-700 text-sm font-semibold whitespace-pre-line leading-relaxed pl-1">
+                  <p className="text-slate-700 text-sm font-medium whitespace-pre-line leading-relaxed pl-1">
                     {selectedInquiry.content}
                   </p>
                 </div>
@@ -294,11 +301,11 @@ export const Inquiry: React.FC = () => {
                 {selectedInquiry.status === 'answered' && selectedInquiry.answer ? (
                   <div className="pt-5 border-t border-slate-150 space-y-3">
                     <div className="flex items-center justify-between select-none">
-                      <h3 className="text-xs font-black text-brand-primary flex items-center gap-1">
+                      <h3 className="text-sm font-bold text-brand-primary flex items-center gap-1">
                         <CheckCircle2 size={13} />
                         WORK.AI 운영팀 답변
                       </h3>
-                      <span className="text-xxs font-bold text-slate-400">
+                      <span className="text-xs font-bold text-slate-400">
                         {selectedInquiry.answerDate}
                       </span>
                     </div>
@@ -312,8 +319,8 @@ export const Inquiry: React.FC = () => {
                   <div className="pt-5 border-t border-slate-150 flex items-center gap-2 bg-amber-50/50 p-4.5 border border-amber-250/50 select-none">
                     <Clock size={16} className="text-amber-500 shrink-0" />
                     <div className="text-left">
-                      <p className="text-xs font-black text-amber-800">현재 담당자가 문의 내용을 검토 중입니다.</p>
-                      <p className="text-xxs font-medium text-amber-600 mt-0.5">최대 24시간 이내에 접수해 주신 이메일로 회신해 드리겠습니다.</p>
+                      <p className="text-sm font-semibold text-amber-800">현재 담당자가 문의 내용을 검토 중입니다.</p>
+                      <p className="text-xs font-medium text-amber-600 mt-0.5">최대 24시간 이내에 접수해 주신 이메일로 회신해 드리겠습니다.</p>
                     </div>
                   </div>
                 )}
@@ -323,7 +330,7 @@ export const Inquiry: React.FC = () => {
               <div className="bg-slate-50 px-6 py-4 flex justify-end border-t border-slate-150 select-none">
                 <button
                   onClick={() => setSelectedInquiry(null)}
-                  className="px-4 py-2 bg-slate-200 hover:bg-slate-350 text-slate-700 font-bold text-xs cursor-pointer active:scale-95 transition-all"
+                  className="px-5 py-2.5 bg-slate-200 hover:bg-slate-350 text-slate-700 font-bold text-sm cursor-pointer active:scale-95 transition-all"
                 >
                   닫기
                 </button>

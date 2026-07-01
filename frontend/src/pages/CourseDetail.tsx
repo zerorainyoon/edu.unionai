@@ -24,11 +24,11 @@ export const CourseDetail: React.FC = () => {
 
   if (!course) {
     return (
-      <div className="max-w-md mx-auto my-20 px-6 py-12 bg-white border border-slate-200 text-center shadow-sm select-none">
+      <div className="max-w-md mx-auto my-20 p-8 bg-white border border-slate-200 text-center shadow-sm select-none">
         <div className="inline-flex p-4 rounded-full bg-rose-50 text-rose-500 mb-4">
-          <AlertCircle size={36} />
+          <AlertCircle size={40} />
         </div>
-        <h2 className="text-2xl font-bold text-slate-900 mb-2">과정을 찾을 수 없습니다</h2>
+        <h2 className="text-xl font-bold text-slate-900 mb-3">과정을 찾을 수 없습니다</h2>
         <p className="text-sm text-slate-500 mb-6">존재하지 않거나 삭제된 교육 과정입니다.</p>
         <Link
           to="/courses"
@@ -100,7 +100,7 @@ export const CourseDetail: React.FC = () => {
         {/* Detailed Header Banner Card */}
         <div className="bg-white border border-slate-200 overflow-hidden shadow-sm p-6 md:p-8 mb-8 flex flex-col gap-6">
           <div className="flex flex-col gap-3">
-            <h1 className="text-2xl md:text-4xl font-black text-slate-900 leading-tight tracking-tight mt-1">
+            <h1 className="text-2xl md:text-3xl font-extrabold text-slate-900 leading-tight tracking-tight mt-1">
               {course.title}
             </h1>
           </div>

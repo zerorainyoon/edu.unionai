@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { ClipboardList, RefreshCw } from 'lucide-react';
+import { ClipboardList, RefreshCw, AlertCircle } from 'lucide-react';
 import { useToast } from '../../components/ui/Toast';
 import { api } from '../../services/api';
 import { courseService } from '../../services/courseService';
@@ -150,9 +150,9 @@ export const AdminRegistrations: React.FC = () => {
           }}
         >
           <div className="relative z-10 w-full text-left">
-            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-              <ClipboardList className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-              <span className="text-4xl md:text-4xl font-bold">수강 신청 현황 관리</span>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-white">
+              <ClipboardList className="h-8 md:h-9 w-auto text-white stroke-[2]" />
+              수강 신청 현황 관리
             </h1>
             <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
               현재 날짜 기준 모집 중이거나 교육 중인 코스를 선택하고, 수강 신청 및 상세 상담 내역을 모니터링합니다.
@@ -216,10 +216,10 @@ export const AdminRegistrations: React.FC = () => {
             ) : filteredCourses.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-20 text-center">
                 <div className="bg-slate-100 text-slate-400 p-4.5 rounded-full mb-4">
-                  <ClipboardList size={40} />
+                  <AlertCircle size={40} />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-1">진행 중인 코스 없음</h3>
-                <p className="text-slate-400 text-sm font-medium max-w-md">
+                <h3 className="text-xl font-bold text-slate-900 mb-2">진행 중인 코스 없음</h3>
+                <p className="text-slate-500 text-sm font-medium max-w-xs mx-auto">
                   현재 날짜를 기준으로 수강 접수 중이거나 교육 진행 중인 과정이 존재하지 않습니다.
                 </p>
               </div>
@@ -228,8 +228,8 @@ export const AdminRegistrations: React.FC = () => {
                 <div className="bg-slate-100 text-slate-400 p-4.5 rounded-full mb-4">
                   <ClipboardList size={40} />
                 </div>
-                <h3 className="text-xl font-bold text-slate-800 mb-1">신청 내역이 없습니다</h3>
-                <p className="text-slate-400 text-sm font-medium max-w-md">
+                <h3 className="text-xl font-bold text-slate-900 mb-2">신청 내역이 없습니다</h3>
+                <p className="text-slate-500 text-sm font-medium max-w-xs mx-auto">
                   선택하신 교육 과정에 접수된 수강 신청 또는 상세 상담 요청이 존재하지 않습니다.
                 </p>
               </div>

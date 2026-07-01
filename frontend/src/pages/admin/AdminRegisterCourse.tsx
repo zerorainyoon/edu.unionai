@@ -73,9 +73,9 @@ export const AdminRegisterCourse: React.FC = () => {
           }}
         >
           <div className="relative z-10 w-full text-left">
-            <h1 className="text-3xl md:text-5xl font-light mb-4 tracking-tight flex items-center gap-4 text-white">
-              <PlusCircle className="h-10 md:h-9 w-auto text-white stroke-[2]" />
-              <span className="text-4xl md:text-4xl font-bold">교육과정 등록</span>
+            <h1 className="text-2xl md:text-3xl font-extrabold tracking-tight flex items-center gap-3 text-white">
+              <PlusCircle className="h-8 md:h-9 w-auto text-white stroke-[2]" />
+              교육과정 등록
             </h1>
             <p className="text-base md:text-lg text-blue-100/90 leading-relaxed break-keep font-medium">
               Intel 교육과정을 게시합니다. 아래의 세부사항들을 빠짐없이 기입해주세요.
